@@ -4,7 +4,7 @@
 using namespace std;
 
 // Function to find the sum of subarray with maximum sum
-int maxSubarraySum(vector<int> &arr) {
+int max_subarray_sum_naive_Rcpp(vector<int> &arr) {
   int res = arr[0];
 
   // Outer loop for starting point of subarray

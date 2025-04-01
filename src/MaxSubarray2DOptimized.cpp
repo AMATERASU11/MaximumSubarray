@@ -28,7 +28,7 @@ int kadaneAlgorithm(vector<int>& temp) {
 }
 
 // Function to find the maximum sum rectangle in a 2D matrix
-int maxSumRectangle(vector<vector<int>> &mat) {
+int max_subarray_rectangle_opt_Rcpp(vector<vector<int>> &mat) {
   int rows = mat.size();
   int cols = mat[0].size();
 

@@ -4,7 +4,7 @@
 using namespace std;
 
 // Function to find the maximum subarray sum
-int maxSubarraySum(vector<int> &arr) {
+int max_subarray_sum_opt_Rcpp(vector<int> &arr) {
   int res = arr[0];
   int maxEnding = arr[0];
 
