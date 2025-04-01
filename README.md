@@ -11,6 +11,7 @@ The goal of MaximumSubarray is to find the contiguous subarray (or submatrix) wi
  - In the 2D case, the objective is to find a rectangular submatrix (i.e., a block of contiguous rows and columns) whose elements yield the largest sum.
 
 These problems are useful in various applications such as time-series analysis, image processing, and optimization tasks where identifying the "best-performing" segment or region is essential.
+
 This Package provides different type of algorithms and implementation in R or C++ to resolve the maximum subarray problem with the possibility to compare between them based time complexity.
 
 ## Installation
