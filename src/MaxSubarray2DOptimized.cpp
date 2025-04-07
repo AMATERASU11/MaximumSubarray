@@ -30,6 +30,7 @@ int kadaneAlgorithm(std::vector<int>& temp) {
 }
 
 // Function to find the maximum sum rectangle in a 2D matrix
+//' @export
 // [[Rcpp::export]]
 int max_subarray_rectangle_opt_Rcpp(std::vector<std::vector<int>> &mat) {
   int rows = mat.size();

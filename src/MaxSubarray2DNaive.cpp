@@ -3,7 +3,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-
+//' @export
 // [[Rcpp::export]]
 int max_subarray_rectangle_naive_Rcpp(std::vector<std::vector<int>> &mat) {
 

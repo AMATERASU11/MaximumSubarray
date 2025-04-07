@@ -4,6 +4,7 @@
 using namespace Rcpp;
 
 // Function to find the maximum subarray sum
+//' @export
 // [[Rcpp::export]]
 int max_subarray_sum_opt_Rcpp(std::vector<int> &arr) {
   int res = arr[0];

@@ -9,3 +9,8 @@ export(max_subarray_rectangle_naive_Rcpp)
 export(max_subarray_rectangle_opt_Rcpp)
 export(max_subarray_sum_naive_Rcpp)
 export(max_subarray_sum_opt_Rcpp)
+
+
+##### import from PACKAGES
+
+importFrom(Rcpp, evalCpp)

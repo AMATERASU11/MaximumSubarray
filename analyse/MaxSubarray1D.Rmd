@@ -58,7 +58,7 @@ ___
 Le package se télécharge ainsi :
 
 ```{r, eval=FALSE}
-devtools::install_github("AMATERASU11/MaximumSubarray")
+devtools::install_github("AMATERASU11/MaximumSubarray", force=TRUE)
 ```
 
 et ses fonctions sont rendues disponibles sur Rstudio ainsi :
@@ -70,8 +70,8 @@ library(MaximumSubarray)
 On simule un petit exemple d'un vecteur `v` de taille `100`
 
 ```{r}
-n <- 100
-v <- sample(n)
+set.seed(123)
+v <- sample(-100:100, 50, replace = TRUE)
 ```
 
 On teste les 4 algorithmes implémentés avec des noms explicites : 
