@@ -5,7 +5,7 @@ Version: 1.0
 Authors@R: 
     c(
         person("Khalil", "Ounis", email = "khalilounis10@gmail.com", role = c("aut", "cre")),
-        person("Manal", "Derghal", email = "manal.derghal@ensiie.eu", role = "aut"),
+        person("Manal", "Derghal", email = "derghalmanal@gmail.com", role = "aut"),
         person("Takwa", "Ben Romdhane", email = "benromdhantakwa@gmail.com", role = "aut")
     )
 Description: 

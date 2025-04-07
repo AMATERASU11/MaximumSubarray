@@ -1,8 +1,11 @@
 // Naive Approach for 2D case of Maximum Subarray Problem
-#include <bits/stdc++.h>
-using namespace std;
 
-int max_subarray_rectangle_naive_Rcpp(vector<vector<int>> &mat) {
+#include <Rcpp.h>
+using namespace Rcpp;
+
+
+// [[Rcpp::export]]
+int max_subarray_rectangle_naive_Rcpp(std::vector<std::vector<int>> &mat) {
 
   int n = mat.size();
   int m = mat[0].size();

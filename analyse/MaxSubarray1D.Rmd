@@ -1,0 +1,407 @@
+---
+title: | 
+  | Analyse de deux algorithmes de tableau maximum par comparaison
+author:  "Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane"
+date: "lundi 7 avril 2025"
+header-includes:
+  - \usepackage[french]{babel}
+output:
+  pdf_document:
+    keep_tex: yes
+    toc: true
+    number_sections: true  
+urlcolor: blue
+---
+
+\noindent\hrulefill
+
+
+# Description du problème et objectif
+
+---
+title: | 
+  | Analyse des algorithmes de Maximum Subarray 1D
+  | ![](Images/logo_lamme.png){width=1in}  ![](Images/logo_UEVE.png){width=1.7in}
+  |  M2 Data Science Algorithmique 
+author:  "Khalil Ounis, Manal Derghal, Taqwa BenRomdhane"
+date: "jeudi 27 mars 2025"
+header-includes:
+  - \usepackage[french]{babel}
+output:
+  pdf_document:
+    keep_tex: yes
+    toc: true
+    number_sections: true  
+urlcolor: blue
+---
+
+\noindent\hrulefill
+
+
+# Description du problème et objectif
+
+Le problème du Maximum Subarray 1D consiste à trouver la sous-séquence contiguë d'un tableau numérique dont la somme des éléments est maximale. Ce problème classique en algorithmique a des applications en analyse de données financières, bioinformatique et traitement du signal.
+
+[La page Wikipedia du Maximum Subarray](https://en.wikipedia.org/wiki/Maximum_subarray_problem) présente plusieurs approches algorithmiques pour résoudre ce problème. Nous nous concentrons sur deux méthodes :
+
+1. Algorithme naïf : complexité O(n²)
+2. Algorithme de Kadane : complexité optimale O(n)
+
+Nos objectifs sont :
+a) d'implémenter ces algorithmes en R et C++ et évaluer le gain de temps ;
+b) de confirmer les complexités théoriques par des simulations intensives.
+
+___ 
+
+# Un premier exemple
+
+Le package se télécharge ainsi :
+
+```{r, eval=FALSE}
+devtools::install_github("AMATERASU11/MaximumSubarray")
+```
+
+et ses fonctions sont rendues disponibles sur Rstudio ainsi :
+
+```{r}
+library(MaximumSubarray)
+```
+
+On simule un petit exemple d'un vecteur `v` de taille `100`
+
+```{r}
+n <- 100
+v <- sample(n)
+```
+
+On teste les 4 algorithmes implémentés avec des noms explicites : 
+
+- `max_subarray_sum_naive` 
+- `max_subarray_sum_opt` 
+- `max_subarray_sum_naive_Rcpp` 
+- `max_subarray_sum_opt_Rcpp` 
+
+Cela donne :
+
+```{r}
+v
+max_subarray_sum_naive(v)
+max_subarray_sum_opt(v)
+max_subarray_sum_naive_Rcpp(v)
+max_subarray_sum_opt_Rcpp(v)
+```
+
+
+___ 
+
+# Comparaison R avec C++
+
+On va faire des comparaisons pour les deux types d'algorithme en R et C++ pour quantifier leur différence de performance.
+
+La fonction `one.simu.time` retourne le temps recherché, et `one.simu` sera utilisé par `microbenchmark`
+
+```{r}
+one.simu.time <- function(n, type = "sample", func = "insertion_sort")
+{
+  if(type == "sample"){v <- sample(n)}else{v <- n:1}
+  if(func == "insertion_sort"){t <- system.time(insertion_sort(v))[[1]]}
+  if(func == "heap_sort"){t <- system.time(heap_sort(v))[[1]]} 
+  if(func == "insertion_sort_Rcpp"){t <- system.time(insertion_sort_Rcpp(v))[[1]]}
+  if(func == "heap_sort_Rcpp"){t <- system.time(heap_sort_Rcpp(v))[[1]]}
+  return(t)
+}
+
+one.simu <- function(n, type = "sample", func = "insertion_sort")
+{
+  if(type == "sample"){v <- sample(n)}else{v <- n:1}
+  if(func == "insertion_sort"){insertion_sort(v)}
+  if(func == "heap_sort"){heap_sort(v)} 
+  if(func == "insertion_sort_Rcpp"){insertion_sort_Rcpp(v)}
+  if(func == "heap_sort_Rcpp"){heap_sort_Rcpp(v)}
+}
+```
+
+## Un essai
+
+Sur un exemple, on obtient :
+
+```{r}
+n <- 10000
+one.simu.time(n, func = "insertion_sort")
+one.simu.time(n, func = "heap_sort")
+one.simu.time(n, func = "insertion_sort_Rcpp")
+one.simu.time(n, func = "heap_sort_Rcpp")
+```
+
+
+## Simulations avec répétitions
+
+On reproduit ces comparaisons de manière plus robuste:
+
+```{r first simu}
+nbSimus <- 10
+
+time1 <- rep(0, nbSimus); time2 <- rep(0, nbSimus);
+time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
+
+for(i in 1:nbSimus){time1[i] <- one.simu.time(n, func = "insertion_sort")}
+for(i in 1:nbSimus){time2[i] <- one.simu.time(n, func = "insertion_sort_Rcpp")}
+for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "heap_sort")}
+for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "heap_sort_Rcpp")}
+```
+
+Gain C++ versus R
+
+```{r}
+mean(time1)/mean(time2)
+mean(time3)/mean(time4)
+```
+
+Gain tas versus insertion
+
+```{r}
+mean(time1)/mean(time3)
+mean(time2)/mean(time4)
+```
+
+On recommence avec `n = 20000` seulement pour le gain avec C++ pour le tas
+
+```{r second simu}
+n <- 20000
+nbSimus <- 10
+time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
+for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "heap_sort")}
+for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "heap_sort_Rcpp")}
+median(time3)/median(time4)
+```
+
+
+**Conclusion:**
+
+- pour une taille de `10000` la gain avec C++ atteint un facteur 500 entre le tas C++ et le tas R. Ce gain semble augmenter avec la taille. 
+
+- Sans surprise, le tri par tas est plus rapide que le tri par insertion.
+
+## Simulations avec `microbenchmark`
+
+Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les simulations et afficher les résultats (sous forme de diagrammes en violon). Nous comparons `insertion_sort_Rcpp` avec `heap_sort_Rcpp` pour des tailles de données `n = 1000` et `n = 10000`.
+
+```{r}
+library(microbenchmark)
+library(ggplot2)
+```
+
+```{r benchmark, echo = FALSE, warning=FALSE, message=FALSE}
+# Function to run benchmark
+benchmark_sorting <- function(n, times = 50)
+{
+  microbenchmark(
+    insertion_sort = one.simu(n, func = "insertion_sort_Rcpp"),
+    heap_sort = one.simu(n, func = "heap_sort_Rcpp"),
+    times = times,
+    control = list(gc = FALSE)
+  )
+}
+# Run benchmarks for different n values
+n_values <- c(100, 5000, 100000)
+results <- lapply(n_values, benchmark_sorting)
+
+# Combine results into a single dataframe with n as an identifier
+df_results <- do.call(rbind, Map(cbind, results, n = n_values))
+# Plot with better aesthetics
+ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
+  geom_violin(alpha = 0.7) +
+  facet_wrap(~n, scales = "free") +
+  labs(title = "Sorting Algorithm in Rcpp Benchmark",
+       x = "Sorting Algorithm",
+       y = "Execution Time (ms)",
+       fill = "Algorithm") +
+  theme_minimal()
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+df_results %>%
+  group_by(n, expr) %>%
+  summarise(
+    min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
+    q1_time = quantile(time, 0.25) / 1e6,
+    median_time = median(time) / 1e6,
+    mean_time = mean(time) / 1e6,
+    q3_time = quantile(time, 0.75) / 1e6,
+    max_time = max(time) / 1e6,
+    .groups = "drop"
+  )
+```
+
+
+___ 
+
+
+# Evaluation de la complexité
+
+Les vecteurs de longueurs `vector_n_insertion` et `vector_n_heap` (`n` dans les dataframes) sont choisis sur l'echelle logarithmique afin d'avoir un pas constant sur l'échelle logarithmique en abscisse pour la régression.
+
+On réalise 10 répétitions pour chaque valeur de `n` et pour chaque algorithme. Les barres d'erreur sont placées en "mean +/- sd". 
+
+```{r simu complexite, echo = FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+library(dplyr)
+
+# Function to run benchmarking with mean and standard deviation
+benchmark_sorting <- function(func_name, n_values, nbRep) {
+  results <- sapply(n_values, function(n) {
+    times <- replicate(nbRep, one.simu.time(n, func = func_name))  # Run simulations
+    c(mean_time = mean(times), sd_time = sd(times))  # Return mean & std dev
+  })
+  
+  # Convert results to a data frame
+  data.frame(n = n_values, mean_time = results["mean_time",], sd_time = results["sd_time",])
+}
+
+
+
+# Parameters
+nbSimus <- 20
+nbRep <- 10
+
+# Heap Sort Benchmark
+vector_n_heap <- exp(seq(log(10000), log(100000), length.out = nbSimus))
+vector_n_heap <- round(vector_n_heap)
+res_Heap <- benchmark_sorting("heap_sort_Rcpp", vector_n_heap, nbRep)
+
+# Insertion Sort Benchmark
+vector_n_insert <- exp(seq(log(5000), log(50000), length.out = nbSimus))
+vector_n_insert <- round(vector_n_insert)
+res_Insertion <- benchmark_sorting("insertion_sort_Rcpp", vector_n_insert, nbRep)
+
+# Log-log plot of sorting performance with error bars
+ggplot() +
+  # Heap Sort
+  geom_line(data = res_Heap, aes(x = n, y = mean_time, color = "Heap Sort"), size = 1) +
+  geom_errorbar(data = res_Heap, 
+                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Heap Sort"), 
+                width = 0.1, alpha = 0.5) +
+  
+  # Insertion Sort
+  geom_line(data = res_Insertion, aes(x = n, y = mean_time, color = "Insertion Sort"), size = 1) +
+  geom_errorbar(data = res_Insertion, 
+                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Insertion Sort"), 
+                width = 0.1, alpha = 0.5) +
+
+  # Log-log scales
+  scale_x_log10() +
+  scale_y_log10() +
+  
+  # Labels & theme
+  labs(title = "Sorting Algorithm Performance (Log-Log Scale with Error Bars)",
+       x = "Data Length (log scale)", 
+       y = "Mean Running Time (log scale)",
+       color = "Algorithm") +
+  theme_minimal()
+
+```
+
+```{r}
+res_Heap
+res_Insertion
+```
+
+On vérifie la valeur du coefficient directeur pour les deux méthodes:
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+model <- lm(log(res_Insertion$mean_time) ~ log(res_Insertion$n))
+print(summary(model)) 
+slope_r <- coef(model)[2]
+cat("Estimated exponent:", slope_r, "\n")
+```
+
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+model <- lm(log(res_Heap$mean_time) ~ log(res_Heap$n))
+print(summary(model)) 
+slope_r <- coef(model)[2]
+cat("Estimated exponent:", slope_r, "\n")
+```
+
+Les coefficients dfirecteurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour l'insertion et 1 pour le tas.
+
+
+___ 
+
+
+# Cas particulier des données presque triées
+
+On considère des données triées avec 5% de valeurs échangées au hasard.
+
+Sur un exemple cela donne : 
+```{r}
+v <- 1:100
+n_swap <- floor(0.05 * length(v))
+swap_indices <- sample(length(v), n_swap)
+v[swap_indices] <- sample(v[swap_indices])
+v
+```
+
+
+```{r}
+one.simu2 <- function(n, func)
+{
+  v <- 1:n
+  n_swap <- floor(0.05 * length(v))
+  swap_indices <- sample(length(v), n_swap)
+  v[swap_indices] <- sample(v[swap_indices])
+  if(func == "insertion_sort"){insertion_sort(v)}
+  if(func == "heap_sort"){heap_sort(v)} 
+  if(func == "insertion_sort_Rcpp"){insertion_sort_Rcpp(v)}
+  if(func == "heap_sort_Rcpp"){heap_sort_Rcpp(v)}
+}
+```
+
+
+```{r benchmark2, echo = FALSE, warning=FALSE, message=FALSE}
+# Function to run benchmark
+benchmark_sorting <- function(n, times = 50)
+{
+  microbenchmark(
+    insertion_sort = one.simu2(n, func = "insertion_sort_Rcpp"),
+    heap_sort = one.simu2(n, func = "heap_sort_Rcpp"),
+    times = times,
+    control = list(gc = FALSE)
+  )
+}
+# Run benchmarks for different n values
+n_values <- c(1000, 10000)
+results <- lapply(n_values, benchmark_sorting)
+
+# Combine results into a single dataframe with n as an identifier
+df_results <- do.call(rbind, Map(cbind, results, n = n_values))
+# Plot with better aesthetics
+ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
+  geom_violin(alpha = 0.7) +
+  facet_wrap(~n, scales = "free") +
+  labs(title = "Sorting Algorithm in Rcpp Benchmark",
+       x = "Sorting Algorithm",
+       y = "Execution Time (ms)",
+       fill = "Algorithm") +
+  theme_minimal()
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+df_results %>%
+  group_by(n, expr) %>%
+  summarise(
+    min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
+    q1_time = quantile(time, 0.25) / 1e6,
+    median_time = median(time) / 1e6,
+    mean_time = mean(time) / 1e6,
+    q3_time = quantile(time, 0.75) / 1e6,
+    max_time = max(time) / 1e6,
+    .groups = "drop"
+  )
+```
+
+
+L'algorithme d'insertion est ici plus rapide pour la longueur `1000`. Cela est dû au fait que pour un vecteur déjà trié, l'algorithme d'insertion est linéaire et nous sommes dans un cas proche du linéaire.
+

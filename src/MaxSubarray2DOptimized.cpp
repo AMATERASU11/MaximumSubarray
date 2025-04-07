@@ -1,11 +1,13 @@
 //Optimized Approach for 2D case of Maximum Subarray Problem (using Kadane's Algorithm)
 
-#include <bits/stdc++.h>
-using namespace std;
+
+#include <Rcpp.h>
+using namespace Rcpp;
+
 
 // Kadane's algorithm to find the maximum sum
 // subarray in a 1D array
-int kadaneAlgorithm(vector<int>& temp) {
+int kadaneAlgorithm(std::vector<int>& temp) {
   int rows = temp.size();
   int currSum = 0;
   int maxSum = INT_MIN;
@@ -28,7 +30,8 @@ int kadaneAlgorithm(vector<int>& temp) {
 }
 
 // Function to find the maximum sum rectangle in a 2D matrix
-int max_subarray_rectangle_opt_Rcpp(vector<vector<int>> &mat) {
+// [[Rcpp::export]]
+int max_subarray_rectangle_opt_Rcpp(std::vector<std::vector<int>> &mat) {
   int rows = mat.size();
   int cols = mat[0].size();
 
@@ -36,7 +39,7 @@ int max_subarray_rectangle_opt_Rcpp(vector<vector<int>> &mat) {
 
   // Initialize a temporary array to store row-wise
   // sums between left and right boundaries
-  vector<int> temp(rows);
+  std::vector<int> temp(rows);
 
   // Check for all possible left and right boundaries
   for (int left = 0; left < cols; left++) {
@@ -58,7 +61,7 @@ int max_subarray_rectangle_opt_Rcpp(vector<vector<int>> &mat) {
       int sum = kadaneAlgorithm(temp);
 
       // Update the maximum sum found so far
-      maxSum = max(maxSum, sum);
+      maxSum = std::max(maxSum, sum);
     }
   }
 
