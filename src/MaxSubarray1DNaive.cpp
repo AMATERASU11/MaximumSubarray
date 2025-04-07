@@ -8,17 +8,24 @@ using namespace Rcpp;
 //' @export
 // [[Rcpp::export]]
 int max_subarray_sum_naive_Rcpp(std::vector<int> &arr) {
+  if (arr.empty()) return 0;
+
+  // Cas trivial : tous les éléments positifs
+  if (std::all_of(arr.begin(), arr.end(), [](int x) { return x >= 0; })) {
+    return std::accumulate(arr.begin(), arr.end(), 0);
+  }
+
+  // Cas trivial : tous les éléments négatifs
+  if (std::all_of(arr.begin(), arr.end(), [](int x) { return x <= 0; })) {
+    return *std::max_element(arr.begin(), arr.end());
+  }
+
   int res = arr[0];
 
-  // Outer loop for starting point of subarray
-  for(size_t i = 0; i < arr.size(); i++) {
+  for (size_t i = 0; i < arr.size(); i++) {
     int currSum = 0;
-
-    // Inner loop for ending point of subarray
-    for(size_t j = i; j < arr.size(); j++) {
-      currSum = currSum + arr[j];
-
-      // Update res if currSum is greater than res
+    for (size_t j = i; j < arr.size(); j++) {
+      currSum += arr[j];
       res = std::max(res, currSum);
     }
   }

@@ -42,6 +42,16 @@
 #'
 #' @export
 max_subarray_rectangle_naive <- function(mat) {
+  # Cas trivial : tous les éléments sont positifs
+  if (all(mat >= 0)) {
+    return(sum(mat))
+  }
+
+  # Cas trivial : tous les éléments sont négatifs
+  if (all(mat <= 0)) {
+    return(max(mat))
+  }
+
   n <- nrow(mat)
   m <- ncol(mat)
   max_sum <- -Inf
@@ -50,19 +60,13 @@ max_subarray_rectangle_naive <- function(mat) {
     for (left in 1:m) {
       for (down in up:n) {
         for (right in left:m) {
-
-          # Sum the submatrix from (up, left) to (down, right)
           sub_sum <- 0
           for (i in up:down) {
             for (j in left:right) {
               sub_sum <- sub_sum + mat[i, j]
             }
           }
-
-          # Update max_sum if needed
-          if (sub_sum > max_sum) {
-            max_sum <- sub_sum
-          }
+          max_sum <- max(max_sum, sub_sum)
         }
       }
     }

@@ -66,12 +66,24 @@ kadane_algorithm <- function(temp) {
 #'
 #' @export
 max_subarray_rectangle_opt <- function(mat) {
+  if (length(mat) == 0) return(-Inf)
+
   if (any(dim(mat) == 0)) return(-Inf)
+
   if (any(is.na(mat))) return(NA_real_)
+  # Cas trivial : tous les éléments sont positifs
+  if (all(mat >= 0)) {
+    return(sum(mat))
+  }
+
+  # Cas trivial : tous les éléments sont négatifs
+  if (all(mat <= 0)) {
+    return(max(mat))
+  }
 
   rows <- nrow(mat)
   cols <- ncol(mat)
-  max_sum <- mat[1, 1]  # Initialize with first element
+  max_sum <- mat[1, 1]
 
   for (left in 1:cols) {
     temp <- rep(0, rows)
@@ -80,6 +92,7 @@ max_subarray_rectangle_opt <- function(mat) {
       for (row in 1:rows) {
         temp[row] <- temp[row] + mat[row, right]
       }
+
       current_sum <- kadane_algorithm(temp)
       max_sum <- max(max_sum, current_sum)
     }
@@ -87,3 +100,4 @@ max_subarray_rectangle_opt <- function(mat) {
 
   return(max_sum)
 }
+

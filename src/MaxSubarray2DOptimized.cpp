@@ -2,8 +2,8 @@
 
 
 #include <Rcpp.h>
+#include "utils.h"
 using namespace Rcpp;
-
 
 // Kadane's algorithm to find the maximum sum
 // subarray in a 1D array
@@ -33,38 +33,35 @@ int kadaneAlgorithm(std::vector<int>& temp) {
 //' @export
 // [[Rcpp::export]]
 int max_subarray_rectangle_opt_Rcpp(std::vector<std::vector<int>> &mat) {
-  int rows = mat.size();
+ int rows = mat.size();
   int cols = mat[0].size();
+ if (rows == 0 || cols == 0)  return INT_MIN;
 
-  int maxSum = INT_MIN;
+ // Cas trivial : tous les éléments positifs
+ if (all_non_negative(mat)) {
+   return total_sum(mat);
+ }
 
-  // Initialize a temporary array to store row-wise
-  // sums between left and right boundaries
-  std::vector<int> temp(rows);
+ // Cas trivial : tous les éléments négatifs
+ if (all_non_positive(mat)) {
+   return max_element_2d(mat);
+ }
 
-  // Check for all possible left and right boundaries
-  for (int left = 0; left < cols; left++) {
+ int maxSum = INT_MIN;
+ std::vector<int> temp(rows);
 
-    // Reset the temporary array for each new left boundary
-    for (int i = 0; i < rows; i++)
-      temp[i] = 0;
+ for (int left = 0; left < cols; left++) {
+   std::fill(temp.begin(), temp.end(), 0);
 
-    for (int right = left; right < cols; right++) {
+   for (int right = left; right < cols; right++) {
+     for (int row = 0; row < rows; row++) {
+       temp[row] += mat[row][right];
+     }
 
-      // Update the temporary array with the current
-      // column's values
-      for (int row = 0; row < rows; row++) {
-        temp[row] += mat[row][right];
-      }
+     int sum = kadaneAlgorithm(temp);
+     maxSum = std::max(maxSum, sum);
+   }
+ }
 
-      // Find the maximum sum of the subarray for the
-      // current column boundaries
-      int sum = kadaneAlgorithm(temp);
-
-      // Update the maximum sum found so far
-      maxSum = std::max(maxSum, sum);
-    }
-  }
-
-  return maxSum;
+ return maxSum;
 }
