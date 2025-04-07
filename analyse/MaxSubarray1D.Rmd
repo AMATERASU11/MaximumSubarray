@@ -1,7 +1,7 @@
 ---
 title: | 
   | Analyse de deux algorithmes de tableau maximum par comparaison
-author:  "Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane"
+author:  "Manal Derghal, Khalil Ounis, {Taqwa Ben Romdhane}"
 date: "lundi 7 avril 2025"
 header-includes:
   - \usepackage[french]{babel}
@@ -18,7 +18,7 @@ title: |
   | Analyse des algorithmes de Maximum Subarray 1D
   |  M2 Data Science Algorithmique 
 author:  "Khalil Ounis, Manal Derghal, Taqwa BenRomdhane"
-date: "jeudi 27 mars 2025"
+date: "Lundi 7 avril 2025"
 header-includes:
   - \usepackage[french]{babel}
 output:
@@ -41,9 +41,9 @@ Le problème du Maximum Subarray 1D consiste à trouver la sous-séquence contig
 1. Algorithme naïf : complexité O(n²)
 2. Algorithme de Kadane : complexité optimale O(n)
 
-Nos objectifs sont :
-a) d'implémenter ces algorithmes en R et C++ et évaluer le gain de temps.
-b) de confirmer les complexités théoriques par des simulations intensives.
+Nos objectifs sont :  
+a. d'implémenter ces algorithmes en R et C++ et évaluer le gain de temps.  
+b. de confirmer les complexités théoriques par des simulations intensives.
 
 ___ 
 
@@ -102,30 +102,28 @@ one.simu.time <- function(n, func, data_type = "random") {
   if (data_type == "random") {
     v <- sample(-100:100, n, replace = TRUE)
   } else if (data_type == "all_negative") {
-    v <- runif(n, -100, -1)
-  } else { # single_positive
-    v <- runif(n, -100, -1)
-    v[sample(n, 1)] <- runif(1, 1, 100)
+    v <- sample(-100:-1, n, replace = TRUE)
+  } else if (data_type == "all_positive") {
+    v <- sample(0:100, n, replace = TRUE)
+  } else {
+    stop("data_type inconnu")
   }
 
   if (func == "naive") {
     t <- microbenchmark(max_subarray_sum_naive(v), times = 1)$time / 1e6
-  }
-  if (func == "naive_Rcpp") {
+  } else if (func == "naive_Rcpp") {
     t <- microbenchmark(max_subarray_sum_naive_Rcpp(v), times = 1)$time / 1e6
-  }
-  if (func == "opt") {
+  } else if (func == "opt") {
     t <- microbenchmark(max_subarray_sum_opt(v), times = 1)$time / 1e6
-  }
-  if (func == "opt_Rcpp") {
+  } else if (func == "opt_Rcpp") {
     t <- microbenchmark(max_subarray_sum_opt_Rcpp(v), times = 1)$time / 1e6
+  } else {
+    stop("fonction inconnue")
   }
 
-  # Arrondi à 2 décimales
-  t <- round(t, 2)
-
-  return(t)
+  return(round(t, 2))
 }
+
 
 ```
 
@@ -216,11 +214,10 @@ Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les s
 ```{r}
 library(microbenchmark)
 library(ggplot2)
+library(dplyr)
 ```
 
 ```{r benchmark, echo = FALSE, warning=FALSE, message=FALSE}
-library(microbenchmark)
-library(ggplot2)
 set.seed(123)
 
 benchmark_1d <- function(n) {
@@ -247,7 +244,6 @@ ggplot(df_1d, aes(x = expr, y = time/1e6, fill = expr)) +
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
 df_1d %>%
   group_by(n, expr) %>%
   summarise(
@@ -273,10 +269,6 @@ On réalise 10 répétitions pour chaque valeur de `n` et pour chaque algorithme
 
 ```{r simu complexite, echo = FALSE, warning=FALSE, message=FALSE}
 set.seed(123)
-# Evaluation de la complexité pour Maximum Subarray
-
-library(ggplot2)
-library(dplyr)
 
 # Function to run benchmarking with mean and standard deviation
 benchmark_subarray <- function(func_name, n_values, nbRep) {
@@ -369,16 +361,17 @@ benchmark_subarray_biased <- function(n, case, ratio = 0.95) {
   if (case == "mostly_negative") {
     # 95% de valeurs négatives, 5% positives
     v <- c(
-      runif(round(n * ratio), -100, -1),
-      runif(n - round(n * ratio), 1, 100)
+      sample(-100:-1, round(n * ratio), replace = TRUE),
+      sample(1:100, n - round(n * ratio), replace = TRUE)
     )
   } else if (case == "mostly_positive") {
     # 95% de valeurs positives, 5% négatives
     v <- c(
-      runif(round(n * ratio), 1, 100),
-      runif(n - round(n * ratio), -100, -1)
+      sample(1:100, round(n * ratio), replace = TRUE),
+      sample(-100:-1, n - round(n * ratio), replace = TRUE)
     )
   } else {
+    # Cas aléatoire, valeurs dans l'intervalle [-100, 100]
     v <- sample(-100:100, n, replace = TRUE)
   }
   
@@ -428,6 +421,7 @@ ggplot(results, aes(x = case, y = time, fill = algo)) +
   ) +
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}

@@ -1,11 +1,13 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include <vector>
+#include <Rcpp.h>
 
-bool all_non_negative(const std::vector<std::vector<int>> &mat);
-bool all_non_positive(const std::vector<std::vector<int>> &mat);
-int total_sum(const std::vector<std::vector<int>> &mat);
-int max_element_2d(const std::vector<std::vector<int>> &mat);
+using namespace Rcpp;
+
+bool all_non_negative(const NumericMatrix &mat);
+bool all_non_positive(const NumericMatrix &mat);
+int total_sum(const NumericMatrix &mat);
+int max_element_2d(const NumericMatrix &mat);
 
 #endif

@@ -131,14 +131,11 @@ arr
     
 ``` r
 mat <- matrix(c(1, -2, 3, -4, 5, -6), nrow = 2)
-mat <- lapply(1:nrow(mat), function(i) mat[i,])
 mat
 ```
-    ##             [[1]]
-                   [1] 1 3 5
-
-                  [[2]]
-                  [1] -2 -4 -6
+    ##      [,1] [,2] [,3]
+      [1,]    1    3    5
+      [2,]   -2   -4   -6
     
     
 We implemented 8 algorithms:
@@ -166,55 +163,3 @@ max_subarray_rectangle_opt_Rcpp(mat)
 ```
 
     ##  [1]  9
-
-### Dijkstra Algorithms (Dynamic Programming)
-
-### TSP Algorithms (Heuristic)
-
-We generate `n = 20` towns (villes) randomly in a **2D plane** using a
-uniform distribution:
-
-``` r
-n <- 20
-villes <- matrix(runif(2 * n), n, 2)
-```
-
-#### Visualization of the Towns
-
-![](Pour_les_etudiants/README_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
-
-We implemented **four heuristic** algorithms and **one exact** algorithm
-for solving the **Travelling Salesman Problem (TSP)**:
-
-- **Heuristic Approaches:**
-  - `TSP_naif` (Naive approach)  
-  - `TSP_cheapest` (Cheapest insertion heuristic)  
-  - `TSP_nearest` (Nearest neighbor heuristic)  
-  - `TSP_farthest` (Farthest insertion heuristic)
-- **Exact Algorithm:**
-  - `TSP_B_and_B` (Branch and Bound)
-
-Each algorithm also has an equivalent **Rcpp implementation** for
-performance optimization.
-
-#### Example
-
-![](Pour_les_etudiants/README_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
-
-------------------------------------------------------------------------
-
-<a id="an"></a>
-
-## Analysis
-
-The `Pour_les_etudiants` folder contains the following analysis files:
-
-- **`Sorting_analyse.Rmd`** – Analysis of sorting algorithms  
-- **`Dijkstra_analyse.Rmd`** – Analysis of Dijkstra’s algorithm  
-- **`TSP_analyse.Rmd`** – Analysis of the Traveling Salesman Problem
-  (TSP)
-
-<span style="color:red">These documents, written in French, outline the
-type of analysis students are expected to conduct to validate this
-course.</span>
-

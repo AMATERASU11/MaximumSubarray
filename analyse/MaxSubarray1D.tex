@@ -114,7 +114,7 @@
 \title{Analyse des algorithmes de Maximum Subarray 1D\\
 \strut ~M2 Data Science Algorithmique}
 \author{Khalil Ounis, Manal Derghal, Taqwa BenRomdhane}
-\date{jeudi 27 mars 2025}
+\date{Lundi 7 avril 2025}
 
 \begin{document}
 \maketitle
@@ -148,9 +148,11 @@ méthodes :
   Algorithme de Kadane : complexité optimale O(n)
 \end{enumerate}
 
-Nos objectifs sont : a) d'implémenter ces algorithmes en R et C++ et
-évaluer le gain de temps. b) de confirmer les complexités théoriques par
-des simulations intensives.
+Nos objectifs sont :\\
+a. d'implémenter ces algorithmes en R et C++ et évaluer le gain de
+temps.\\
+b. de confirmer les complexités théoriques par des simulations
+intensives.
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
 
@@ -270,29 +272,26 @@ le temps en ms
   \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"random"}\NormalTok{) \{}
 \NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
 \NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"all\_negative"}\NormalTok{) \{}
-\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{ }\CommentTok{\# single\_positive}
-\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
-\NormalTok{    v[}\FunctionTok{sample}\NormalTok{(n, }\DecValTok{1}\NormalTok{)] }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:{-}}\DecValTok{1}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"all\_positive"}\NormalTok{) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{0}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"data\_type inconnu"}\NormalTok{)}
 \NormalTok{  \}}
 
   \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \}}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \}}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \}}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt\_Rcpp"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt\_Rcpp"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
+    \FunctionTok{stop}\NormalTok{(}\StringTok{"fonction inconnue"}\NormalTok{)}
 \NormalTok{  \}}
 
-  \CommentTok{\# Arrondi à 2 décimales}
-\NormalTok{  t }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(t, }\DecValTok{2}\NormalTok{)}
-
-  \FunctionTok{return}\NormalTok{(t)}
+  \FunctionTok{return}\NormalTok{(}\FunctionTok{round}\NormalTok{(t, }\DecValTok{2}\NormalTok{))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -310,7 +309,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 10708.68
+## [1] 13067.59
 \end{verbatim}
 
 \begin{Shaded}
@@ -320,7 +319,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 23.56
+## [1] 26.43
 \end{verbatim}
 
 \begin{Shaded}
@@ -330,7 +329,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 3.1
+## [1] 4.49
 \end{verbatim}
 
 \begin{Shaded}
@@ -340,7 +339,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.03
+## [1] 0.08
 \end{verbatim}
 
 \subsection{Simulations avec
@@ -372,7 +371,7 @@ Gain C++ versus R
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 452.9097
+## [1] 540.614
 \end{verbatim}
 
 \begin{Shaded}
@@ -382,7 +381,7 @@ Gain C++ versus R
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 89.15
+## [1] 43.1875
 \end{verbatim}
 
 Gain naive versus optimisé
@@ -394,7 +393,7 @@ Gain naive versus optimisé
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 3134.679
+## [1] 3579.84
 \end{verbatim}
 
 \begin{Shaded}
@@ -404,7 +403,7 @@ Gain naive versus optimisé
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 617.025
+## [1] 285.9792
 \end{verbatim}
 
 On recommence avec \texttt{n\ =\ 20000} seulement pour le gain avec C++
@@ -423,7 +422,7 @@ pour l'optimisé
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 166.5
+## [1] 71.08333
 \end{verbatim}
 
 \textbf{Conclusion:}
@@ -471,21 +470,39 @@ Vous avez besoin des packages \texttt{microbenchmark} et
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(microbenchmark)}
 \FunctionTok{library}\NormalTok{(ggplot2)}
+\FunctionTok{library}\NormalTok{(dplyr)}
 \end{Highlighting}
 \end{Shaded}
+
+\begin{verbatim}
+## 
+## Attachement du package : 'dplyr'
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:stats':
+## 
+##     filter, lag
+\end{verbatim}
+
+\begin{verbatim}
+## Les objets suivants sont masqués depuis 'package:base':
+## 
+##     intersect, setdiff, setequal, union
+\end{verbatim}
 
 \includegraphics{MaxSubarray1D_files/figure-latex/benchmark-1.pdf}
 
 \begin{verbatim}
 ## # A tibble: 6 x 8
-##       n expr       min_time  q1_time median_time mean_time q3_time max_time
-##   <dbl> <fct>         <dbl>    <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
-## 1   100 Naif_Cpp     0.0027  0.0028       0.0029   0.00368  0.0039   0.0227
-## 2   100 Kadane_Cpp   0.0006  0.0006       0.0008   0.00114  0.0011   0.0096
-## 3  5000 Naif_Cpp     5.83    6.11         6.20     6.23     6.31     7.05  
-## 4  5000 Kadane_Cpp   0.0055  0.00622      0.0105   0.0106   0.0122   0.0284
-## 5 10000 Naif_Cpp    23.7    24.5         24.7     24.7     24.9     25.6   
-## 6 10000 Kadane_Cpp   0.0093  0.0112       0.0167   0.0197   0.0246   0.0454
+##       n expr       min_time q1_time median_time mean_time q3_time max_time
+##   <dbl> <fct>         <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
+## 1   100 Naif_Cpp     0.0037  0.0037      0.0038  0.00461   0.0041   0.0302
+## 2   100 Kadane_Cpp   0.0008  0.0008      0.0008  0.000968  0.0009   0.0055
+## 3  5000 Naif_Cpp     6.38    6.60        7.03    7.03      7.40     7.93  
+## 4  5000 Kadane_Cpp   0.0136  0.0226      0.0294  0.0295    0.0351   0.0494
+## 5 10000 Naif_Cpp    26.0    27.2        27.6    27.8      28.4     30.8   
+## 6 10000 Kadane_Cpp   0.0297  0.0422      0.0598  0.0542    0.0633   0.0929
 \end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -511,27 +528,27 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 \end{Shaded}
 
 \begin{verbatim}
-##        n mean_time   sd_time
-## 1   5000     6.147 0.2213117
-## 2   5644     8.372 0.8580313
-## 3   6371    10.413 0.9465734
-## 4   7192    12.952 0.7278858
-## 5   8119    16.874 1.0361703
-## 6   9165    20.315 0.1591121
-## 7  10346    25.992 0.2482293
-## 8  11679    33.489 0.1614139
-## 9  13183    42.662 0.2569392
-## 10 14882    54.670 0.3962603
-## 11 16799    69.361 0.3786951
-## 12 18963    88.863 0.6887033
-## 13 21407   113.355 0.6515324
-## 14 24165   144.141 0.1893527
-## 15 27278   183.539 0.2845445
-## 16 30792   231.584 1.5268064
-## 17 34760   294.684 1.6846642
-## 18 39238   378.648 0.8272014
-## 19 44293   481.064 0.8169891
-## 20 50000   611.288 1.1626961
+##        n mean_time     sd_time
+## 1   5000     7.030   0.6015720
+## 2   5644     9.137   1.4486626
+## 3   6371    11.029   0.3733765
+## 4   7192    14.803   0.7333341
+## 5   8119    18.275   0.4438280
+## 6   9165    23.261   0.7987692
+## 7  10346    30.011   0.9560271
+## 8  11679    37.642   1.4872480
+## 9  13183    47.568   1.0732070
+## 10 14882    60.649   2.0885426
+## 11 16799    78.128   2.1889409
+## 12 18963   100.763   4.0222963
+## 13 21407   139.588  38.5011812
+## 14 24165   267.876  18.3665670
+## 15 27278   328.288  12.0094646
+## 16 30792   413.570   9.4930735
+## 17 34760   528.812  16.0630112
+## 18 39238   675.797  21.3498561
+## 19 44293   680.835 191.0169773
+## 20 50000   689.922  12.4544743
 \end{verbatim}
 
 \begin{Shaded}
@@ -542,26 +559,26 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 
 \begin{verbatim}
 ##         n mean_time    sd_time
-## 1  400000     0.473 0.02907844
-## 2  411957     0.498 0.03938415
-## 3  424271     0.506 0.02011080
-## 4  436953     0.504 0.01349897
-## 5  450014     0.520 0.01247219
-## 6  463465     0.538 0.01229273
-## 7  477319     0.584 0.05719363
-## 8  491587     0.613 0.03465705
-## 9  506281     0.614 0.03098387
-## 10 521415     0.654 0.06239658
-## 11 537001     0.618 0.01032796
-## 12 553052     0.675 0.07975657
-## 13 569584     0.673 0.06325434
-## 14 586610     0.692 0.07067924
-## 15 604144     0.717 0.05850926
-## 16 622203     0.786 0.12375603
-## 17 640802     0.756 0.06703233
-## 18 659956     0.781 0.06806043
-## 19 679683     0.803 0.08743887
-## 20 700000     0.865 0.10036046
+## 1  400000     2.116 0.35011744
+## 2  411957     2.182 0.17980236
+## 3  424271     2.280 0.45509462
+## 4  436953     2.236 0.10966616
+## 5  450014     2.255 0.07706419
+## 6  463465     2.432 0.29275701
+## 7  477319     2.515 0.28402856
+## 8  491587     2.541 0.17084431
+## 9  506281     2.573 0.14414884
+## 10 521415     2.629 0.14594139
+## 11 537001     2.763 0.11851395
+## 12 553052     2.801 0.17381024
+## 13 569584     3.122 0.47121121
+## 14 586610     2.945 0.07706419
+## 15 604144     3.007 0.04967673
+## 16 622203     3.149 0.08937437
+## 17 640802     3.319 0.27497273
+## 18 659956     3.419 0.37173617
+## 19 679683     3.410 0.10110501
+## 20 700000     3.518 0.09319037
 \end{verbatim}
 
 On vérifie la valeur du coefficient directeur pour les deux méthodes:
@@ -572,23 +589,23 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## lm(formula = log(res_Naive$mean_time) ~ log(res_Naive$n))
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q       Max 
-## -0.031452 -0.007422  0.000342  0.005343  0.044363 
+##      Min       1Q   Median       3Q      Max 
+## -0.34533 -0.10013 -0.02736  0.10413  0.29276 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      -15.065824   0.055459  -271.7   <2e-16 ***
-## log(res_Naive$n)   1.984911   0.005721   346.9   <2e-16 ***
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      -16.69069    0.50682  -32.93   <2e-16 ***
+## log(res_Naive$n)   2.17866    0.05228   41.67   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.01788 on 18 degrees of freedom
-## Multiple R-squared:  0.9999, Adjusted R-squared:  0.9998 
-## F-statistic: 1.204e+05 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.1634 on 18 degrees of freedom
+## Multiple R-squared:  0.9897, Adjusted R-squared:  0.9892 
+## F-statistic:  1736 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (naïf): 1.984911
+## Exposant estimé (naïf): 2.178658
 \end{verbatim}
 
 \begin{verbatim}
@@ -597,23 +614,23 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## lm(formula = log(res_Kadane$mean_time) ~ log(res_Kadane$n))
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q       Max 
-## -0.040001 -0.020735 -0.008311  0.019137  0.048648 
+##      Min       1Q   Median       3Q      Max 
+## -0.03866 -0.01699 -0.00346  0.01195  0.06722 
 ## 
 ## Coefficients:
 ##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       -14.04290    0.49391  -28.43  < 2e-16 ***
-## log(res_Kadane$n)   1.03091    0.03747   27.51 3.69e-16 ***
+## (Intercept)       -11.27146    0.41973  -26.85 5.65e-16 ***
+## log(res_Kadane$n)   0.93134    0.03185   29.25  < 2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.02846 on 18 degrees of freedom
-## Multiple R-squared:  0.9768, Adjusted R-squared:  0.9755 
-## F-statistic: 756.8 on 1 and 18 DF,  p-value: 3.695e-16
+## Residual standard error: 0.02419 on 18 degrees of freedom
+## Multiple R-squared:  0.9794, Adjusted R-squared:  0.9782 
+## F-statistic: 855.3 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (Kadane): 1.030915
+## Exposant estimé (Kadane): 0.9313389
 \end{verbatim}
 
 Les coefficients directeurs trouvés sont bien ceux que l'on attendait.
@@ -636,20 +653,20 @@ positives}\label{cas-particulier-des-donnuxe9es-presques-toutes-nuxe9gatives-ou-
 
 \begin{verbatim}
 ## # A tibble: 12 x 9
-##        n case            algo       min      q1   median    mean      q3     max
-##    <dbl> <fct>           <fct>    <dbl>   <dbl>    <dbl>   <dbl>   <dbl>   <dbl>
-##  1  1000 mostly_negative Naif    0.233   0.239   0.251   2.50e-1 2.55e-1  0.312 
-##  2  1000 mostly_negative Kadane  0.0029  0.0033  0.0035  5.36e-3 3.78e-3  0.0333
-##  3  1000 mostly_positive Naif    0.229   0.239   0.249   2.47e-1 2.53e-1  0.270 
-##  4  1000 mostly_positive Kadane  0.0029  0.0033  0.00355 5.06e-3 3.87e-3  0.0223
-##  5  1000 random          Naif    0.226   0.240   0.246   2.43e-1 2.49e-1  0.257 
-##  6  1000 random          Kadane  0.0014  0.0016  0.0017  1.93e-3 1.87e-3  0.008 
-##  7 10000 mostly_negative Naif   24.8    25.0    25.1     2.53e+1 2.56e+1 26.6   
-##  8 10000 mostly_negative Kadane  0.0252  0.0398  0.0476  5.25e-2 6.45e-2  0.109 
-##  9 10000 mostly_positive Naif   24.6    24.8    24.8     2.49e+1 2.49e+1 25.2   
-## 10 10000 mostly_positive Kadane  0.025   0.0360  0.0396  4.31e-2 4.79e-2  0.0942
-## 11 10000 random          Naif   24.6    24.7    24.8     2.48e+1 2.48e+1 25.4   
-## 12 10000 random          Kadane  0.01    0.0103  0.0129  1.56e-2 2.03e-2  0.0308
+##        n case            algo       min       q1  median    mean      q3     max
+##    <dbl> <fct>           <fct>    <dbl>    <dbl>   <dbl>   <dbl>   <dbl>   <dbl>
+##  1  1000 mostly_negative Naif    0.261   0.262    0.267  3.18e-1 3.08e-1  0.871 
+##  2  1000 mostly_negative Kadane  0.003   0.0031   0.0034 6.00e-3 6.78e-3  0.0278
+##  3  1000 mostly_positive Naif    0.260   0.261    0.262  2.68e-1 2.72e-1  0.299 
+##  4  1000 mostly_positive Kadane  0.0025  0.0026   0.0027 3.53e-3 3.1 e-3  0.0272
+##  5  1000 random          Naif    0.260   0.261    0.262  2.72e-1 2.64e-1  0.428 
+##  6  1000 random          Kadane  0.0028  0.00292  0.0031 4.39e-3 3.8 e-3  0.0411
+##  7 10000 mostly_negative Naif   25.7    26.2     26.6    2.68e+1 2.71e+1 28.3   
+##  8 10000 mostly_negative Kadane  0.026   0.0273   0.0340 3.40e-2 3.83e-2  0.0667
+##  9 10000 mostly_positive Naif   25.8    26.5     27.0    2.69e+1 2.72e+1 29.2   
+## 10 10000 mostly_positive Kadane  0.0211  0.0221   0.0272 3.07e-2 3.67e-2  0.078 
+## 11 10000 random          Naif   25.9    26.4     26.6    2.68e+1 2.71e+1 28.4   
+## 12 10000 random          Kadane  0.0274  0.0410   0.0511 5.16e-2 6.28e-2  0.0891
 \end{verbatim}
 
 \begin{Shaded}
@@ -670,14 +687,14 @@ positives}\label{cas-particulier-des-donnuxe9es-presques-toutes-nuxe9gatives-ou-
 
 \begin{verbatim}
 ## # A tibble: 6 x 3
-##       n case              gain
-##   <dbl> <fct>            <dbl>
-## 1  1000 mostly_negative   71.6
-## 2  1000 mostly_positive   70.1
-## 3  1000 random           145. 
-## 4 10000 mostly_negative  527. 
-## 5 10000 mostly_positive  627. 
-## 6 10000 random          1920.
+##       n case             gain
+##   <dbl> <fct>           <dbl>
+## 1  1000 mostly_negative  78.6
+## 2  1000 mostly_positive  97.1
+## 3  1000 random           84.4
+## 4 10000 mostly_negative 782. 
+## 5 10000 mostly_positive 992. 
+## 6 10000 random          520.
 \end{verbatim}
 
 \begin{Shaded}
