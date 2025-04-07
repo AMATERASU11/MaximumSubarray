@@ -299,7 +299,7 @@ vector_n_naive <- exp(seq(log(5000), log(50000), length.out = nbSimus)) |> round
 res_Naive <- benchmark_subarray("naive_Rcpp", vector_n_naive, nbRep)
 
 # Benchmark pour Kadane
-vector_n_kadane <- exp(seq(log(10000), log(500000), length.out = nbSimus)) |> round()
+vector_n_kadane <- exp(seq(log(100000), log(500000), length.out = nbSimus)) |> round()
 res_Kadane <- benchmark_subarray("opt_Rcpp", vector_n_kadane, nbRep)
 
 # Graphique log-log avec barres d'erreur
@@ -352,84 +352,122 @@ print(summary(model_kadane))
 cat("Exposant estimé (Kadane):", coef(model_kadane)[2], "\n")
 ```
 
-Les coefficients dfirecteurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour l'insertion et 1 pour le tas.
+Les coefficients dfirecteurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour la méthode naïve et 1 pour l'algorithme de Kadane
 
 
 ___ 
 
 
-# Cas particulier des données presque triées
-
-On considère des données triées avec 5% de valeurs échangées au hasard.
-
-Sur un exemple cela donne : 
-```{r}
-v <- 1:100
-n_swap <- floor(0.05 * length(v))
-swap_indices <- sample(length(v), n_swap)
-v[swap_indices] <- sample(v[swap_indices])
-v
-```
-
-
-```{r}
-one.simu2 <- function(n, func)
-{
-  v <- 1:n
-  n_swap <- floor(0.05 * length(v))
-  swap_indices <- sample(length(v), n_swap)
-  v[swap_indices] <- sample(v[swap_indices])
-  if(func == "insertion_sort"){insertion_sort(v)}
-  if(func == "heap_sort"){heap_sort(v)} 
-  if(func == "insertion_sort_Rcpp"){insertion_sort_Rcpp(v)}
-  if(func == "heap_sort_Rcpp"){heap_sort_Rcpp(v)}
-}
-```
+# Cas particulier des données toutes négatives ou avec un seul positif
 
 
 ```{r benchmark2, echo = FALSE, warning=FALSE, message=FALSE}
-# Function to run benchmark
-benchmark_sorting <- function(n, times = 50)
-{
+# Fonction de benchmark modifiée
+benchmark_subarray <- function(n, case) {
+  if(case == "all_negative") {
+    v <- runif(n, -100, -1)
+  } else if(case == "single_positive") {
+    v <- rep(-1, n)
+    v[sample(n, 1)] <- 100
+  } else {
+    v <- sample(-100:100, n, replace = TRUE)
+  }
+  
   microbenchmark(
-    insertion_sort = one.simu2(n, func = "insertion_sort_Rcpp"),
-    heap_sort = one.simu2(n, func = "heap_sort_Rcpp"),
-    times = times,
-    control = list(gc = FALSE)
+    Naif = max_subarray_sum_naive_Rcpp(v),
+    Kadane = max_subarray_sum_opt_Rcpp(v),
+    times = 50
   )
 }
-# Run benchmarks for different n values
-n_values <- c(1000, 10000)
-results <- lapply(n_values, benchmark_sorting)
 
-# Combine results into a single dataframe with n as an identifier
-df_results <- do.call(rbind, Map(cbind, results, n = n_values))
-# Plot with better aesthetics
-ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
-  geom_violin(alpha = 0.7) +
-  facet_wrap(~n, scales = "free") +
-  labs(title = "Sorting Algorithm in Rcpp Benchmark",
-       x = "Sorting Algorithm",
-       y = "Execution Time (ms)",
-       fill = "Algorithm") +
-  theme_minimal()
+# Exécution pour différentes tailles
+n_values <- c(1000, 10000)
+cases <- c("all_negative", "single_positive", "random")
+
+# Génération des résultats
+results <- expand.grid(n = n_values, case = cases) |>
+  rowwise() |>
+  mutate(
+    bm = list(benchmark_subarray(n, case)),
+    data = list(
+      data.frame(
+        expr = bm$expr,
+        time = bm$time,
+        n = n,
+        case = case
+      )
+    )
+  ) |>
+  pull(data) |>
+  bind_rows()
+
+# Visualisation par violon
+ggplot(results, aes(x = case, y = time/1e6, fill = expr)) +
+  geom_violin(alpha = 0.7, trim = FALSE) +
+  facet_wrap(~n, scales = "free_y", labeller = labeller(n = function(x) paste("n =", x))) +
+  scale_y_log10() +  # Échelle log pour mieux voir les différences
+  labs(
+    title = "Comparaison des algorithmes Maximum Subarray",
+    subtitle = "Performance sur différents cas de données",
+    x = "Type de données d'entrée",
+    y = "Temps d'exécution (ms, échelle log)",
+    fill = "Algorithme"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
-df_results %>%
-  group_by(n, expr) %>%
+library(tidyr)
+
+# Statistiques détaillées
+stats_results <- results |>
+  group_by(n, case, expr) |>
   summarise(
-    min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
-    q1_time = quantile(time, 0.25) / 1e6,
-    median_time = median(time) / 1e6,
-    mean_time = mean(time) / 1e6,
-    q3_time = quantile(time, 0.75) / 1e6,
-    max_time = max(time) / 1e6,
+    min = min(time)/1e6,
+    q1 = quantile(time, 0.25)/1e6,
+    median = median(time)/1e6,
+    mean = mean(time)/1e6,
+    q3 = quantile(time, 0.75)/1e6,
+    max = max(time)/1e6,
     .groups = "drop"
-  )
+  ) |>
+  arrange(n, case, expr)
+
+# Affichage des stats
+print(stats_results)
 ```
 
+```{r}
+library(dplyr)
+library(tidyr)
 
-L'algorithme d'insertion est ici plus rapide pour la longueur `1000`. Cela est dû au fait que pour un vecteur déjà trié, l'algorithme d'insertion est linéaire et nous sommes dans un cas proche du linéaire.
+gain_comparison <- stats_results %>%
+  group_by(n, case) %>%
+  summarise(
+    gain = median[expr == "Naif"]/median[expr == "Kadane"],
+    .groups = "drop"
+  )
+
+print(gain_comparison)
+```
+```{r}
+gain_plot <- gain_comparison %>%
+  ggplot(aes(x = case, y = gain, fill = factor(n))) +
+  geom_col(position = position_dodge(preserve = "single")) +
+  geom_text(aes(label = round(gain, 1)), 
+            position = position_dodge(width = 0.9),
+            vjust = -0.5) +
+  labs(
+    title = "Gain de performance de Kadane vs Naïf",
+    x = "Type de données",
+    y = "Facteur d'accélération",
+    fill = "Taille (n)"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Pastel1")
+
+print(gain_plot)
+```
+
 
