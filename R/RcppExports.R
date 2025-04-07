@@ -3,21 +3,21 @@
 
 #' @export
 max_subarray_sum_naive_Rcpp <- function(arr) {
-    .Call('_MaximumSubarray_max_subarray_sum_naive_Rcpp', PACKAGE = 'MaximumSubarray', arr)
+    .Call(`_MaximumSubarray_max_subarray_sum_naive_Rcpp`, arr)
 }
 
 #' @export
 max_subarray_sum_opt_Rcpp <- function(arr) {
-    .Call('_MaximumSubarray_max_subarray_sum_opt_Rcpp', PACKAGE = 'MaximumSubarray', arr)
+    .Call(`_MaximumSubarray_max_subarray_sum_opt_Rcpp`, arr)
 }
 
 #' @export
 max_subarray_rectangle_naive_Rcpp <- function(mat) {
-    .Call('_MaximumSubarray_max_subarray_rectangle_naive_Rcpp', PACKAGE = 'MaximumSubarray', mat)
+    .Call(`_MaximumSubarray_max_subarray_rectangle_naive_Rcpp`, mat)
 }
 
 #' @export
 max_subarray_rectangle_opt_Rcpp <- function(mat) {
-    .Call('_MaximumSubarray_max_subarray_rectangle_opt_Rcpp', PACKAGE = 'MaximumSubarray', mat)
+    .Call(`_MaximumSubarray_max_subarray_rectangle_opt_Rcpp`, mat)
 }
 
