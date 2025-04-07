@@ -3,23 +3,123 @@ title: "MaxSubarray2D"
 author: "Taqwa Ben Romdhane"
 date: "2025-04-07"
 output: html_document
+toc: true
+toc_depth: 3
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+1.  **Introduction**
 
+    -   Présentation du problème
 
+    -   Objectifs du projet
 
-```{r cars}
-summary(cars)
+2.  **Max subarray problem**
+
+    -   Solution naïve (Méthode Brut Force)
+
+    -   Solution optimale (algorithme de Kadane)
+
+3.  **Maximum Sum submatrix**
+
+    -   Solution naïve
+
+    -   Solution optimale (algorithme de Kadane)
+
+4.  **Évaluation des performances**
+
+    -   Temps d'exécution pour le problème 1D
+
+    -   Temps d'exécution pour le problème 2D
+
+5.  **Analyse de la complexité**
+
+## 
+
+### **Maximum Sum submatrix**
+
+Etant donné un tableau 2D, la tâche consiste à trouver la sous-matrice de somme maximale qu'il contient.
+
+Imaginez que vous avez cette matrice 4x5 :
+
+Le rectangle en vert présente la sous-matrice avec la somme maximale égale à 29.
+
+#### Approche naive :
+
+Nous explorons tous les rectangles possibles dans le tableau 2D donné, en utilisant quatre variables : deux pour définir les limites gauche et droite et deux autres pour définir les limites supérieure et inférieure et calculer leurs sommes, et garder une trace de la somme maximale trouvée.
+
+**Complexité algorithmique** : $O\left((n m)^3\right)$ *car nous parcourons toutes les limites du rectangle en* $O\left((n m)^2\right)$. Pour chaque rectangle, nous calculons sa somme en O(n*m). Par conséquent, la complexité temporelle globale est* $O\left((n m)^3\right)$ *O((n*m) \^ 2 \* (n*m)) = O((n*m) \^ 3). où n est le nombre de lignes et m le nombre de colonnes de la matrice.
+
+#### Un premier exemple
+
+```{r}
+# installer le package
+devtools::install_github("AMATERASU11/MaximumSubarray")
+# charger le package
+library(MaximumSubarray)
 ```
 
-## Including Plots
+```{r}
+# Définir la matrice
+matrix <- matrix(c(
+  1, 2, -1, -4, -20,
+  -8, -3, 4, 2, 1,
+  3, 8, 10, 1, 3,
+  -4, -1, 1, 7, -6
+), nrow = 4, byrow = TRUE)
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+# Afficher la matrice
+print(matrix)
 ```
 
+```{r}
+MaxSubarray
+```
+
+```{r}
+
+```
+
+#### Comapraison des algorithmes en R
+
+```{r}
+# comparaison de temps d'éxécution
+
+one.simu <- function(arr, algos) {
+  results <- list()
+  
+  for (algo in algos) {
+    t <- system.time(algo$func(arr))[[1]]
+    results[[algo$name]] <- t
+  }
+  
+  return(results)
+}
+```
+
+```{r}
+
+```
+
+#### Comparaison des algo en C++
+
+```{r}
+
+```
+
+```{r}
+
+```
+
+#### Comparaison entre R et C++
+
+```{r}
+
+```
+
+```{r}
+
+```
