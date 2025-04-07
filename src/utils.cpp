@@ -3,17 +3,21 @@
 #include <climits>
 
 bool all_non_negative(const std::vector<std::vector<int>> &mat) {
-  for (const auto &row : mat)
-    for (int val : row)
+  for (const auto &row : mat){
+    for (int val : row){
       if (val < 0) return false;
-      return true;
+    }
+  }
+  return true;
 }
 
 bool all_non_positive(const std::vector<std::vector<int>> &mat) {
-  for (const auto &row : mat)
-    for (int val : row)
+  for (const auto &row : mat){
+    for (int val : row){
       if (val > 0) return false;
-      return true;
+    }
+  }
+  return true;
 }
 
 int total_sum(const std::vector<std::vector<int>> &mat) {

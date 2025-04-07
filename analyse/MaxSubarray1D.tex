@@ -1,0 +1,710 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{5}
+\usepackage[french]{babel}
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdfauthor={Khalil Ounis, Manal Derghal, Taqwa BenRomdhane},
+  colorlinks=true,
+  linkcolor={Maroon},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={blue},
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Analyse des algorithmes de Maximum Subarray 1D\\
+\strut ~M2 Data Science Algorithmique}
+\author{Khalil Ounis, Manal Derghal, Taqwa BenRomdhane}
+\date{jeudi 27 mars 2025}
+
+\begin{document}
+\maketitle
+
+{
+\hypersetup{linkcolor=}
+\setcounter{tocdepth}{2}
+\tableofcontents
+}
+\noindent\hrulefill
+
+\section{Description du problème et
+objectif}\label{description-du-probluxe8me-et-objectif}
+
+Le problème du Maximum Subarray 1D consiste à trouver la sous-séquence
+contiguë d'un tableau numérique dont la somme des éléments est maximale.
+Ce problème classique en algorithmique a des applications en analyse de
+données financières, bioinformatique et traitement du signal.
+
+\href{https://en.wikipedia.org/wiki/Maximum_subarray_problem}{La page
+Wikipedia du Maximum Subarray} présente plusieurs approches
+algorithmiques pour résoudre ce problème. Nous nous concentrons sur deux
+méthodes :
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Algorithme naïf : complexité O(n²)
+\item
+  Algorithme de Kadane : complexité optimale O(n)
+\end{enumerate}
+
+Nos objectifs sont : a) d'implémenter ces algorithmes en R et C++ et
+évaluer le gain de temps. b) de confirmer les complexités théoriques par
+des simulations intensives.
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Un premier exemple}\label{un-premier-exemple}
+
+Le package se télécharge ainsi :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{devtools}\SpecialCharTok{::}\FunctionTok{install\_github}\NormalTok{(}\StringTok{"AMATERASU11/MaximumSubarray"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+et ses fonctions sont rendues disponibles sur Rstudio ainsi :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(MaximumSubarray)}
+\end{Highlighting}
+\end{Shaded}
+
+On simule un petit exemple d'un vecteur \texttt{v} de taille
+\texttt{100}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, }\DecValTok{50}\NormalTok{, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+On teste les 4 algorithmes implémentés avec des noms explicites :
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{max\_subarray\_sum\_naive}
+\item
+  \texttt{max\_subarray\_sum\_opt}
+\item
+  \texttt{max\_subarray\_sum\_naive\_Rcpp}
+\item
+  \texttt{max\_subarray\_sum\_opt\_Rcpp}
+\end{itemize}
+
+Cela donne :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{v}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  [1]  58  78 -87  94  69 -51  17 -58 -87  17  52 -11 -10  96 -10  84  -9  36  -2
+## [20] -29 -75 -94  69  36  63 -23 -20 -58   2  16 -25  42 -69   8 -94  36  68 -27
+## [39] -78  54  87 -48  34 -48  54  65 -67 -32 -29 -25
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max\_subarray\_sum\_naive}\NormalTok{(v)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 278
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 278
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max\_subarray\_sum\_opt}\NormalTok{(v)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 278
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 278
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Comparaison R avec C++}\label{comparaison-r-avec-c}
+
+On va faire des comparaisons pour les deux types d'algorithme en R et
+C++ pour quantifier leur différence de performance.
+
+La fonction \texttt{one.simu.time} retourne le temps recherché, et
+\texttt{one.simu} sera utilisé par \texttt{microbenchmark}, on retourne
+le temps en ms
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(microbenchmark)}
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\NormalTok{one.simu.time }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func, }\AttributeTok{data\_type =} \StringTok{"random"}\NormalTok{) \{}
+  \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"random"}\NormalTok{) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"all\_negative"}\NormalTok{) \{}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{ }\CommentTok{\# single\_positive}
+\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(n, }\SpecialCharTok{{-}}\DecValTok{100}\NormalTok{, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{)}
+\NormalTok{    v[}\FunctionTok{sample}\NormalTok{(n, }\DecValTok{1}\NormalTok{)] }\OtherTok{\textless{}{-}} \FunctionTok{runif}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{1}\NormalTok{, }\DecValTok{100}\NormalTok{)}
+\NormalTok{  \}}
+
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive"}\NormalTok{) \{}
+\NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) \{}
+\NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt"}\NormalTok{) \{}
+\NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
+\NormalTok{  \}}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt\_Rcpp"}\NormalTok{) \{}
+\NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
+\NormalTok{  \}}
+
+  \CommentTok{\# Arrondi à 2 décimales}
+\NormalTok{  t }\OtherTok{\textless{}{-}} \FunctionTok{round}\NormalTok{(t, }\DecValTok{2}\NormalTok{)}
+
+  \FunctionTok{return}\NormalTok{(t)}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Un essai}\label{un-essai}
+
+Sur un exemple, on obtient :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{10000}
+\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 10708.68
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive\_Rcpp"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 23.56
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3.1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.03
+\end{verbatim}
+
+\subsection{Simulations avec
+répétitions}\label{simulations-avec-ruxe9puxe9titions}
+
+On reproduit ces comparaisons de manière plus robuste:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{nbSimus }\OtherTok{\textless{}{-}} \DecValTok{10}
+
+\NormalTok{time1 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time2 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus);}
+\NormalTok{time3 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time4 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
+
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time1[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time2[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive\_Rcpp"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time3[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time4[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)\}}
+\end{Highlighting}
+\end{Shaded}
+
+Gain C++ versus R
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(time1)}\SpecialCharTok{/}\FunctionTok{mean}\NormalTok{(time2)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 452.9097
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(time3)}\SpecialCharTok{/}\FunctionTok{mean}\NormalTok{(time4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 89.15
+\end{verbatim}
+
+Gain naive versus optimisé
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(time1)}\SpecialCharTok{/}\FunctionTok{mean}\NormalTok{(time3)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 3134.679
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{mean}\NormalTok{(time2)}\SpecialCharTok{/}\FunctionTok{mean}\NormalTok{(time4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 617.025
+\end{verbatim}
+
+On recommence avec \texttt{n\ =\ 20000} seulement pour le gain avec C++
+pour l'optimisé
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{20000}
+\NormalTok{nbSimus }\OtherTok{\textless{}{-}} \DecValTok{10}
+\NormalTok{time3 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time4 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time3[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time4[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)\}}
+\FunctionTok{median}\NormalTok{(time3)}\SpecialCharTok{/}\FunctionTok{median}\NormalTok{(time4)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 166.5
+\end{verbatim}
+
+\textbf{Conclusion:}
+
+\subsubsection{Performances C++ vs R :}\label{performances-c-vs-r}
+
+\begin{itemize}
+\item
+  Naïf : C++ 443× plus rapide
+\item
+  Kadane : C++ 102× plus rapide → 177× pour n=20k
+\end{itemize}
+
+\subsubsection{Efficacité algorithmique
+:}\label{efficacituxe9-algorithmique}
+
+\begin{itemize}
+\item
+  Kadane 3 261× mieux que naïf en R, 754× en C++
+\item
+  Confirme O(n²) naïf vs O(n) Kadane
+\end{itemize}
+
+\subsubsection{Recommandations :}\label{recommandations}
+
+\begin{itemize}
+\item
+  n \textgreater{} 1k : Toujours préférer Kadane
+\item
+  n \textgreater{} 10k : Obligatoire d'utiliser Rcpp
+\item
+  Très grands n : Seul Kadane+Rcpp reste viable
+\end{itemize}
+
+\subsection{\texorpdfstring{Simulations avec
+\texttt{microbenchmark}}{Simulations avec microbenchmark}}\label{simulations-avec-microbenchmark}
+
+Vous avez besoin des packages \texttt{microbenchmark} et
+\texttt{ggplot2} pour exécuter les simulations et afficher les résultats
+(sous forme de diagrammes en violon). Nous comparons
+\texttt{naive\_Rcpp} avec \texttt{opt\_Rcpp} pour des tailles de données
+\texttt{n\ =\ 1000} et \texttt{n\ =\ 10000}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(microbenchmark)}
+\FunctionTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MaxSubarray1D_files/figure-latex/benchmark-1.pdf}
+
+\begin{verbatim}
+## # A tibble: 6 x 8
+##       n expr       min_time  q1_time median_time mean_time q3_time max_time
+##   <dbl> <fct>         <dbl>    <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
+## 1   100 Naif_Cpp     0.0027  0.0028       0.0029   0.00368  0.0039   0.0227
+## 2   100 Kadane_Cpp   0.0006  0.0006       0.0008   0.00114  0.0011   0.0096
+## 3  5000 Naif_Cpp     5.83    6.11         6.20     6.23     6.31     7.05  
+## 4  5000 Kadane_Cpp   0.0055  0.00622      0.0105   0.0106   0.0122   0.0284
+## 5 10000 Naif_Cpp    23.7    24.5         24.7     24.7     24.9     25.6   
+## 6 10000 Kadane_Cpp   0.0093  0.0112       0.0167   0.0197   0.0246   0.0454
+\end{verbatim}
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Evaluation de la
+complexité}\label{evaluation-de-la-complexituxe9}
+
+Les vecteurs de longueurs \texttt{vector\_n\_naive} et
+\texttt{vector\_n\_kadane} (\texttt{n} dans les dataframes) sont choisis
+sur l'echelle logarithmique afin d'avoir un pas constant sur l'échelle
+logarithmique en abscisse pour la régression.
+
+On réalise 10 répétitions pour chaque valeur de \texttt{n} et pour
+chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
+
+\includegraphics{MaxSubarray1D_files/figure-latex/simu complexite-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Affichage des résultats}
+\NormalTok{res\_Naive}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        n mean_time   sd_time
+## 1   5000     6.147 0.2213117
+## 2   5644     8.372 0.8580313
+## 3   6371    10.413 0.9465734
+## 4   7192    12.952 0.7278858
+## 5   8119    16.874 1.0361703
+## 6   9165    20.315 0.1591121
+## 7  10346    25.992 0.2482293
+## 8  11679    33.489 0.1614139
+## 9  13183    42.662 0.2569392
+## 10 14882    54.670 0.3962603
+## 11 16799    69.361 0.3786951
+## 12 18963    88.863 0.6887033
+## 13 21407   113.355 0.6515324
+## 14 24165   144.141 0.1893527
+## 15 27278   183.539 0.2845445
+## 16 30792   231.584 1.5268064
+## 17 34760   294.684 1.6846642
+## 18 39238   378.648 0.8272014
+## 19 44293   481.064 0.8169891
+## 20 50000   611.288 1.1626961
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{res\_Kadane}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##         n mean_time    sd_time
+## 1  400000     0.473 0.02907844
+## 2  411957     0.498 0.03938415
+## 3  424271     0.506 0.02011080
+## 4  436953     0.504 0.01349897
+## 5  450014     0.520 0.01247219
+## 6  463465     0.538 0.01229273
+## 7  477319     0.584 0.05719363
+## 8  491587     0.613 0.03465705
+## 9  506281     0.614 0.03098387
+## 10 521415     0.654 0.06239658
+## 11 537001     0.618 0.01032796
+## 12 553052     0.675 0.07975657
+## 13 569584     0.673 0.06325434
+## 14 586610     0.692 0.07067924
+## 15 604144     0.717 0.05850926
+## 16 622203     0.786 0.12375603
+## 17 640802     0.756 0.06703233
+## 18 659956     0.781 0.06806043
+## 19 679683     0.803 0.08743887
+## 20 700000     0.865 0.10036046
+\end{verbatim}
+
+On vérifie la valeur du coefficient directeur pour les deux méthodes:
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(res_Naive$mean_time) ~ log(res_Naive$n))
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.031452 -0.007422  0.000342  0.005343  0.044363 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      -15.065824   0.055459  -271.7   <2e-16 ***
+## log(res_Naive$n)   1.984911   0.005721   346.9   <2e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.01788 on 18 degrees of freedom
+## Multiple R-squared:  0.9999, Adjusted R-squared:  0.9998 
+## F-statistic: 1.204e+05 on 1 and 18 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{verbatim}
+## Exposant estimé (naïf): 1.984911
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = log(res_Kadane$mean_time) ~ log(res_Kadane$n))
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.040001 -0.020735 -0.008311  0.019137  0.048648 
+## 
+## Coefficients:
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)       -14.04290    0.49391  -28.43  < 2e-16 ***
+## log(res_Kadane$n)   1.03091    0.03747   27.51 3.69e-16 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 0.02846 on 18 degrees of freedom
+## Multiple R-squared:  0.9768, Adjusted R-squared:  0.9755 
+## F-statistic: 756.8 on 1 and 18 DF,  p-value: 3.695e-16
+\end{verbatim}
+
+\begin{verbatim}
+## Exposant estimé (Kadane): 1.030915
+\end{verbatim}
+
+Les coefficients directeurs trouvés sont bien ceux que l'on attendait.
+La valeur 2 pour la méthode naïve et 1 pour l'algorithme de Kadane
+
+\begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
+
+\section{Cas particulier des données presques toutes négatives ou toutes
+positives}\label{cas-particulier-des-donnuxe9es-presques-toutes-nuxe9gatives-ou-toutes-positives}
+
+\begin{itemize}
+\tightlist
+\item
+  cas 1 : 95\% de valeurs négatives, 5\% positives
+\item
+  cas 2 : 95\% de valeurs positives, 5\% négatives
+\end{itemize}
+
+\includegraphics{MaxSubarray1D_files/figure-latex/benchmark2-1.pdf}
+
+\begin{verbatim}
+## # A tibble: 12 x 9
+##        n case            algo       min      q1   median    mean      q3     max
+##    <dbl> <fct>           <fct>    <dbl>   <dbl>    <dbl>   <dbl>   <dbl>   <dbl>
+##  1  1000 mostly_negative Naif    0.233   0.239   0.251   2.50e-1 2.55e-1  0.312 
+##  2  1000 mostly_negative Kadane  0.0029  0.0033  0.0035  5.36e-3 3.78e-3  0.0333
+##  3  1000 mostly_positive Naif    0.229   0.239   0.249   2.47e-1 2.53e-1  0.270 
+##  4  1000 mostly_positive Kadane  0.0029  0.0033  0.00355 5.06e-3 3.87e-3  0.0223
+##  5  1000 random          Naif    0.226   0.240   0.246   2.43e-1 2.49e-1  0.257 
+##  6  1000 random          Kadane  0.0014  0.0016  0.0017  1.93e-3 1.87e-3  0.008 
+##  7 10000 mostly_negative Naif   24.8    25.0    25.1     2.53e+1 2.56e+1 26.6   
+##  8 10000 mostly_negative Kadane  0.0252  0.0398  0.0476  5.25e-2 6.45e-2  0.109 
+##  9 10000 mostly_positive Naif   24.6    24.8    24.8     2.49e+1 2.49e+1 25.2   
+## 10 10000 mostly_positive Kadane  0.025   0.0360  0.0396  4.31e-2 4.79e-2  0.0942
+## 11 10000 random          Naif   24.6    24.7    24.8     2.48e+1 2.48e+1 25.4   
+## 12 10000 random          Kadane  0.01    0.0103  0.0129  1.56e-2 2.03e-2  0.0308
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(dplyr)}
+\FunctionTok{library}\NormalTok{(tidyr)}
+
+\NormalTok{gain\_comparison }\OtherTok{\textless{}{-}}\NormalTok{ stats\_results }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{group\_by}\NormalTok{(n, case) }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{summarise}\NormalTok{(}
+    \AttributeTok{gain =}\NormalTok{ median[algo }\SpecialCharTok{==} \StringTok{"Naif"}\NormalTok{]}\SpecialCharTok{/}\NormalTok{median[algo }\SpecialCharTok{==} \StringTok{"Kadane"}\NormalTok{],}
+    \AttributeTok{.groups =} \StringTok{"drop"}
+\NormalTok{  )}
+
+\FunctionTok{print}\NormalTok{(gain\_comparison)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 6 x 3
+##       n case              gain
+##   <dbl> <fct>            <dbl>
+## 1  1000 mostly_negative   71.6
+## 2  1000 mostly_positive   70.1
+## 3  1000 random           145. 
+## 4 10000 mostly_negative  527. 
+## 5 10000 mostly_positive  627. 
+## 6 10000 random          1920.
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{gain\_plot }\OtherTok{\textless{}{-}}\NormalTok{ gain\_comparison }\SpecialCharTok{\%\textgreater{}\%}
+  \FunctionTok{ggplot}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ case, }\AttributeTok{y =}\NormalTok{ gain, }\AttributeTok{fill =} \FunctionTok{factor}\NormalTok{(n))) }\SpecialCharTok{+}
+  \FunctionTok{geom\_col}\NormalTok{(}\AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\AttributeTok{preserve =} \StringTok{"single"}\NormalTok{)) }\SpecialCharTok{+}
+  \FunctionTok{geom\_text}\NormalTok{(}\FunctionTok{aes}\NormalTok{(}\AttributeTok{label =} \FunctionTok{round}\NormalTok{(gain, }\DecValTok{1}\NormalTok{)), }
+            \AttributeTok{position =} \FunctionTok{position\_dodge}\NormalTok{(}\AttributeTok{width =} \FloatTok{0.9}\NormalTok{),}
+            \AttributeTok{vjust =} \SpecialCharTok{{-}}\FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
+  \FunctionTok{labs}\NormalTok{(}
+    \AttributeTok{title =} \StringTok{"Gain de performance de Kadane vs Naïf"}\NormalTok{,}
+    \AttributeTok{x =} \StringTok{"Type de données"}\NormalTok{,}
+    \AttributeTok{y =} \StringTok{"Facteur d\textquotesingle{}accélération"}\NormalTok{,}
+    \AttributeTok{fill =} \StringTok{"Taille (n)"}
+\NormalTok{  ) }\SpecialCharTok{+}
+  \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+  \FunctionTok{scale\_fill\_brewer}\NormalTok{(}\AttributeTok{palette =} \StringTok{"Pastel1"}\NormalTok{)}
+
+\FunctionTok{print}\NormalTok{(gain\_plot)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MaxSubarray1D_files/figure-latex/unnamed-chunk-16-1.pdf}
+
+Ces résultats montrent que les algorithmes sont plus efficaces sur des
+données avec une structure, comme celles qui sont majoritairement
+positives ou négatives, par rapport aux données complètement aléatoires.
+
+\end{document}
