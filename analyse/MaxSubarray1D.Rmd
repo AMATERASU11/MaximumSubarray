@@ -58,7 +58,7 @@ ___
 Le package se télécharge ainsi :
 
 ```{r, eval=FALSE}
-devtools::install_github("AMATERASU11/MaximumSubarray", force=TRUE)
+devtools::install_github("AMATERASU11/MaximumSubarray")
 ```
 
 et ses fonctions sont rendues disponibles sur Rstudio ainsi :
@@ -86,8 +86,8 @@ Cela donne :
 ```{r}
 v
 max_subarray_sum_naive(v)
-max_subarray_sum_opt(v)
 max_subarray_sum_naive_Rcpp(v)
+max_subarray_sum_opt(v)
 max_subarray_sum_opt_Rcpp(v)
 ```
 
@@ -98,27 +98,40 @@ ___
 
 On va faire des comparaisons pour les deux types d'algorithme en R et C++ pour quantifier leur différence de performance.
 
-La fonction `one.simu.time` retourne le temps recherché, et `one.simu` sera utilisé par `microbenchmark`
+La fonction `one.simu.time` retourne le temps recherché, et `one.simu` sera utilisé par `microbenchmark`, on retourne le temps en ms
 
 ```{r}
-one.simu.time <- function(n, type = "sample", func = "insertion_sort")
-{
-  if(type == "sample"){v <- sample(n)}else{v <- n:1}
-  if(func == "insertion_sort"){t <- system.time(insertion_sort(v))[[1]]}
-  if(func == "heap_sort"){t <- system.time(heap_sort(v))[[1]]} 
-  if(func == "insertion_sort_Rcpp"){t <- system.time(insertion_sort_Rcpp(v))[[1]]}
-  if(func == "heap_sort_Rcpp"){t <- system.time(heap_sort_Rcpp(v))[[1]]}
+library(microbenchmark)
+
+one.simu.time <- function(n, func, data_type = "random") {
+  if (data_type == "random") {
+    v <- sample(-100:100, n, replace = TRUE)
+  } else if (data_type == "all_negative") {
+    v <- runif(n, -100, -1)
+  } else { # single_positive
+    v <- runif(n, -100, -1)
+    v[sample(n, 1)] <- runif(1, 1, 100)
+  }
+
+  if (func == "naive") {
+    t <- microbenchmark(max_subarray_sum_naive(v), times = 1)$time / 1e6
+  }
+  if (func == "naive_Rcpp") {
+    t <- microbenchmark(max_subarray_sum_naive_Rcpp(v), times = 1)$time / 1e6
+  }
+  if (func == "opt") {
+    t <- microbenchmark(max_subarray_sum_opt(v), times = 1)$time / 1e6
+  }
+  if (func == "opt_Rcpp") {
+    t <- microbenchmark(max_subarray_sum_opt_Rcpp(v), times = 1)$time / 1e6
+  }
+
+  # Arrondi à 2 décimales
+  t <- round(t, 2)
+
   return(t)
 }
 
-one.simu <- function(n, type = "sample", func = "insertion_sort")
-{
-  if(type == "sample"){v <- sample(n)}else{v <- n:1}
-  if(func == "insertion_sort"){insertion_sort(v)}
-  if(func == "heap_sort"){heap_sort(v)} 
-  if(func == "insertion_sort_Rcpp"){insertion_sort_Rcpp(v)}
-  if(func == "heap_sort_Rcpp"){heap_sort_Rcpp(v)}
-}
 ```
 
 ## Un essai
@@ -127,10 +140,10 @@ Sur un exemple, on obtient :
 
 ```{r}
 n <- 10000
-one.simu.time(n, func = "insertion_sort")
-one.simu.time(n, func = "heap_sort")
-one.simu.time(n, func = "insertion_sort_Rcpp")
-one.simu.time(n, func = "heap_sort_Rcpp")
+one.simu.time(n, func = "naive")
+one.simu.time(n, func = "naive_Rcpp")
+one.simu.time(n, func = "opt")
+one.simu.time(n, func = "opt_Rcpp")
 ```
 
 
@@ -144,47 +157,64 @@ nbSimus <- 10
 time1 <- rep(0, nbSimus); time2 <- rep(0, nbSimus);
 time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
 
-for(i in 1:nbSimus){time1[i] <- one.simu.time(n, func = "insertion_sort")}
-for(i in 1:nbSimus){time2[i] <- one.simu.time(n, func = "insertion_sort_Rcpp")}
-for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "heap_sort")}
-for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "heap_sort_Rcpp")}
+for(i in 1:nbSimus){time1[i] <- one.simu.time(n, func = "naive")}
+for(i in 1:nbSimus){time2[i] <- one.simu.time(n, func = "naive_Rcpp")}
+for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "opt")}
+for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "opt_Rcpp")}
 ```
 
 Gain C++ versus R
 
 ```{r}
+
 mean(time1)/mean(time2)
 mean(time3)/mean(time4)
 ```
 
-Gain tas versus insertion
+Gain naive versus optimisé
 
 ```{r}
 mean(time1)/mean(time3)
 mean(time2)/mean(time4)
 ```
 
-On recommence avec `n = 20000` seulement pour le gain avec C++ pour le tas
+On recommence avec `n = 20000` seulement pour le gain avec C++ pour l'optimisé
 
 ```{r second simu}
 n <- 20000
 nbSimus <- 10
 time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
-for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "heap_sort")}
-for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "heap_sort_Rcpp")}
+for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "opt")}
+for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "opt_Rcpp")}
 median(time3)/median(time4)
 ```
 
 
 **Conclusion:**
 
-- pour une taille de `10000` la gain avec C++ atteint un facteur 500 entre le tas C++ et le tas R. Ce gain semble augmenter avec la taille. 
+### Performances C++ vs R :
 
-- Sans surprise, le tri par tas est plus rapide que le tri par insertion.
+- Naïf : C++ 523× plus rapide (26 ms vs 14 768 ms)
+
+- Kadane : C++ 66× plus rapide (0.06 ms vs 3.69 ms) → 101× pour n=20k
+
+### Efficacité algorithmique :
+
+- Kadane 3 600× mieux que naïf en R, 460× en C++
+
+- Confirme O(n²) naïf vs O(n) Kadane
+
+### Recommandations :
+
+- n > 1k : Toujours préférer Kadane
+
+- n > 10k : Obligatoire d'utiliser Rcpp
+
+- Très grands n : Seul Kadane+Rcpp reste viable
 
 ## Simulations avec `microbenchmark`
 
-Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les simulations et afficher les résultats (sous forme de diagrammes en violon). Nous comparons `insertion_sort_Rcpp` avec `heap_sort_Rcpp` pour des tailles de données `n = 1000` et `n = 10000`.
+Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les simulations et afficher les résultats (sous forme de diagrammes en violon). Nous comparons `naive_Rcpp` avec `opt_Rcpp` pour des tailles de données `n = 1000` et `n = 10000`.
 
 ```{r}
 library(microbenchmark)
@@ -192,36 +222,35 @@ library(ggplot2)
 ```
 
 ```{r benchmark, echo = FALSE, warning=FALSE, message=FALSE}
-# Function to run benchmark
-benchmark_sorting <- function(n, times = 50)
-{
+library(microbenchmark)
+library(ggplot2)
+
+benchmark_1d <- function(n) {
+  v <- sample(-100:100, n, replace = TRUE)
   microbenchmark(
-    insertion_sort = one.simu(n, func = "insertion_sort_Rcpp"),
-    heap_sort = one.simu(n, func = "heap_sort_Rcpp"),
-    times = times,
-    control = list(gc = FALSE)
+    Naif_Cpp = max_subarray_sum_naive_Rcpp(v),
+    Kadane_Cpp = max_subarray_sum_opt_Rcpp(v),
+    times = 20
   )
 }
-# Run benchmarks for different n values
-n_values <- c(100, 5000, 100000)
-results <- lapply(n_values, benchmark_sorting)
 
-# Combine results into a single dataframe with n as an identifier
-df_results <- do.call(rbind, Map(cbind, results, n = n_values))
-# Plot with better aesthetics
-ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
-  geom_violin(alpha = 0.7) +
+n_values <- c(100, 5000, 10000)
+results_1d <- lapply(n_values, benchmark_1d)
+
+# Visualisation
+df_1d <- do.call(rbind, Map(cbind, results_1d, n = n_values))
+ggplot(df_1d, aes(x = expr, y = time/1e6, fill = expr)) +
+  geom_violin() +
   facet_wrap(~n, scales = "free") +
-  labs(title = "Sorting Algorithm in Rcpp Benchmark",
-       x = "Sorting Algorithm",
-       y = "Execution Time (ms)",
-       fill = "Algorithm") +
+  labs(title = "Comparaison des algorithmes Maximum Subarray 1D",
+       x = "Algorithm",
+       y = "Temps (ms)") +
   theme_minimal()
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
 library(dplyr)
-df_results %>%
+df_1d %>%
   group_by(n, expr) %>%
   summarise(
     min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
@@ -245,6 +274,8 @@ Les vecteurs de longueurs `vector_n_insertion` et `vector_n_heap` (`n` dans les 
 On réalise 10 répétitions pour chaque valeur de `n` et pour chaque algorithme. Les barres d'erreur sont placées en "mean +/- sd". 
 
 ```{r simu complexite, echo = FALSE, warning=FALSE, message=FALSE}
+# Evaluation de la complexité pour Maximum Subarray
+
 library(ggplot2)
 library(dplyr)
 
@@ -259,69 +290,66 @@ benchmark_sorting <- function(func_name, n_values, nbRep) {
   data.frame(n = n_values, mean_time = results["mean_time",], sd_time = results["sd_time",])
 }
 
-
-
 # Parameters
 nbSimus <- 20
 nbRep <- 10
 
-# Heap Sort Benchmark
-vector_n_heap <- exp(seq(log(10000), log(100000), length.out = nbSimus))
-vector_n_heap <- round(vector_n_heap)
-res_Heap <- benchmark_sorting("heap_sort_Rcpp", vector_n_heap, nbRep)
+# Benchmark pour l'algorithme naïf
+vector_n_naive <- exp(seq(log(5000), log(50000), length.out = nbSimus)) |> round()
+res_Naive <- benchmark_subarray("naive_Rcpp", vector_n_naive, nbRep)
 
-# Insertion Sort Benchmark
-vector_n_insert <- exp(seq(log(5000), log(50000), length.out = nbSimus))
-vector_n_insert <- round(vector_n_insert)
-res_Insertion <- benchmark_sorting("insertion_sort_Rcpp", vector_n_insert, nbRep)
+# Benchmark pour Kadane
+vector_n_kadane <- exp(seq(log(10000), log(500000), length.out = nbSimus)) |> round()
+res_Kadane <- benchmark_subarray("opt_Rcpp", vector_n_kadane, nbRep)
 
-# Log-log plot of sorting performance with error bars
+# Graphique log-log avec barres d'erreur
 ggplot() +
-  # Heap Sort
-  geom_line(data = res_Heap, aes(x = n, y = mean_time, color = "Heap Sort"), size = 1) +
-  geom_errorbar(data = res_Heap, 
-                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Heap Sort"), 
+  # Algorithme naïf
+  geom_line(data = res_Naive, aes(x = n, y = mean_time, color = "Naïf Rcpp"), size = 1) +
+  geom_errorbar(data = res_Naive, 
+                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Naïf Rcpp"), 
                 width = 0.1, alpha = 0.5) +
   
-  # Insertion Sort
-  geom_line(data = res_Insertion, aes(x = n, y = mean_time, color = "Insertion Sort"), size = 1) +
-  geom_errorbar(data = res_Insertion, 
-                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Insertion Sort"), 
+  # Algorithme de Kadane
+  geom_line(data = res_Kadane, aes(x = n, y = mean_time, color = "Kadane Rcpp"), size = 1) +
+  geom_errorbar(data = res_Kadane, 
+                aes(x = n, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Kadane Rcpp"), 
                 width = 0.1, alpha = 0.5) +
 
-  # Log-log scales
+  # Échelles logarithmiques
   scale_x_log10() +
   scale_y_log10() +
   
-  # Labels & theme
-  labs(title = "Sorting Algorithm Performance (Log-Log Scale with Error Bars)",
-       x = "Data Length (log scale)", 
-       y = "Mean Running Time (log scale)",
+  # Labels & thème
+  labs(title = "Performance des algorithmes Maximum Subarray (échelle log-log)",
+       x = "Taille des données (échelle log)", 
+       y = "Temps moyen d'exécution (ms, échelle log)",
        color = "Algorithm") +
   theme_minimal()
 
 ```
 
 ```{r}
-res_Heap
-res_Insertion
+# Affichage des résultats
+res_Naive
+res_Kadane
 ```
 
 On vérifie la valeur du coefficient directeur pour les deux méthodes:
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-model <- lm(log(res_Insertion$mean_time) ~ log(res_Insertion$n))
-print(summary(model)) 
-slope_r <- coef(model)[2]
-cat("Estimated exponent:", slope_r, "\n")
+# Estimation de la complexité pour l'algorithme naïf
+model_naive <- lm(log(res_Naive$mean_time) ~ log(res_Naive$n))
+print(summary(model_naive)) 
+cat("Exposant estimé (naïf):", coef(model_naive)[2], "\n")
 ```
 
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-model <- lm(log(res_Heap$mean_time) ~ log(res_Heap$n))
-print(summary(model)) 
-slope_r <- coef(model)[2]
-cat("Estimated exponent:", slope_r, "\n")
+# Estimation de la complexité pour Kadane
+model_kadane <- lm(log(res_Kadane$mean_time) ~ log(res_Kadane$n))
+print(summary(model_kadane)) 
+cat("Exposant estimé (Kadane):", coef(model_kadane)[2], "\n")
 ```
 
 Les coefficients dfirecteurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour l'insertion et 1 pour le tas.
