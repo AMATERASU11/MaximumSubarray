@@ -11,45 +11,45 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // max_subarray_sum_naive_Rcpp
-int max_subarray_sum_naive_Rcpp(std::vector<int>& arr);
+List max_subarray_sum_naive_Rcpp(IntegerVector arr);
 RcppExport SEXP _MaximumSubarray_max_subarray_sum_naive_Rcpp(SEXP arrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<int>& >::type arr(arrSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type arr(arrSEXP);
     rcpp_result_gen = Rcpp::wrap(max_subarray_sum_naive_Rcpp(arr));
     return rcpp_result_gen;
 END_RCPP
 }
 // max_subarray_sum_opt_Rcpp
-int max_subarray_sum_opt_Rcpp(std::vector<int>& arr);
+List max_subarray_sum_opt_Rcpp(IntegerVector arr);
 RcppExport SEXP _MaximumSubarray_max_subarray_sum_opt_Rcpp(SEXP arrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<int>& >::type arr(arrSEXP);
+    Rcpp::traits::input_parameter< IntegerVector >::type arr(arrSEXP);
     rcpp_result_gen = Rcpp::wrap(max_subarray_sum_opt_Rcpp(arr));
     return rcpp_result_gen;
 END_RCPP
 }
 // max_subarray_rectangle_naive_Rcpp
-int max_subarray_rectangle_naive_Rcpp(std::vector<std::vector<int>>& mat);
+List max_subarray_rectangle_naive_Rcpp(NumericMatrix mat);
 RcppExport SEXP _MaximumSubarray_max_subarray_rectangle_naive_Rcpp(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<std::vector<int>>& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
     rcpp_result_gen = Rcpp::wrap(max_subarray_rectangle_naive_Rcpp(mat));
     return rcpp_result_gen;
 END_RCPP
 }
 // max_subarray_rectangle_opt_Rcpp
-int max_subarray_rectangle_opt_Rcpp(std::vector<std::vector<int>>& mat);
+List max_subarray_rectangle_opt_Rcpp(NumericMatrix mat);
 RcppExport SEXP _MaximumSubarray_max_subarray_rectangle_opt_Rcpp(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<std::vector<int>>& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type mat(matSEXP);
     rcpp_result_gen = Rcpp::wrap(max_subarray_rectangle_opt_Rcpp(mat));
     return rcpp_result_gen;
 END_RCPP

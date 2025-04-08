@@ -1,70 +1,91 @@
-//Optimized Approach for 2D case of Maximum Subarray Problem (using Kadane's Algorithm)
-
-
 #include <Rcpp.h>
+#include "utils.h"
 using namespace Rcpp;
 
+// Kadane's algorithm to find the maximum sum subarray in a 1D array
+List kadaneAlgorithm(NumericVector& arr) {
+  int n = arr.size();
+  double maxSum = arr[0];
+  double currSum = arr[0];
+  int start = 0, end = 0, tempStart = 0;
 
-// Kadane's algorithm to find the maximum sum
-// subarray in a 1D array
-int kadaneAlgorithm(std::vector<int>& temp) {
-  int rows = temp.size();
-  int currSum = 0;
-  int maxSum = INT_MIN;
-
-  for (int i = 0; i < rows; i++) {
-    currSum += temp[i];
-
-    // Update maxSum if the current sum is greater
-    if (maxSum < currSum) {
-      maxSum = currSum;
+  for (int i = 1; i < n; ++i) {
+    if (arr[i] > currSum + arr[i]) {
+      currSum = arr[i];
+      tempStart = i;
+    } else {
+      currSum += arr[i];
     }
 
-    // If the current sum becomes negative, reset it to 0
-    if (currSum < 0) {
-      currSum = 0;
+    if (currSum > maxSum) {
+      maxSum = currSum;
+      start = tempStart;
+      end = i;
     }
   }
 
-  return maxSum;
+  return List::create(
+    Named("sum") = maxSum,
+    Named("start") = start,
+    Named("end") = end
+  );
 }
 
-// Function to find the maximum sum rectangle in a 2D matrix
-//' @export
 // [[Rcpp::export]]
-int max_subarray_rectangle_opt_Rcpp(std::vector<std::vector<int>> &mat) {
-  int rows = mat.size();
-  int cols = mat[0].size();
+List max_subarray_rectangle_opt_Rcpp(NumericMatrix mat) {
+  int rows = mat.nrow();
+  int cols = mat.ncol();
 
-  int maxSum = INT_MIN;
+  if (rows == 0 || cols == 0) {
+    return List::create(Named("sum") = R_NegInf, Named("submatrix") = NumericMatrix(0, 0));
+  }
 
-  // Initialize a temporary array to store row-wise
-  // sums between left and right boundaries
-  std::vector<int> temp(rows);
+  if (all_non_negative(mat)) {
+    return List::create(Named("sum") = total_sum(mat), Named("submatrix") = mat);
+  }
 
-  // Check for all possible left and right boundaries
-  for (int left = 0; left < cols; left++) {
+  if (all_non_positive(mat)) {
+    double max_val = max_element_2d(mat);
+    NumericMatrix mat_out(1, 1);
+    mat_out(0, 0) = max_val;
+    return List::create(Named("sum") = max_val, Named("submatrix") = mat_out);
+  }
 
-    // Reset the temporary array for each new left boundary
-    for (int i = 0; i < rows; i++)
-      temp[i] = 0;
+  double maxSum = mat(0, 0);
+  int final_top = 0, final_bottom = 0, final_left = 0, final_right = 0;
+  NumericVector temp(rows);
 
-    for (int right = left; right < cols; right++) {
+  for (int left = 0; left < cols; ++left) {
+    std::fill(temp.begin(), temp.end(), 0);
 
-      // Update the temporary array with the current
-      // column's values
-      for (int row = 0; row < rows; row++) {
-        temp[row] += mat[row][right];
+    for (int right = left; right < cols; ++right) {
+      for (int row = 0; row < rows; ++row) {
+        temp[row] += mat(row, right);
       }
 
-      // Find the maximum sum of the subarray for the
-      // current column boundaries
-      int sum = kadaneAlgorithm(temp);
+      List kadane_result = kadaneAlgorithm(temp);
+      double currentSum = kadane_result["sum"];
+      int top = kadane_result["start"];
+      int bottom = kadane_result["end"];
 
-      // Update the maximum sum found so far
-      maxSum = std::max(maxSum, sum);
+      if (currentSum > maxSum) {
+        maxSum = currentSum;
+        final_top = top;
+        final_bottom = bottom;
+        final_left = left;
+        final_right = right;
+      }
     }
   }
 
-  return maxSum;
+  // Extract submatrix
+  NumericMatrix submatrix(final_bottom - final_top + 1, final_right - final_left + 1);
+  for (int i = 0; i <= final_bottom - final_top; ++i)
+    for (int j = 0; j <= final_right - final_left; ++j)
+      submatrix(i, j) = mat(final_top + i, final_left + j);
+
+  return List::create(
+    Named("sum") = maxSum,
+    Named("submatrix") = submatrix
+  );
 }

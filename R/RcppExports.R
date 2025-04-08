@@ -16,7 +16,6 @@ max_subarray_rectangle_naive_Rcpp <- function(mat) {
     .Call(`_MaximumSubarray_max_subarray_rectangle_naive_Rcpp`, mat)
 }
 
-#' @export
 max_subarray_rectangle_opt_Rcpp <- function(mat) {
     .Call(`_MaximumSubarray_max_subarray_rectangle_opt_Rcpp`, mat)
 }

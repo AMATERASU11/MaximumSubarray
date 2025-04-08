@@ -1,7 +1,7 @@
 ---
 title: | 
   | Analyse de deux algorithmes de tableau maximum par comparaison
-author:  "Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane"
+author:  "Manal Derghal, Khalil Ounis, {Taqwa Ben Romdhane}"
 date: "lundi 7 avril 2025"
 header-includes:
   - \usepackage[french]{babel}
@@ -13,18 +13,12 @@ output:
 urlcolor: blue
 ---
 
-\noindent\hrulefill
-
-
-# Description du problème et objectif
-
 ---
 title: | 
   | Analyse des algorithmes de Maximum Subarray 1D
-  | ![](Images/logo_lamme.png){width=1in}  ![](Images/logo_UEVE.png){width=1.7in}
   |  M2 Data Science Algorithmique 
 author:  "Khalil Ounis, Manal Derghal, Taqwa BenRomdhane"
-date: "jeudi 27 mars 2025"
+date: "Lundi 7 avril 2025"
 header-includes:
   - \usepackage[french]{babel}
 output:
@@ -47,9 +41,9 @@ Le problème du Maximum Subarray 1D consiste à trouver la sous-séquence contig
 1. Algorithme naïf : complexité O(n²)
 2. Algorithme de Kadane : complexité optimale O(n)
 
-Nos objectifs sont :
-a) d'implémenter ces algorithmes en R et C++ et évaluer le gain de temps ;
-b) de confirmer les complexités théoriques par des simulations intensives.
+Nos objectifs sont :  
+a. d'implémenter ces algorithmes en R et C++ et évaluer le gain de temps.  
+b. de confirmer les complexités théoriques par des simulations intensives.
 
 ___ 
 
@@ -102,35 +96,34 @@ La fonction `one.simu.time` retourne le temps recherché, et `one.simu` sera uti
 
 ```{r}
 library(microbenchmark)
+set.seed(123)
 
 one.simu.time <- function(n, func, data_type = "random") {
   if (data_type == "random") {
     v <- sample(-100:100, n, replace = TRUE)
   } else if (data_type == "all_negative") {
-    v <- runif(n, -100, -1)
-  } else { # single_positive
-    v <- runif(n, -100, -1)
-    v[sample(n, 1)] <- runif(1, 1, 100)
+    v <- sample(-100:-1, n, replace = TRUE)
+  } else if (data_type == "all_positive") {
+    v <- sample(0:100, n, replace = TRUE)
+  } else {
+    stop("data_type inconnu")
   }
 
   if (func == "naive") {
     t <- microbenchmark(max_subarray_sum_naive(v), times = 1)$time / 1e6
-  }
-  if (func == "naive_Rcpp") {
+  } else if (func == "naive_Rcpp") {
     t <- microbenchmark(max_subarray_sum_naive_Rcpp(v), times = 1)$time / 1e6
-  }
-  if (func == "opt") {
+  } else if (func == "opt") {
     t <- microbenchmark(max_subarray_sum_opt(v), times = 1)$time / 1e6
-  }
-  if (func == "opt_Rcpp") {
+  } else if (func == "opt_Rcpp") {
     t <- microbenchmark(max_subarray_sum_opt_Rcpp(v), times = 1)$time / 1e6
+  } else {
+    stop("fonction inconnue")
   }
 
-  # Arrondi à 2 décimales
-  t <- round(t, 2)
-
-  return(t)
+  return(round(t, 2))
 }
+
 
 ```
 
@@ -139,6 +132,7 @@ one.simu.time <- function(n, func, data_type = "random") {
 Sur un exemple, on obtient :
 
 ```{r}
+set.seed(123)
 n <- 10000
 one.simu.time(n, func = "naive")
 one.simu.time(n, func = "naive_Rcpp")
@@ -152,6 +146,7 @@ one.simu.time(n, func = "opt_Rcpp")
 On reproduit ces comparaisons de manière plus robuste:
 
 ```{r first simu}
+set.seed(123)
 nbSimus <- 10
 
 time1 <- rep(0, nbSimus); time2 <- rep(0, nbSimus);
@@ -166,7 +161,6 @@ for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "opt_Rcpp")}
 Gain C++ versus R
 
 ```{r}
-
 mean(time1)/mean(time2)
 mean(time3)/mean(time4)
 ```
@@ -181,6 +175,7 @@ mean(time2)/mean(time4)
 On recommence avec `n = 20000` seulement pour le gain avec C++ pour l'optimisé
 
 ```{r second simu}
+set.seed(123)
 n <- 20000
 nbSimus <- 10
 time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
@@ -194,13 +189,13 @@ median(time3)/median(time4)
 
 ### Performances C++ vs R :
 
-- Naïf : C++ 523× plus rapide (26 ms vs 14 768 ms)
+- Naïf : C++ 443× plus rapide 
 
-- Kadane : C++ 66× plus rapide (0.06 ms vs 3.69 ms) → 101× pour n=20k
+- Kadane : C++ 102× plus rapide → 177× pour n=20k
 
 ### Efficacité algorithmique :
 
-- Kadane 3 600× mieux que naïf en R, 460× en C++
+- Kadane 3 261× mieux que naïf en R, 754× en C++
 
 - Confirme O(n²) naïf vs O(n) Kadane
 
@@ -219,18 +214,18 @@ Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les s
 ```{r}
 library(microbenchmark)
 library(ggplot2)
+library(dplyr)
 ```
 
 ```{r benchmark, echo = FALSE, warning=FALSE, message=FALSE}
-library(microbenchmark)
-library(ggplot2)
+set.seed(123)
 
 benchmark_1d <- function(n) {
   v <- sample(-100:100, n, replace = TRUE)
   microbenchmark(
     Naif_Cpp = max_subarray_sum_naive_Rcpp(v),
     Kadane_Cpp = max_subarray_sum_opt_Rcpp(v),
-    times = 20
+    times = 50
   )
 }
 
@@ -249,7 +244,6 @@ ggplot(df_1d, aes(x = expr, y = time/1e6, fill = expr)) +
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
 df_1d %>%
   group_by(n, expr) %>%
   summarise(
@@ -269,18 +263,15 @@ ___
 
 # Evaluation de la complexité
 
-Les vecteurs de longueurs `vector_n_insertion` et `vector_n_heap` (`n` dans les dataframes) sont choisis sur l'echelle logarithmique afin d'avoir un pas constant sur l'échelle logarithmique en abscisse pour la régression.
+Les vecteurs de longueurs `vector_n_naive` et `vector_n_kadane` (`n` dans les dataframes) sont choisis sur l'echelle logarithmique afin d'avoir un pas constant sur l'échelle logarithmique en abscisse pour la régression.
 
 On réalise 10 répétitions pour chaque valeur de `n` et pour chaque algorithme. Les barres d'erreur sont placées en "mean +/- sd". 
 
 ```{r simu complexite, echo = FALSE, warning=FALSE, message=FALSE}
-# Evaluation de la complexité pour Maximum Subarray
-
-library(ggplot2)
-library(dplyr)
+set.seed(123)
 
 # Function to run benchmarking with mean and standard deviation
-benchmark_sorting <- function(func_name, n_values, nbRep) {
+benchmark_subarray <- function(func_name, n_values, nbRep) {
   results <- sapply(n_values, function(n) {
     times <- replicate(nbRep, one.simu.time(n, func = func_name))  # Run simulations
     c(mean_time = mean(times), sd_time = sd(times))  # Return mean & std dev
@@ -299,7 +290,7 @@ vector_n_naive <- exp(seq(log(5000), log(50000), length.out = nbSimus)) |> round
 res_Naive <- benchmark_subarray("naive_Rcpp", vector_n_naive, nbRep)
 
 # Benchmark pour Kadane
-vector_n_kadane <- exp(seq(log(10000), log(500000), length.out = nbSimus)) |> round()
+vector_n_kadane <- exp(seq(log(400000), log(700000), length.out = nbSimus)) |> round()
 res_Kadane <- benchmark_subarray("opt_Rcpp", vector_n_kadane, nbRep)
 
 # Graphique log-log avec barres d'erreur
@@ -352,84 +343,139 @@ print(summary(model_kadane))
 cat("Exposant estimé (Kadane):", coef(model_kadane)[2], "\n")
 ```
 
-Les coefficients dfirecteurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour l'insertion et 1 pour le tas.
+Les coefficients directeurs trouvés sont bien ceux que l'on attendait. La valeur 2 pour la méthode naïve et 1 pour l'algorithme de Kadane
 
 
 ___ 
 
 
-# Cas particulier des données presque triées
+# Cas particulier des données presques toutes négatives ou toutes positives
 
-On considère des données triées avec 5% de valeurs échangées au hasard.
-
-Sur un exemple cela donne : 
-```{r}
-v <- 1:100
-n_swap <- floor(0.05 * length(v))
-swap_indices <- sample(length(v), n_swap)
-v[swap_indices] <- sample(v[swap_indices])
-v
-```
-
-
-```{r}
-one.simu2 <- function(n, func)
-{
-  v <- 1:n
-  n_swap <- floor(0.05 * length(v))
-  swap_indices <- sample(length(v), n_swap)
-  v[swap_indices] <- sample(v[swap_indices])
-  if(func == "insertion_sort"){insertion_sort(v)}
-  if(func == "heap_sort"){heap_sort(v)} 
-  if(func == "insertion_sort_Rcpp"){insertion_sort_Rcpp(v)}
-  if(func == "heap_sort_Rcpp"){heap_sort_Rcpp(v)}
-}
-```
+- cas 1 : 95% de valeurs négatives, 5% positives
+- cas 2 : 95% de valeurs positives, 5% négatives
 
 
 ```{r benchmark2, echo = FALSE, warning=FALSE, message=FALSE}
-# Function to run benchmark
-benchmark_sorting <- function(n, times = 50)
-{
+# Fonction de benchmark pour données majoritairement négatives/positives
+benchmark_subarray_biased <- function(n, case, ratio = 0.95) {
+  if (case == "mostly_negative") {
+    # 95% de valeurs négatives, 5% positives
+    v <- c(
+      sample(-100:-1, round(n * ratio), replace = TRUE),
+      sample(1:100, n - round(n * ratio), replace = TRUE)
+    )
+  } else if (case == "mostly_positive") {
+    # 95% de valeurs positives, 5% négatives
+    v <- c(
+      sample(1:100, round(n * ratio), replace = TRUE),
+      sample(-100:-1, n - round(n * ratio), replace = TRUE)
+    )
+  } else {
+    # Cas aléatoire, valeurs dans l'intervalle [-100, 100]
+    v <- sample(-100:100, n, replace = TRUE)
+  }
+  
+  # Mélange aléatoire des valeurs
+  v <- sample(v)
+  
   microbenchmark(
-    insertion_sort = one.simu2(n, func = "insertion_sort_Rcpp"),
-    heap_sort = one.simu2(n, func = "heap_sort_Rcpp"),
-    times = times,
-    control = list(gc = FALSE)
+    Naif = max_subarray_sum_naive_Rcpp(v),
+    Kadane = max_subarray_sum_opt_Rcpp(v),
+    times = 50,
+    unit = "ms"
   )
 }
-# Run benchmarks for different n values
-n_values <- c(1000, 10000)
-results <- lapply(n_values, benchmark_sorting)
 
-# Combine results into a single dataframe with n as an identifier
-df_results <- do.call(rbind, Map(cbind, results, n = n_values))
-# Plot with better aesthetics
-ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
-  geom_violin(alpha = 0.7) +
-  facet_wrap(~n, scales = "free") +
-  labs(title = "Sorting Algorithm in Rcpp Benchmark",
-       x = "Sorting Algorithm",
-       y = "Execution Time (ms)",
-       fill = "Algorithm") +
-  theme_minimal()
+# Exemple d'utilisation
+n_values <- c(1000, 10000)
+cases <- c("mostly_negative", "mostly_positive", "random")
+
+# Génération des résultats
+results <- expand.grid(n = n_values, case = cases) |>
+  rowwise() |>
+  mutate(
+    bm = list(benchmark_subarray_biased(n, case)),
+    data = list(
+      data.frame(
+        n = n,
+        case = case,
+        algo = bm$expr,
+        time = bm$time / 1e6  # Conversion en ms
+      )
+    )
+  ) |>
+  pull(data) |>
+  bind_rows()
+
+# Visualisation par violon
+ggplot(results, aes(x = case, y = time, fill = algo)) +
+  geom_violin(alpha = 0.7, trim = FALSE) +
+  facet_wrap(~n, scales = "free_y", labeller = labeller(n = function(x) paste("n =", x))) +
+  scale_y_log10() +  # Échelle log pour mieux voir les différences
+  labs(
+    title = "Comparaison des algorithmes Maximum Subarray",
+    subtitle = "Performance sur différents cas de données",
+    x = "Type de données d'entrée",
+    y = "Temps d'exécution (ms, échelle log)",
+    fill = "Algorithme"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
-library(dplyr)
-df_results %>%
-  group_by(n, expr) %>%
+library(tidyr)
+
+# Statistiques détaillées
+stats_results <- results |>
+  group_by(n, case, algo) |>
   summarise(
-    min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
-    q1_time = quantile(time, 0.25) / 1e6,
-    median_time = median(time) / 1e6,
-    mean_time = mean(time) / 1e6,
-    q3_time = quantile(time, 0.75) / 1e6,
-    max_time = max(time) / 1e6,
+    min = min(time),
+    q1 = quantile(time, 0.25),
+    median = median(time),
+    mean = mean(time),
+    q3 = quantile(time, 0.75),
+    max = max(time),
+    .groups = "drop"
+  ) |>
+  arrange(n, case, algo)
+
+# Affichage des stats
+print(stats_results)
+```
+
+```{r}
+library(dplyr)
+library(tidyr)
+
+gain_comparison <- stats_results %>%
+  group_by(n, case) %>%
+  summarise(
+    gain = median[algo == "Naif"]/median[algo == "Kadane"],
     .groups = "drop"
   )
+
+print(gain_comparison)
+```
+```{r}
+gain_plot <- gain_comparison %>%
+  ggplot(aes(x = case, y = gain, fill = factor(n))) +
+  geom_col(position = position_dodge(preserve = "single")) +
+  geom_text(aes(label = round(gain, 1)), 
+            position = position_dodge(width = 0.9),
+            vjust = -0.5) +
+  labs(
+    title = "Gain de performance de Kadane vs Naïf",
+    x = "Type de données",
+    y = "Facteur d'accélération",
+    fill = "Taille (n)"
+  ) +
+  theme_minimal() +
+  scale_fill_brewer(palette = "Pastel1")
+
+print(gain_plot)
 ```
 
 
-L'algorithme d'insertion est ici plus rapide pour la longueur `1000`. Cela est dû au fait que pour un vecteur déjà trié, l'algorithme d'insertion est linéaire et nous sommes dans un cas proche du linéaire.
-
+Ces résultats montrent que les algorithmes sont plus efficaces sur des données avec une structure, comme celles qui sont majoritairement positives ou négatives, par rapport aux données complètement aléatoires.
