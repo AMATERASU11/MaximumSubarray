@@ -2,41 +2,60 @@
 #include "utils.h"
 using namespace Rcpp;
 
-// Function to find the maximum sum rectangle in a 2D matrix
 //' @export
  // [[Rcpp::export]]
- int max_subarray_rectangle_naive_Rcpp(NumericMatrix mat) {
-   int n = mat.nrow();  // Nombre de lignes
-   int m = mat.ncol();  // Nombre de colonnes
+ List max_subarray_rectangle_naive_Rcpp(NumericMatrix mat) {
+   int n = mat.nrow();
+   int m = mat.ncol();
 
-   // Cas trivial : tous les éléments positifs
-   if (all_non_negative(mat)) {
-     return total_sum(mat);
-   }
+   if (n == 0 || m == 0)
+     return List::create(Named("sum") = R_NegInf, Named("submatrix") = NumericMatrix(0, 0));
 
-   // Cas trivial : tous les éléments négatifs
+   // Cas trivial : tous positifs
+   if (all_non_negative(mat))
+     return List::create(Named("sum") = total_sum(mat), Named("submatrix") = mat);
+
+   // Cas trivial : tous négatifs
    if (all_non_positive(mat)) {
-     return max_element_2d(mat);
+     double max_val = max_element_2d(mat);
+     NumericMatrix mat_out(1, 1);
+     mat_out(0, 0) = max_val;
+     return List::create(Named("sum") = max_val, Named("submatrix") = mat_out);
    }
 
-   int maxSum = INT_MIN;
+   double maxSum = mat(0, 0);
+   int top = 0, bottom = 0, left = 0, right = 0;
 
-   // Parcours de toutes les sous-matrices possibles
-   for (int up = 0; up < n; up++) {
-     for (int left = 0; left < m; left++) {
-       for (int down = up; down < n; down++) {
-         for (int right = left; right < m; right++) {
-           int sum = 0;
-           for (int i = up; i <= down; i++) {
-             for (int j = left; j <= right; j++) {
-               sum += mat(i, j);  // Accès aux éléments de la matrice
+   for (int up = 0; up < n; ++up) {
+     for (int l = 0; l < m; ++l) {
+       for (int down = up; down < n; ++down) {
+         for (int r = l; r < m; ++r) {
+           double sum = 0.0;
+           for (int i = up; i <= down; ++i) {
+             for (int j = l; j <= r; ++j) {
+               sum += mat(i, j);
              }
            }
-           maxSum = std::max(maxSum, sum);  // Mise à jour de la somme maximale
+           if (sum > maxSum) {
+             maxSum = sum;
+             top = up;
+             bottom = down;
+             left = l;
+             right = r;
+           }
          }
        }
      }
    }
 
-   return maxSum;
+   // Extract submatrix
+   NumericMatrix submatrix(bottom - top + 1, right - left + 1);
+   for (int i = 0; i <= bottom - top; ++i)
+     for (int j = 0; j <= right - left; ++j)
+       submatrix(i, j) = mat(top + i, left + j);
+
+   return List::create(
+     Named("sum") = maxSum,
+     Named("submatrix") = submatrix
+   );
  }

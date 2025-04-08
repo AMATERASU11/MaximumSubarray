@@ -1,76 +1,96 @@
 #' Find Maximum Sum Rectangle in 2D Matrix (Brute-Force Approach)
 #'
-#' Computes the maximum sum of any rectangular submatrix using a naive O(n³m³) approach
-#' by checking all possible submatrices.
+#' Computes the maximum sum of any rectangular submatrix using a naive brute-force
+#' algorithm by checking all possible submatrices.
 #'
 #' @param mat A numeric matrix (2D array) containing the input values.
 #'
-#' @return A single numeric value representing the maximum submatrix sum found.
+#' @return A list with the following elements:
+#' \describe{
+#'   \item{sum}{The maximum submatrix sum (numeric).}
+#'   \item{submatrix}{The 2D submatrix corresponding to this sum.}
+#'   \item{top, bottom, left, right}{The row and column boundaries of the submatrix.}
+#' }
 #'
 #' @details
 #' This function implements the brute-force solution to the 2D maximum subarray problem
-#' by iterating through all possible combinations of:
+#' by evaluating every possible submatrix defined by:
 #' \itemize{
-#'   \item Starting row (`up`) and column (`left`)
-#'   \item Ending row (`down`) and column (`right`)
+#'   \item A starting row (\code{up}) and column (\code{left})
+#'   \item An ending row (\code{down}) and column (\code{right})
 #' }
-#' For each submatrix defined by these bounds, it calculates the sum and tracks the maximum.
+#' For each such rectangle, it computes the sum and keeps track of the maximum.
 #'
 #' @section Performance Warning:
-#' This implementation has \strong{O(n³m³)} time complexity (where n = rows, m = columns),
-#' making it \strong{prohibitively slow} for matrices larger than 20x20.
-#' For practical use, prefer optimized algorithms like the \strong{extended Kadane's approach}
-#' (O(n²m) time).
+#' This approach has \strong{O(n³m³)} time complexity, where \code{n} is the number of rows
+#' and \code{m} is the number of columns. It becomes impractical for matrices larger than
+#' about 20x20. For better performance, consider using
+#' \code{\link{max_subarray_rectangle_opt}}, which uses Kadane's algorithm.
 #'
 #' @examples
 #' # Basic usage
-#' mat <- matrix(c(1, 2, -1, -3, 0, 4, 2, -5, 1), nrow = 3, byrow = TRUE)
-#' max_subarray_rectangle_naive(mat)  # Returns 6 (submatrix [1:2, 2:3])
+#' mat <- matrix(c(1, 2, -1,
+#'                 -3, 0, 4,
+#'                 2, -5, 1), nrow = 3, byrow = TRUE)
+#' max_subarray_rectangle_naive(mat)$sum  # Returns 6
 #'
 #' # Edge case: all negative values
-#' max_subarray_rectangle_naive(matrix(c(-1, -2, -3, -4), nrow = 2))  # Returns -1
+#' mat2 <- matrix(c(-1, -2, -3, -4), nrow = 2)
+#' max_subarray_rectangle_naive(mat2)$sum  # Returns -1
 #'
 #' @seealso
-#' \code{\link{max_subarray_rectangle_opt}} for an optimized O(n²m) implementation,
-#' \code{\link{max_subarray_sum_naive}} for the 1D version of this algorithm.
+#' \code{\link{max_subarray_rectangle_opt}} for the optimized O(n²m) version. \cr
+#' \code{\link{max_subarray_sum_naive}} for the 1D brute-force version.
 #'
 #' @references
 #' \itemize{
-#'   \item Bentley, J. (1984). "Programming Pearls: Algorithm Design Techniques".
-#'   \emph{Communications of the ACM} (explains the 1D-to-2D extension).
+#'   \item Bentley, J. (1984). Programming Pearls: Algorithm Design Techniques.
+#'   \emph{Communications of the ACM}.
 #' }
 #'
 #' @export
 max_subarray_rectangle_naive <- function(mat) {
+  n <- nrow(mat)
+  m <- ncol(mat)
+
+  if (n == 0 || m == 0) {
+    return(list(sum = -Inf, submatrix = matrix(nrow = 0, ncol = 0)))
+  }
+
   # Cas trivial : tous les éléments sont positifs
   if (all(mat >= 0)) {
-    return(sum(mat))
+    return(list(sum = sum(mat), submatrix = mat))
   }
 
   # Cas trivial : tous les éléments sont négatifs
   if (all(mat <= 0)) {
-    return(max(mat))
+    max_val <- max(mat)
+    return(list(sum = max_val, submatrix = matrix(max_val, nrow = 1)))
   }
 
-  n <- nrow(mat)
-  m <- ncol(mat)
   max_sum <- -Inf
+  top <- bottom <- left <- right <- 1
 
   for (up in 1:n) {
-    for (left in 1:m) {
+    for (l in 1:m) {
       for (down in up:n) {
-        for (right in left:m) {
-          sub_sum <- 0
-          for (i in up:down) {
-            for (j in left:right) {
-              sub_sum <- sub_sum + mat[i, j]
-            }
+        for (r in l:m) {
+          sub_sum <- sum(mat[up:down, l:r])
+          if (sub_sum > max_sum) {
+            max_sum <- sub_sum
+            top <- up
+            bottom <- down
+            left <- l
+            right <- r
           }
-          max_sum <- max(max_sum, sub_sum)
         }
       }
     }
   }
 
-  return(max_sum)
+  return(list(
+    sum = max_sum,
+    submatrix = mat[top:bottom, left:right, drop = FALSE]
+  ))
 }
+

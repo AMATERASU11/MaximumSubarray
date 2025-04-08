@@ -5,35 +5,51 @@ using namespace Rcpp;
 
 // Function to find the maximum subarray sum
 //' @export
- // [[Rcpp::export]]
- int max_subarray_sum_opt_Rcpp(IntegerVector arr) {
+// [[Rcpp::export]]
+List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
    int n = arr.size();
-   if (n == 0) return 0;
+   if (n == 0) return List::create(Named("sum") = 0, Named("subarray") = IntegerVector());
 
-   // Vérification des cas triviaux en une passe
+   // Cas triviaux
    bool all_positive = true;
    bool all_negative = true;
    int max_val = arr[0];
-   int sum = 0;
+   int total_sum = 0;
+   int max_val_index = 0;
 
    for (int i = 0; i < n; ++i) {
      if (arr[i] < 0) all_positive = false;
      if (arr[i] > 0) all_negative = false;
-     if (arr[i] > max_val) max_val = arr[i];
-     sum += arr[i];
+     if (arr[i] > max_val) {
+       max_val = arr[i];
+       max_val_index = i;
+     }
+     total_sum += arr[i];
    }
 
-   if (all_positive) return sum;
-   if (all_negative) return max_val;
+   if (all_positive) return List::create(Named("sum") = total_sum, Named("subarray") = arr);
+   if (all_negative) return List::create(Named("sum") = max_val, Named("subarray") = IntegerVector::create(max_val));
 
-   // Algorithme de Kadane
+   // Kadane with subarray tracking
    int max_so_far = arr[0];
    int max_ending_here = arr[0];
+   int start = 0, end = 0, temp_start = 0;
 
    for (int i = 1; i < n; ++i) {
-     max_ending_here = std::max(arr[i], max_ending_here + arr[i]);
-     max_so_far = std::max(max_so_far, max_ending_here);
+     if (arr[i] > max_ending_here + arr[i]) {
+       max_ending_here = arr[i];
+       temp_start = i;
+     } else {
+       max_ending_here += arr[i];
+     }
+
+     if (max_ending_here > max_so_far) {
+       max_so_far = max_ending_here;
+       start = temp_start;
+       end = i;
+     }
    }
 
-   return max_so_far;
- }
+   IntegerVector subarray = arr[Range(start, end)];
+   return List::create(Named("sum") = max_so_far, Named("subarray") = subarray);
+}

@@ -11,7 +11,7 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // max_subarray_sum_naive_Rcpp
-int max_subarray_sum_naive_Rcpp(IntegerVector arr);
+List max_subarray_sum_naive_Rcpp(IntegerVector arr);
 RcppExport SEXP _MaximumSubarray_max_subarray_sum_naive_Rcpp(SEXP arrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -22,7 +22,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // max_subarray_sum_opt_Rcpp
-int max_subarray_sum_opt_Rcpp(IntegerVector arr);
+List max_subarray_sum_opt_Rcpp(IntegerVector arr);
 RcppExport SEXP _MaximumSubarray_max_subarray_sum_opt_Rcpp(SEXP arrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -33,7 +33,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // max_subarray_rectangle_naive_Rcpp
-int max_subarray_rectangle_naive_Rcpp(NumericMatrix mat);
+List max_subarray_rectangle_naive_Rcpp(NumericMatrix mat);
 RcppExport SEXP _MaximumSubarray_max_subarray_rectangle_naive_Rcpp(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -44,7 +44,7 @@ BEGIN_RCPP
 END_RCPP
 }
 // max_subarray_rectangle_opt_Rcpp
-int max_subarray_rectangle_opt_Rcpp(NumericMatrix mat);
+List max_subarray_rectangle_opt_Rcpp(NumericMatrix mat);
 RcppExport SEXP _MaximumSubarray_max_subarray_rectangle_opt_Rcpp(SEXP matSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;

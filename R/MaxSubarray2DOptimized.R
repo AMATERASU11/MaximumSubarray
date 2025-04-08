@@ -1,89 +1,116 @@
 # Kadane's Algorithm for 1D Maximum Subarray
-kadane_algorithm <- function(temp) {
-  if (any(is.na(temp))) return(NA_real_)
-  if (length(temp) == 0) return(-Inf)
-
-  curr_sum <- 0
-  max_sum <- temp[1]  # Initialize with first element
-
-  for (val in temp) {
-    curr_sum <- curr_sum + val
-    max_sum <- max(max_sum, curr_sum)
-    curr_sum <- max(curr_sum, 0)
+kadane_algorithm <- function(arr) {
+  if (length(arr) == 0) {
+    return(list(sum = -Inf, start = NA_integer_, end = NA_integer_))
   }
 
-  return(max_sum)
+  if (anyNA(arr)) {
+    return(list(sum = NA_real_, start = NA_integer_, end = NA_integer_))
+  }
+
+  max_so_far <- arr[1]
+  max_ending_here <- arr[1]
+  start <- end <- temp_start <- 1
+
+  for (i in 2:length(arr)) {
+    if (arr[i] > max_ending_here + arr[i]) {
+      max_ending_here <- arr[i]
+      temp_start <- i
+    } else {
+      max_ending_here <- max_ending_here + arr[i]
+    }
+
+    if (max_ending_here > max_so_far) {
+      max_so_far <- max_ending_here
+      start <- temp_start
+      end <- i
+    }
+  }
+
+  list(sum = max_so_far, start = start, end = end)
 }
 
-# Optimized 2D Maximum Subarray using Kadane's Algorithm
-#' Find Maximum Sum Rectangle in 2D Matrix (Optimized Kadane's Algorithm)
+
+#' Optimized 2D Maximum Subarray using Kadane's Algorithm
 #'
-#' Computes the maximum sum of any rectangular submatrix using an optimized O(n²m) approach
-#' that extends Kadane's 1D algorithm to 2D matrices by collapsing columns.
+#' Finds the maximum sum of any rectangular submatrix within a 2D numeric matrix,
+#' using an optimized approach based on Kadane's algorithm.
 #'
-#' @param mat A numeric matrix (2D array) containing the input values.
+#' @param mat A numeric matrix.
 #'
-#' @return A single numeric value representing the maximum submatrix sum found.
+#' @return A list with the following elements:
+#' \describe{
+#'   \item{sum}{The maximum submatrix sum (numeric).}
+#'   \item{submatrix}{The 2D submatrix corresponding to this sum.}
+#'   \item{top, bottom, left, right}{The boundaries (1-based indices) of the submatrix.}
+#' }
 #'
 #' @details
-#' This function implements the most efficient known solution to the 2D maximum subarray problem:
-#' \enumerate{
-#'   \item For each possible pair of left/right column boundaries (O(m²) combinations):
-#'   \itemize{
-#'     \item Collapse all rows between these columns into a temporary 1D array (O(n) per column pair)
-#'   }
-#'   \item Apply \code{\link{kadane_algorithm}} to the collapsed array (O(n) per operation)
-#' }
-#' The total time complexity is O(n²m) where n = rows and m = columns - dramatically faster than the
-#' brute-force O(n³m³) approach.
+#' This function implements an efficient solution to the 2D maximum subarray problem.
+#' It collapses each pair of columns into a 1D array of row sums, then applies
+#' \code{\link{kadane_algorithm}} to find the best vertical slice for that column span.
+#'
+#' The total time complexity is O(n²m), where \code{n} is the number of rows and
+#' \code{m} the number of columns, which is significantly faster than the
+#' brute-force O(n³m³) method.
 #'
 #' @section Algorithm:
-#' The key optimization comes from recognizing that:
+#' The key idea is:
 #' \preformatted{
-#'   sum(rectangle between columns L-R) = sum(row-wise sums from L to R)
+#' sum(matrix[i:j, L:R]) = sum(row-wise collapses from columns L to R)
 #' }
-#' This allows reusing Kadane's 1D algorithm on the collapsed column sums.
+#' This transformation enables reuse of the 1D Kadane's algorithm across each
+#' column pair.
 #'
 #' @examples
 #' # Basic usage
-#' mat <- matrix(c(1, 2, -1, -3, 0, 4, 2, -5, 1), nrow = 3, byrow = TRUE)
-#' max_subarray_rectangle_opt(mat)  # Returns 6 (submatrix [1:2, 2:3])
+#' mat <- matrix(c(1, 2, -1,
+#'                 -3, 0, 4,
+#'                 2, -5, 1), nrow = 3, byrow = TRUE)
+#' max_subarray_rectangle_opt(mat)$sum  # Returns 6
 #'
-#' # Edge case: single maximum element
-#' max_subarray_rectangle_opt(matrix(c(-1, -2, 10, -3), nrow = 2))  # Returns 10
+#' # Edge case: single large positive element
+#' max_subarray_rectangle_opt(matrix(c(-1, -2, 10, -3), nrow = 2))$sum  # Returns 10
 #'
 #' @seealso
-#' \code{\link{kadane_algorithm}} for the 1D implementation used internally,
-#' \code{\link{max_subarray_rectangle_naive}} for the brute-force reference version.
+#' \code{\link{kadane_algorithm}} for the 1D max subarray version used internally. \cr
+#' \code{\link{max_subarray_rectangle_naive}} for the brute-force 2D version.
 #'
 #' @references
 #' \itemize{
-#'   \item Kadane, J. (1984). "Design of an O(n) algorithm for the maximum subarray problem".
-#'   \emph{Communications of the ACM} (original 1D algorithm)
-#'   \item Takaoka, T. (2002). "Efficient algorithms for the maximum subarray problem".
-#'   \emph{Theoretical Computer Science} (2D extension)
+#'   \item Kadane, J. (1984). Design of an O(n) algorithm for the maximum subarray problem.
+#'   \emph{Communications of the ACM}.
+#'   \item Takaoka, T. (2002). Efficient algorithms for the maximum subarray problem.
+#'   \emph{Theoretical Computer Science}.
 #' }
 #'
 #' @export
+
 max_subarray_rectangle_opt <- function(mat) {
-  if (length(mat) == 0) return(-Inf)
+  if (length(mat) == 0 || any(dim(mat) == 0)) {
+    return(list(sum = -Inf, submatrix = matrix(nrow = 0, ncol = 0)))
+  }
 
-  if (any(dim(mat) == 0)) return(-Inf)
+  if (any(is.na(mat))) {
+    return(list(sum = NA_real_, submatrix = matrix(NA, nrow = 1)))
+  }
 
-  if (any(is.na(mat))) return(NA_real_)
   # Cas trivial : tous les éléments sont positifs
   if (all(mat >= 0)) {
-    return(sum(mat))
+    return(list(sum = sum(mat), submatrix = mat))
   }
 
   # Cas trivial : tous les éléments sont négatifs
   if (all(mat <= 0)) {
-    return(max(mat))
+    max_val <- max(mat)
+    return(list(sum = max_val, submatrix = matrix(max_val, nrow = 1)))
   }
 
   rows <- nrow(mat)
   cols <- ncol(mat)
-  max_sum <- mat[1, 1]
+
+  max_sum <- -Inf
+  final_top <- final_bottom <- final_left <- final_right <- 1
 
   for (left in 1:cols) {
     temp <- rep(0, rows)
@@ -93,11 +120,27 @@ max_subarray_rectangle_opt <- function(mat) {
         temp[row] <- temp[row] + mat[row, right]
       }
 
-      current_sum <- kadane_algorithm(temp)
-      max_sum <- max(max_sum, current_sum)
+      kadane_res <- kadane_algorithm(temp)
+      current_sum <- kadane_res$sum
+      top <- kadane_res$start
+      bottom <- kadane_res$end
+
+      if (current_sum > max_sum) {
+        max_sum <- current_sum
+        final_top <- top
+        final_bottom <- bottom
+        final_left <- left
+        final_right <- right
+      }
     }
   }
 
-  return(max_sum)
+  submatrix <- mat[final_top:final_bottom, final_left:final_right, drop = FALSE]
+
+  return(list(
+    sum = max_sum,
+    submatrix = submatrix
+  ))
 }
+
 
