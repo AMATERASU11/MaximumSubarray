@@ -55,7 +55,7 @@ Imaginez que vous avez cette matrice 4x5 :
 
 Le rectangle en vert présente la sous-matrice avec la somme maximale égale à 29.
 
-![](images/clipboard-3984472328.jpeg){width="279"}
+![](images/G2-01.JPG){width="178"}
 
 #### Approche naïve :
 
@@ -446,7 +446,7 @@ ggplot(results, aes(x = expr, y = time / 1e6, fill = expr)) +
 
 #### Analyse de la complexité
 
-##### Complexité théorique de l'algorithme naif 
+##### Complexité théorique de l'algorithme naif
 
 ```{r}
 
