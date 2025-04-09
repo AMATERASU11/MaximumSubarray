@@ -3,10 +3,9 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-// Function to find the maximum subarray sum
 //' @export
-// [[Rcpp::export]]
-List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
+ // [[Rcpp::export]]
+ List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
    int n = arr.size();
    if (n == 0) return List::create(Named("sum") = 0, Named("subarray") = IntegerVector());
 
@@ -15,14 +14,12 @@ List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
    bool all_negative = true;
    int max_val = arr[0];
    int total_sum = 0;
-   int max_val_index = 0;
 
    for (int i = 0; i < n; ++i) {
      if (arr[i] < 0) all_positive = false;
      if (arr[i] > 0) all_negative = false;
      if (arr[i] > max_val) {
        max_val = arr[i];
-       max_val_index = i;
      }
      total_sum += arr[i];
    }
@@ -30,7 +27,7 @@ List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
    if (all_positive) return List::create(Named("sum") = total_sum, Named("subarray") = arr);
    if (all_negative) return List::create(Named("sum") = max_val, Named("subarray") = IntegerVector::create(max_val));
 
-   // Kadane with subarray tracking
+   // Kadane avec tracking des indices
    int max_so_far = arr[0];
    int max_ending_here = arr[0];
    int start = 0, end = 0, temp_start = 0;
@@ -52,4 +49,4 @@ List max_subarray_sum_opt_Rcpp(IntegerVector arr) {
 
    IntegerVector subarray = arr[Range(start, end)];
    return List::create(Named("sum") = max_so_far, Named("subarray") = subarray);
-}
+ }

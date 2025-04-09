@@ -156,10 +156,20 @@ They all have a unique argument: the array `arr` or the matrix `mat`. Examples:
 max_subarray_sum_naive(arr)
 ```
 
-    ##  [1]  5
+    ##  $sum
+        [1] 5
+
+        $subarray
+        [1] 5
+
 
 ``` r
 max_subarray_rectangle_opt_Rcpp(mat)
 ```
 
-    ##  [1]  9
+    ##  $sum
+        [1] 9
+
+        $submatrix
+             [,1] [,2] [,3]
+        [1,]    1    3    5
