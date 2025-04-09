@@ -21,13 +21,13 @@ knitr::opts_chunk$set(echo = TRUE)
 
     -   Solution naïve (Méthode Brut Force)
 
-    -   Solution optimale (algorithme de Kadane)
+    -   Solution optimale (Kadane's method)
 
 3.  **Max sum submatrix**
 
     -   Solution naïve
 
-    -   Solution optimale (algorithme de Kadane)
+    -   Solution optimale (Kadane's method)
 
 4.  **Évaluation des performances**
 
@@ -45,9 +45,23 @@ knitr::opts_chunk$set(echo = TRUE)
 
 7.  **Références**
 
-## 
+## Introduction
 
-### **Maximum Sum Submatrix**
+### Présentation du problème
+
+Dans ce document, nous étudions le problème de sous tableau de somme maximale du point de vue de la complexité algorithmique. Ce problème est intéressant parce qu’il existe nombre d’algorithmes pour le résoudre et la complexité de ces algorithmes varie considérablement. Dans le rapport, nous abordons seulement 2 algorithmes: un algorithme naif utilisant le paradigme de Brute Force et un algorithme optimal basé sur la méthode Kadane. Dans un deuxième temps, nous étudions un cas plus intéressant, nous étendons le problème à 2 dimension pour déterminer la sous matrice contigue avec la somme maximale dans une matrice. Bien que ce cas est plus complexe, la méthode Kadane s'applique dans le cas de 2 dimension.pareil que le cas 1D, nous allons proposer 2 solutions pour le problème de sous matricd maximale
+
+### Objectifs :
+
+Dans le cadre de ce projet, nous devons répondre aux objectifs suivants:
+
+\* Evaluer la performance en temps d'exécution des solutions naive et optimale
+
+\* Implémenter ces algorithmes en R et en C++ et évaluer le gain de temps
+
+\* Valider la complexité théorique attenue par une régression linéaire
+
+### **3. Maximum Sum Submatrix**
 
 Etant donné un tableau 2D, la tâche consiste à trouver la sous-matrice de somme maximale qu'il contient.
 
@@ -57,46 +71,57 @@ Le rectangle en vert présente la sous-matrice avec la somme maximale égale à 
 
 ![](images/G2-01.JPG){width="178"}
 
-#### Approche naïve :
+#### 3.1 Approche naïve :
 
-Nous explorons tous les rectangles possibles dans le tableau 2D donné, en utilisant quatre variables : deux pour définir les limites gauche et droite et deux autres pour définir les limites supérieure et inférieure et calculer leurs sommes, et garder une trace de la somme maximale trouvée.
+Nous explorons tous les rectangles possibles dans le tableau 2D donné, en utilisant quatre variables : deux pour définir les limites gauche et droite (right & left) et deux autres pour définir les limites supérieure et inférieure (up & down) et calculer leurs sommes, et garder une trace de la somme maximale trouvée.
 
-**Complexité algorithmique** : $O\left((n m)^3\right)$ *car nous parcourons toutes les limites du rectangle en* $O\left((n m)^2\right)$. Pour chaque rectangle, nous calculons sa somme en $O\left((n m)\right)$*. Par conséquent, la complexité temporelle globale est* $O\left((n m)^3\right)$, $O\left((n m)^2\cdot nm\right)$ *=* $O((nm) ^ 3)$ . où n est le nombre de lignes et m le nombre de colonnes de la matrice.
+**Complexité algorithmique** : $O\left((n m)^3\right)$ *car nous parcourons toutes les limites du rectangle en* $O\left((n m)^2\right)$ Pour chaque rectangle, nous calculons sa somme en $O\left((n m)\right)$*. Par conséquent, la complexité temporelle globale est* $O\left((n m)^3\right)$, $O\left((n m)^2\cdot nm\right)$ *=* $O((nm) ^ 3)$ . où n est le nombre de lignes et m le nombre de colonnes de la matrice.
 
 Pour une matrice 3×3, il y a 36 sous-matrices. Si l'on étend cela à une matrice 100×100, on obtient des millions de possibilités. et donc il est clair que la méthode naive de force brute ne fonctionne tout simplement pas en pratique.
 
-**Approche améliorée Kadane's Method :**
+#### **3.2 Approche améliorée (Kadane's Method) :**
 
-la nouvelle approche est basé sur l'algorithme Kadane qui a été utilisé comme solution optimale dans le problème 1D, Dans ce qui suit, nous allons expliquer comment appliquer cette méthode sur un tableau 2D, l'idée est de compresser la matrice 2D en une série de tableaux 1D et résoudre chacun d'eux à l'aide de l'algorithme de Kadane.
+la nouvelle approche est basée sur l'algorithme de Kadane qui est utilisé comme solution optimale dans le problème 1D. Nous allons expliquer comment appliquer cette méthode sur un tableau 2D, l'idée est de compresser la matrice 2D en une série de tableaux 1D et résoudre chacun d'eux à l'aide de l'algorithme de Kadane.
 
-##### **Principe de l'algorithme**
+**Complexité algorithmique** :
 
-1.  **Fixer les limites gauche et droite** :
+La complexité temporelle de cette approche est de $O\left(n(m)^2\right)$, où n est le nombre de lignes et m le nombre de colonnes. En effet, nous itérons sur toutes les paires de colonnes et, pour chaque paire, nous appliquons l'algorithme de Kadane, qui prend un temps de $O(n)$. La complexité spatiale est de O(m\*n) pour le stockage des sommes de préfixes.
+
+#### **Principe de l'algorithme**
+
+1.  Fixer les limites gauche et droite :
 
     -   Nous fixons les colonnes gauche (leftleft) et droite (rightright) une par une.
 
-2.  **Calculer les sommes cumulatives** :
+2.  Calculer les sommes cumulatives :
 
     -   Pour chaque paire de colonnes leftleft et rightright, nous calculons la somme des éléments de chaque ligne entre ces colonnes et stockons ces sommes dans un tableau auxiliaire `temp[]`.
 
-3.  **Appliquer l'algorithme de Kadane** :
+3.  Appliquer l'algorithme de Kadane :
 
     -   En appliquant l'algorithme de Kadane sur le tableau `temp[]`, nous obtenons la somme maximale d'un sous-tableau de ce tableau, ce qui correspond à la somme maximale de la sous-matrice avec les limites de colonnes leftleft et rightright.
 
-4.  **Déterminer la sous-matrice de somme maximale** :
+4.  Déterminer la sous-matrice de somme maximale :
 
     -   Pour obtenir la somme maximale globale, nous prenons le maximum de toutes les sommes obtenues pour chaque paire de colonnes leftleft et rightright.
 
-        **Output 1:**\
-        (top, left) : (1, 1)\
-        (bottom, right) : (3, 3)\
-        29
+        **Input:** [[ 1, -9, -10, 1],
 
-#### Un premier test
+    -   [-1, **10**, **10**, 1],
+
+    -   [ 0, 9, 9, -9],
+
+    -   [-1, -1, -1, -1]]
+
+    -   **Output:** 38
+
+    -   Explanation: (top, left) : (2,2) (down, right) (3,3) (Submatrix [[10, 10], [9, 9]])
+
+#### Un premier test de package :
 
 ```{r}
 # installer le package
-devtools::install_github("AMATERASU11/MaximumSubarray")
+devtools::install_github("AMATERASU11/MaximumSubarray", force = TRUE)
 
 # charger le package
 library(MaximumSubarray)
@@ -111,21 +136,32 @@ mat1 <- matrix(c(
   -4, -1, 1, 7, -6
 ), nrow = 4, byrow = TRUE)
 
-mat_list <- lapply(1:nrow(mat1), function(i) matrix[i, ])
+mat_list <- lapply(1:nrow(mat1), function(i) mat1[i, ])
 
 # Afficher la matrice
-print(matrix)
+print(mat1)
 print(mat_list)
 ```
 
 ```{r}
-max_subarray_rectangle_naive(matrix)
-max_subarray_rectangle_naive_Rcpp(mat_list)
-max_subarray_rectangle_opt(matrix)
-max_subarray_rectangle_opt_Rcpp(mat_list)
+max_subarray_rectangle_naive(mat1)
+```
+
+```{r}
+max_subarray_rectangle_naive_Rcpp(mat1)
+```
+
+```{r}
+max_subarray_rectangle_opt(mat1)
+```
+
+```{r}
+max_subarray_rectangle_opt_Rcpp(mat1)
 ```
 
 ##### Temps d'exécution en R
+
+sur une matrice de taille 30x50, on obtient les résultats suivants :
 
 ```{r}
 library(microbenchmark)
@@ -135,16 +171,16 @@ one.simu.time <- function(n, m, func) {
   
   # définir la matrice
   matrix <- matrix(sample(-20:20, n * m, replace = TRUE), nrow = n, ncol = m)
-  mat_list <- lapply(1:nrow(matrix), function(i) matrix[i, ])
+  # mat_list <- lapply(1:nrow(matrix), function(i) matrix[i, ])
   
   if (func == "naive2D") {
     t <- microbenchmark(max_subarray_rectangle_naive(matrix), times=1)$time/1e6}
   if (func == "Kadane2D") {
     t <- microbenchmark(max_subarray_rectangle_opt(matrix), times=1)$time/1e6}
   if (func == "Naive2D_Rcpp") {
-    t <- microbenchmark(max_subarray_rectangle_naive_Rcpp(mat_list), times=1)$time/1e6}
+    t <- microbenchmark(max_subarray_rectangle_naive_Rcpp(matrix), times=1)$time/1e6}
   if(func == "Kadane2D_Rcpp") {
-    t <- microbenchmark(max_subarray_rectangle_opt_Rcpp(mat_list), times=1)$tim/1e6}
+    t <- microbenchmark(max_subarray_rectangle_opt_Rcpp(matrix), times=1)$tim/1e6}
   
   # Arrondi à 2 décimales
   t <- round(t,2)
@@ -169,21 +205,24 @@ cat("time_kadane:", res_kadane, "ms")
 
 ##### Temps d'exécution en C++
 
+sur une matrice de taille 30x50, on obtient les résultats suivants :
+
 ```{r}
 
 set.seed(23)
-
 # Simulation sur une matrice de taille n*m
 n <- 30
 m <- 50
 
-res_naive_Rcpp <- one.simu.time(n,m,"Naive2D_Rcpp")
-res_Kadane_Rcpp <- one.simu.time(n,m,"Kadane2D_Rcpp")
+res_naive_cpp <- one.simu.time(n,m,"Naive2D_Rcpp")
+res_Kadane_cpp <- one.simu.time(n,m,"Kadane2D_Rcpp")
 
 # Afficher les résultats
-cat("time_naive_Rcpp:" ,res_naive_Rcpp,"ms\n")
-cat("time_kadane_Rcpp:",res_Kadane_Rcpp, "ms")
+cat("time_naive_cpp:" ,res_naive_cpp,"ms\n")
+cat("time_kadane_cpp:",res_Kadane_cpp, "ms")
 ```
+
+Nous calculons le gain de temps à partir de 10 répétitions de simulation
 
 ##### Gain Naif versus Kadane en R
 
@@ -208,15 +247,19 @@ for (i in 1:nbSimus) {
 # Mesurer le temps d'exécution pour l'algorithme optimal
 for (i in 1:nbSimus) {
   time_opt[i] <- one.simu.time(rows,cols,func="Kadane2D")}
+```
 
+```{r}
 # Calculer les gains de performance
 gain <- mean(time_opt)/mean(time_naive)
-print(round(gain,4))
+cat("le gain naif vs Kadane en R est:",round(gain,4), "ms\n")
 ```
 
 ##### Gain Naif Versus Kadane en C++
 
 ```{r}
+
+set.seed(23)
 # Nombre de simulations
 nbSimus <- 10
 
@@ -231,17 +274,19 @@ set.seed(23)
 
 # Mesurer le temps d'exécution pour l'algorithme naïf
 for (i in 1:nbSimus) {
-  time_naive[i] <- one.simu.Rcpp(rows, cols, "Naive2D_Rcpp")
+  time_naive[i] <- one.simu.time(rows, cols, "Naive2D_Rcpp")
 }
 
 # Mesurer le temps d'exécution pour l'algorithme optimal
 for (i in 1:nbSimus) {
-  time_opt[i] <- one.simu.Rcpp(rows, cols, "Kadane2D_Rcpp")
+  time_opt[i] <- one.simu.time(rows, cols, "Kadane2D_Rcpp")
 }
+```
 
+```{r}
 # Calculer les gains de performance
-gainRcpp <- mean(time_naive)/mean(time_opt)
-print(gainRcpp)
+gain_cpp <- mean(time_naive)/mean(time_opt)
+cat("le gain cpp est:",gain_cpp, "ms\n")
 ```
 
 #### Gain R versus C++
@@ -254,8 +299,8 @@ nbSimus <- 10
 # Vecteurs pour stocker les temps d'exécution
 time_naive <- rep(0, nbSimus)
 time_opt <- rep(0, nbSimus)
-time_naive_Rcpp <- rep(0, nbSimus)
-time_opt_Rcpp <- rep(0, nbSimus)
+time_naive_cpp <- rep(0, nbSimus)
+time_opt_cpp <- rep(0, nbSimus)
 
 # Taille de la matrice
 rows <- 30
@@ -268,7 +313,7 @@ for (i in 1:nbSimus) {
 }
 
 for (i in 1:nbSimus) {
-  time_naive_Rcpp[i] <- one.simu.time(rows, cols, "Naive2D_Rcpp")
+  time_naive_cpp[i] <- one.simu.time(rows, cols, "Naive2D_Rcpp")
 }
 
 # Mesurer le temps d'exécution pour l'algorithme optimal
@@ -277,14 +322,50 @@ for (i in 1:nbSimus) {
 
 # Mesurer le temps d'exécution pour l'algorithme optimal
 for (i in 1:nbSimus) {
-  time_opt_Rcpp[i] <- one.simu.time(rows, cols, "Kadane2D_Rcpp")
+  time_opt_cpp[i] <- one.simu.time(rows, cols, "Kadane2D_Rcpp")
+}
+```
+
+```{r}
+cat("le gain R vs cpp pour naif:", mean(time_naive)/mean(time_naive_cpp),"ms\n")
+cat("le gain R vs cpp pour Kadane:", mean(time_opt)/mean(time_opt_cpp),"ms\n")
+```
+
+```{r}
+# Nombre de simulations
+nbSimus <- 10
+
+# Vecteurs pour stocker les temps d'exécution
+time_naive2 <- rep(0, nbSimus)
+time_opt2 <- rep(0, nbSimus)
+time_naive_cpp2 <- rep(0, nbSimus)
+time_opt_cpp2 <- rep(0, nbSimus)
+
+# Taille de la matrice
+rows <- 80
+cols <- 60
+set.seed(23)
+
+# Mesurer le temps d'exécution pour l'algorithme naïf
+for (i in 1:nbSimus) {
+  time_naive2[i] <- one.simu.time(rows, cols, "naive2D")
 }
 
-# Calculer les gains de performance
-gain1 <- mean(time_naive)/mean(time_naive_Rcpp)
-gain2 <- mean(time_opt)/mean(time_opt_Rcpp)
-cat("le gain R vs C++ pour naif est:", gain1, "ms\n")
-cat("le gain R vs C++ pour Kadane est:", gain2,"ms")
+for (i in 1:nbSimus) {
+  time_naive_cpp2[i] <- one.simu.time(rows, cols, "Naive2D_Rcpp")
+}
+
+# Mesurer le temps d'exécution pour l'algorithme optimal
+for (i in 1:nbSimus) {
+  time_opt2[i] <- one.simu.time(rows, cols, "Kadane2D")}
+
+# Mesurer le temps d'exécution pour l'algorithme optimal
+for (i in 1:nbSimus) {
+  time_opt_cpp2[i] <- one.simu.time(rows, cols, "Kadane2D_Rcpp")
+}
+
+cat("le gain R vs cpp pour naif:", mean(time_naive2)/mean(time_naive_cpp2),"ms\n")
+cat("le gain R vs cpp pour Kadane:", mean(time_opt2)/mean(time_opt_cpp2),"ms\n")
 ```
 
 #### Simulation avec microbenchmark
@@ -292,103 +373,26 @@ cat("le gain R vs C++ pour Kadane est:", gain2,"ms")
 ```{r}
 library(microbenchmark)
 library(ggplot2)
+library(dplyr)
 ```
 
-```{r}
-# n est le nombre de lignes
-# m est le nombre de colonnes
-
-simu <- function(n, m, func) {
-  matrix <- matrix(sample(-20:20, n * m, replace = TRUE), nrow = n, ncol = m)
-  mat_list <- lapply(1:nrow(matrix), function(i) matrix[i, ])
-  
-  if (func == "naive2D") {
-    t <- system.time(max_subarray_rectangle_naive(matrix))[[1]]
-  }
-  if (func == "kadane2D") {
-    t <- system.time(max_subarray_rectangle_opt(matrix))[[1]]
-  }
-  if (func == "naive2D_Rcpp") {
-    t <- system.time(max_subarray_rectangle_naive_Rcpp(mat_list))[[1]]
-  }
-  if (func == "kadane2D_Rcpp") {
-    t <- system.time(max_subarray_rectangle_opt_Rcpp(mat_list))[[1]]
-  }
-  return(t)
-}
-```
+Nous comparons l'algorithme naive avec Kadane en version R pour des tailles de matrices différentes
 
 ```{r}
-
-simu.time <- function(n, m, func) {
-  matrix <- matrix(sample(-20:20, n * m, replace = TRUE), nrow = n, ncol = m)
-  mat_list <- lapply(1:nrow(matrix), function(i) matrix[i, ])
-  
-  if (func == "naive2D") {
-    t <- microbenchmark(max_subarray_rectangle_naive(matrix), times=1)$time/1e6}
-  if (func == "Kadane2D") {
-    t <- microbenchmark(max_subarray_rectangle_opt(matrix), times=1)$time/1e6}
-  if (func == "Naive2D_Rcpp") {
-    t <- microbenchmark(max_subarray_rectangle_naive_Rcpp(mat_list), times=1)$time/1e6}
-  if(func == "Kadane2D_Rcpp") {
-    t <- microbenchmark(max_subarray_rectangle_opt_Rcpp(mat_list), times=1)$tim/1e6}
-  
-  # Arrondi à 2 décimales
-  t <- round(t,2)
-  return(as.numeric(t))
-}
-```
-
-Nous comparons l'algo naive avec Kadane en version R pour des tailles de matrices différentes
-
-```{r}
-library(microbenchmark)
-library(ggplot2)
-
+set.seed(23)
 # Définir les tailles de matrices à tester
-sizes <- list(c(4,5), c(25, 40), c(60,60))
-
-# Stocker les résultats
-results <- list()
-
-# Exécuter les simulations pour chaque taille de matrice
-for (size in sizes) {
-  n <- size[1]
-  m <- size[2]
-  res <- microbenchmark(
-    naive = simu(n, m, "naive2D"),
-    kadane = simu(n, m, "kadane2D"),
-    times = 50
-  )
-  results[[paste(n, "x", m)]] <- res
-}
-
-# Afficher les résultats sous forme de diagrammes en violon
-for (size in sizes) {
-  n <- size[1]
-  m <- size[2]
-  print(autoplot(results[[paste(n, "x", m)]]) + ggtitle(paste("Taille de la matrice:", n, "x", m)))
-}
-```
-
-```{r}
-library(microbenchmark)
-library(ggplot2)
-
-# Définir les tailles de matrices à tester
-sizes <- list(c(10, 5), c(20, 10))
+sizes <- list(c(10, 20),c(50, 40))
 
 # Stocker les résultats
 results <- data.frame()
-set.seed(23)
-
 # Exécuter les simulations pour chaque taille de matrice
 for (size in sizes) {
   n <- size[1]
   m <- size[2]
+  mat <- matrix(sample(-20:20, n * m, replace = TRUE), nrow = n, ncol = m)
   res <- microbenchmark(
-    naive = simu(n, m, "naive2D"),
-    kadane = simu(n, m, "kadane2D"),
+    naive = max_subarray_rectangle_naive(mat),
+    kadane = max_subarray_rectangle_opt(mat),
     times = 50
   )
   
@@ -403,136 +407,306 @@ ggplot(results, aes(x = expr, y = time / 1e6, fill = expr)) +
   geom_violin() +
   facet_wrap(~ MatrixSize, scales = "free") +
   scale_fill_manual(values = c("naive" = "#DAB3FF", "kadane" = "#FFFACD")) +
-  labs(title = "Comparaison Benchmark des temps d'exécution",
+  labs(title = "Comparaison Benchmark des algorithmes R",
+       x = "Algorithme",
+       y = "Temps d'exécution (ms)") +
+  theme_minimal()
+```
+
+Nous comparons l'algorithme naive avec Kadane en version Cpp pour 3 tailles différentes
+
+```{r}
+
+set.seed(23)
+# Définir les tailles de matrices à tester
+sizes <- list(c(10, 5), c(20, 10), c(30, 40))
+
+# Stocker les résultats
+resultsCpp <- data.frame()
+# Exécuter les simulations pour chaque taille de matrice
+for (size in sizes) {
+  n <- size[1]
+  m <- size[2]
+  mat <- matrix(sample(-20:20, n * m, replace = TRUE), nrow = n, ncol = m)
+  res <- microbenchmark(
+    naiveCpp = max_subarray_rectangle_naive_Rcpp(mat),
+    kadaneCpp = max_subarray_rectangle_opt_Rcpp(mat),
+    times = 50
+  )
+  
+  # Ajouter les résultats au data frame
+  res_df_Cpp <- as.data.frame(res)
+  res_df_Cpp$MatrixSize <- paste(n, "x", m)
+  resultsCpp <- rbind(resultsCpp, res_df_Cpp)
+}
+
+# Afficher les résultats sous forme de diagrammes en violon
+
+ggplot(results, aes(x = expr, y = time / 1e6, fill = expr)) +
+  geom_violin() +
+  facet_wrap(~ MatrixSize, scales = "free") +
+  scale_fill_manual(values = c("naiveCpp" = "#DAB3FF", "kadaneCpp" = "#FFFACD")) +
+  labs(title = "Comparaison Benchmark des algorithmes Cpp",
        x = "Algorithme",
        y = "Temps d'exécution (ms)") +
   theme_minimal()
 ```
 
 ```{r}
-library(microbenchmark)
-library(ggplot2)
+# Extraire les dimensions de la matrice et les ajouter en tant que colonnes séparées
+resultsCpp <- resultsCpp %>%
+  mutate(n = as.numeric(sub("x.*", "", MatrixSize)),
+         m = as.numeric(sub(".*x", "", MatrixSize)),
+         size = n * m)
 
-# Définir les tailles de matrices à tester
-sizes <- list(c(10, 15), c(10, 15))
-
-# Stocker les résultats
-results <- data.frame()
-
-# Exécuter les simulations pour chaque taille de matrice
-for (size in sizes) {
-  n <- size[1]
-  m <- size[2]
-  res <- microbenchmark(
-    naive = simu(n, m, "naive2D_Rcpp"),
-    kadane = simu(n, m, "kadane2D_Rcpp"),
-    times = 50
+# Créer un résumé avec les statistiques souhaitées
+summary_results <- resultsCpp %>%
+  group_by(size, expr) %>%
+  summarise(
+    min_time = min(time) / 1e6,   # Convertir les nanosecondes en millisecondes
+    q1_time = quantile(time, 0.25) / 1e6,
+    median_time = median(time) / 1e6,
+    mean_time = mean(time) / 1e6,
+    q3_time = quantile(time, 0.75) / 1e6,
+    max_time = max(time) / 1e6,
+    .groups = "drop"
   )
-  
-  # Ajouter les résultats au data frame
-  res_df <- as.data.frame(res)
-  res_df$MatrixSize <- paste(n, "x", m)
-  results <- rbind(results, res_df)
-}
 
-# Afficher les résultats sous forme de diagrammes en violon
-ggplot(results, aes(x = expr, y = time / 1e6, fill = expr)) +
-  geom_violin() +
-  facet_wrap(~ MatrixSize, scales = "free") +
-  labs(title = "Comparaison Benchmark des temps d'exécution Rcpp",
-       x = "Algorithme",y = "Temps d'exécution (ms)") +
-  theme_minimal()
+# Afficher le résumé
+print(summary_results)
 ```
 
 #### Analyse de la complexité
 
+##### Complexité expériementale (naif)
+
+D'après la littérature, et comme expliquée précedemment, l'agorithme naif a une complexité polynomiale en O((nm)\^3), içi nous essayons d'exp
+
+```{r}
+```
+
+##### Complexité expériementale (Kadane)
+
+```{r}
+
+```
+
 ##### Complexité théorique de l'algorithme naif
 
+Les vecteurs de longueurs vector_n et vector_m et ((n x m) la taille de matrice) sont choisis sur l'echelle logarithmique afin d'avoir un pas constant sur l'échelle logarithmique en abscisse pour la régression.
+
+On réalise 10 répétitions pour chaque taille n x m et pour chaque algorithme.
+
 ```{r}
-
-# Nombre de simulations
-nbSimus <- 5
-vector_n <- list(c(10, 5), c(20, 30), c(40, 40), c(50, 50), c(60, 60))
-vect_m <- list
-nbRep <- 50
-
-# Stocker les résultats
-res_naive <- data.frame(matrix(0, nbSimus, nbRep + 1))
-res_opt <- data.frame(matrix(0, nbSimus, nbRep + 1))
-colnames(res_naive) <- c("n", paste0("Rep", 1:nbRep))
-colnames(res_opt) <- c("n", paste0("Rep", 1:nbRep))
-
-# Exécuter les simulations pour chaque taille de matrice
-for (j in 1:nbSimus) {
-  n <- vector_n[[j]][1]
-  m <- vector_n[[j]][2]
+# a et b sont les bornes inf et sup de la matrice
+one.simu.time2 <- function(n, m, a, b, func) {
   
-  res_naive[j,] <- c(paste(n, "x", m), replicate(nbRep,one.simu.time(n, m, func = "naive2D")))
-  res_opt[j,] <- c(paste(n, "x", m), replicate(nbRep, one.simu.time(n, m, func = "opt2D")))
+  # définir la matrice
+  matrix <- matrix(sample(a:b, n * m, replace = TRUE), nrow = n, ncol = m)
+  # mat_list <- lapply(1:nrow(matrix), function(i) matrix[i, ])
+  
+  if (func == "naive2D") {
+    t <- microbenchmark(max_subarray_rectangle_naive(matrix), times=1)$time/1e6}
+  if (func == "Kadane2D") {
+    t <- microbenchmark(max_subarray_rectangle_opt(matrix), times=1)$time/1e6}
+  if (func == "Naive2D_Rcpp") {
+    t <- microbenchmark(max_subarray_rectangle_naive_Rcpp(matrix), times=1)$time/1e6}
+  if(func == "Kadane2D_Rcpp") {
+    t <- microbenchmark(max_subarray_rectangle_opt_Rcpp(matrix), times=1)$tim/1e6}
+  
+  # Arrondi à 2 décimales
+  t <- round(t,2)
+  return(t)
 }
-
-# Calculer les moyennes des temps d'exécution
-mean_naive <- rowMeans(res_naive[,-1])
-mean_opt <- rowMeans(res_opt[,-1])
-
-# Afficher les résultats
-plot(1:nbSimus, mean_naive, type = 'b', col = 'red', xlab = "Taille de la matrice (index)", ylab = "Temps moyen en ms", main = "Comparaison des temps d'exécution")
-lines(1:nbSimus, mean_opt, type = 'b', col = "blue")
-legend("topright", legend = c("Naive2D", "Opt2D"), col = c("red", "blue"), lty = 1)
-
-# Régression linéaire pour confirmer la complexité théorique
-lm_naive <- lm(log(mean_naive) ~ log(sapply(vector_n, function(x) x[1] * x[2])))
-lm_opt <- lm(log(mean_opt) ~ log(sapply(vector_n, function(x) x[1] * x[2])))
-summary(lm_naive)
-summary(lm_opt)
 ```
 
-##### Complexité théorique de l'algorithme optimal
-
 ```{r}
+set.seed(23)
+
+# Function to run benchmarking with mean and standard deviation
+benchmark_subarray <- function(func_name, sizes, nbRep) {
+  results <- sapply(sizes, function(size) {
+    n <- size[1]
+    m <- size[2]
+    times <- replicate(nbRep, one.simu.time(n, m, func = func_name))
+    c(mean_time = mean(times), sd_time = sd(times)) 
+  })
+  
+  # Convert results to a data frame
+  data.frame(size = sapply(sizes, function(size) size[1] * size[2]), 
+             mean_time = results["mean_time",], 
+             sd_time = results["sd_time",])
+}
+
+# Parameters
 nbSimus <- 20
+nbRep <- 10
 
-vect_n <- seq(from = 5, to = 20, length.out = nbSimus)
-vect_n <- round(vector_n)  
-vect_m <- seq(from = 10, to = 30, length.out = nbSimus)
-vect_m <- round(vect_m)
+# Définir les tailles de matrices à tester
+vector_n <- exp(seq(log(30), log(100), length.out = nbSimus)) |> round()
+vector_m <- exp(seq(log(30), log(150), length.out = nbSimus)) |> round()
+sizes_naif <- lapply(1:nbSimus, function(i) c(vector_n[i], vector_m[i]))
 
-# nombre de répétitions
-nbRep <- 50
+# Benchmark pour l'algorithme naïf
+res_Naive2D <- benchmark_subarray("naive2D", sizes_naif, nbRep)
 
-# Stocker les résultats
-res_naive <- data.frame(matrix(0, nbSimus, nbRep + 2))
-res_opt <- data.frame(matrix(0, nbSimus, nbRep + 2))
-colnames(res_naive) <- c("nrow", "ncol", paste0("Rep", 1:nbRep))
-colnames(res_opt) <- c("nrow", "ncol", paste0("Rep", 1:nbRep))
+# Benchmark pour Kadane
+vector_n1 <- exp(seq(log(35), log(180), length.out = nbSimus)) |> round()
+vector_m1 <- exp(seq(log(40), log(190), length.out = nbSimus)) |> round()
+sizes_kadane <- lapply(1:nbSimus, function(i) c(vector_n1[i], vector_m1[i]))
+res_Kadane2D <- benchmark_subarray("Kadane2D", sizes_kadane, nbRep)
 
-# Exécuter les simulations pour chaque taille de matrice
-for (j in 1:nbSimus) {
-  n <- vect_n[j]
-  m <- vect_m[j]
+# Gérer le problème de valeurs nulles
+res_Naive2D <- res_Naive2D %>% filter(mean_time > 0, size > 0)
+res_Kadane2D <- res_Kadane2D %>% filter(mean_time > 0, size > 0)
+
+
+# Graphique log-log avec barres d'erreur
+ggplot() +
+  # Algorithme naïf
+  geom_line(data = res_Naive2D, aes(x = size, y = mean_time, color = "Naïf"), linewidth = 1) +
+  geom_errorbar(data = res_Naive2D, 
+                aes(x = size, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Naïf"), width = 0.1, alpha = 0.5) +
   
-  res_naive[j,] <- c(n, m, replicate(nbRep, simu.time(n, m, func = "naive2D")))
-  res_opt[j,] <- c(n, m, replicate(nbRep, simu.time(n, m, func = "Kadane2D")))
-}
+  # Algorithme de Kadane
+  geom_line(data = res_Kadane2D, aes(x = size, y = mean_time, color = "Kadane"), linewidth = 1) +
+  geom_errorbar(data = res_Kadane2D, 
+                aes(x = size, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Kadane"),width = 0.1, alpha = 0.5) +
 
-# Calculer les moyennes des temps d'exécution
-mean_naive <- rowMeans(res_naive[, -c(1, 2)])
-mean_opt <- rowMeans(res_opt[, -c(1, 2)])
-
-# Afficher les résultats
-plot(1:nbSimus, mean_naive, type = 'b', col = 'purple', xlab = "Taille de la matrice (index)", ylab = "Temps moyen en ms", main = "Temps d'exécution - Naive2D")
-
-
-# Régression linéaire pour confirmer la complexité théorique
-lm_naive <- lm(log(mean_naive) ~ log(vect_n * vect_m))
-#lm_opt <- lm(log(mean_opt) ~ log(vect_n * vect_m))
-summary(lm_naive)
-#summary(lm_opt)
+  # Échelles logarithmiques
+  scale_x_log10() +
+  scale_y_log10() +
+  
+  # Labels & thème
+  labs(title = "Performance des algorithmes Maximum Submatrix (échelle log-log)",
+       x = "Taille des données (échelle log)", 
+       y = "Temps moyen d'exécution (ms, échelle log)",
+       color = "Algorithme") +
+  theme_minimal()
 ```
 
 ```{r}
-# Méthode de régression plus simple moins précise
+cat("Les résultats pour la solution naïve:\n")
+print(res_Naive2D)
 ```
+
+```{r}
+cat("Les résultats pour la solution optimale:\n")
+print(res_Kadane2D)
+```
+
+Résultats de la régression linéaire pour l'algorithme naif implémenté en R
+
+```{r}
+# Estimation de la complexité pour l'algorithme naïf
+model_naive2D <- lm(log(res_Naive2D$mean_time) ~ log(res_Naive2D$size))
+print(summary(model_naive2D)) 
+cat("Exposant estimé (naïf):", coef(model_naive2D)[2], "\n")
+```
+
+Résultats de la régression linéaire pour l'algorithme optimal implémenté en R
+
+```{r}
+# Estimation de la complexité pour l'algorithme naïf
+model_Kadane2D <- lm(log(res_Kadane2D$mean_time) ~ log(res_Kadane2D$size))
+print(summary(model_Kadane2D)) 
+cat("Exposant estimé (kadane):", coef(model_Kadane2D)[2], "\n")
+```
+
+##### Complexité théorique de l'algorithme Kadane
+
+```{r}
+set.seed(23)
+
+# Function to run benchmarking with mean and standard deviation
+benchmark_subarray <- function(func_name, sizes, nbRep) {
+  results <- sapply(sizes, function(size) {
+    n <- size[1]
+    m <- size[2]
+    times <- replicate(nbRep, one.simu.time2(n, m, a=-50, b=50, func = func_name))
+    c(mean_time = mean(times), sd_time = sd(times)) 
+  })
+  # Convert results to a data frame
+  data.frame(size = sapply(sizes, function(size) size[1] * size[2]), 
+             mean_time = results["mean_time",], 
+             sd_time = results["sd_time",])
+}
+
+# Parameters
+nbSimus <- 20
+nbRep <- 10
+
+# Définir les tailles de matrices à tester
+vector_nC<- exp(seq(log(25), log(90), length.out = nbSimus)) |> round()
+vector_mC <- exp(seq(log(25), log(90), length.out = nbSimus)) |> round()
+sizes_naifC <- lapply(1:nbSimus, function(i) c(vector_nC[i], vector_mC[i]))
+
+# Benchmark pour l'algorithme naïf
+res_Naive2D_Cpp <- benchmark_subarray("Naive2D_Rcpp", sizes_naifC, nbRep)
+
+# Benchmark pour Kadane
+vector_nK <- exp(seq(log(30), log(110), length.out = nbSimus)) |> round()
+vector_mK <- exp(seq(log(30), log(130), length.out = nbSimus)) |> round()
+sizes_kadane2 <- lapply(1:nbSimus, function(i) c(vector_nK[i], vector_mK[i]))
+res_Kadane2D_Cpp <- benchmark_subarray("Kadane2D_Rcpp", sizes_kadane2, nbRep)
+
+res_Naive2D_Cpp <- res_Naive2D_Cpp %>% filter(mean_time > 0, size > 0)
+res_Kadane2D_Cpp <- res_Kadane2D_Cpp %>% filter(mean_time > 0, size > 0)
+
+
+# Graphique log-log avec barres d'erreur
+ggplot() +
+  # Algorithme naïf
+  geom_line(data = res_Naive2D, aes(x = size, y = mean_time, color = "Naïf Cpp"), linewidth = 1) +
+  geom_errorbar(data = res_Naive2D, 
+                aes(x = size, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Naïf Cpp"), width = 0.1, alpha = 0.5) +
+  
+  # Algorithme de Kadane
+  geom_line(data = res_Kadane2D, aes(x = size, y = mean_time, color = "Kadane Cpp"), linewidth = 1) +
+  geom_errorbar(data = res_Kadane2D, 
+                aes(x = size, ymin = mean_time - sd_time, ymax = mean_time + sd_time, color = "Kadane Cpp"),width = 0.1, alpha = 0.5) +
+
+  # Échelles logarithmiques
+  scale_x_log10() +
+  scale_y_log10() +
+  
+  # Labels & thème
+  labs(title = "Performance des algorithmes Maximum Submatrix (échelle log-log)",
+       x = "Taille des données (échelle log)", 
+       y = "Temps moyen d'exécution (ms, échelle log)",
+       color = "Algorithme") +
+  theme_minimal()
+```
+
+```{r}
+cat("Les résultats pour la solution naïve:\n")
+print(res_Naive2D_Cpp)
+```
+
+```{r}
+cat("Les résultats pour la solution naïve:\n")
+print(res_Kadane2D_Cpp)
+```
+
+Résultats de la régression linéaire pour l'algorithme naif implémenté en C++
+
+```{r}
+# Estimation de la complexité pour l'algorithme Naif en C++
+model_naif_Cpp <- lm(log(res_Naive2D_Cpp$mean_time) ~ log(res_Naive2D_Cpp$size))
+print(summary(model_naif_Cpp)) 
+cat("Exposant estimé (naïf):", coef(model_naif_Cpp)[2], "\n")
+```
+
+Résultats de la régression linéaire pour l'algorithme optimal implémenté en C++
+
+```{r}
+# Estimation de la complexité pour l'algorithme Kadane de C++
+model_Kadane_Cpp <- lm(log(res_Kadane2D_Cpp$mean_time) ~ log(res_Kadane2D_Cpp$size))
+print(summary(model_Kadane_Cpp)) 
+cat("Exposant estimé (kadane):", coef(model_Kadane_Cpp)[2], "\n")
+```
+
+#### Cas particuliers
 
 ```{r}
 
