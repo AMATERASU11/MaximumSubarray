@@ -103,7 +103,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdfauthor={Khalil Ounis, Manal Derghal, Taqwa Ben Romdhane},
+  pdfauthor={Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane},
   colorlinks=true,
   linkcolor={Maroon},
   filecolor={Maroon},
@@ -113,7 +113,7 @@
 
 \title{Analyse des algorithmes de Maximum Subarray 1D\\
 \strut ~M2 Data Science Algorithmique}
-\author{Khalil Ounis, Manal Derghal, Taqwa Ben Romdhane}
+\author{Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane}
 \date{Lundi 7 avril 2025}
 
 \begin{document}
@@ -285,26 +285,18 @@ le temps en ms
 \begin{Shaded}
 \begin{Highlighting}[]
 \FunctionTok{library}\NormalTok{(microbenchmark)}
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 
-\NormalTok{one.simu.time }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func, }\AttributeTok{data\_type =} \StringTok{"random"}\NormalTok{) \{}
-  \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"random"}\NormalTok{) \{}
-\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"all\_negative"}\NormalTok{) \{}
-\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:{-}}\DecValTok{1}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (data\_type }\SpecialCharTok{==} \StringTok{"all\_positive"}\NormalTok{) \{}
-\NormalTok{    v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{0}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
-\NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
-    \FunctionTok{stop}\NormalTok{(}\StringTok{"data\_type inconnu"}\NormalTok{)}
-\NormalTok{  \}}
+\NormalTok{one.simu.time }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
+  
+\NormalTok{  v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
 
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive"}\NormalTok{) \{}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
-\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"opt\_Rcpp"}\NormalTok{) \{}
+\NormalTok{  \} }\ControlFlowTok{else} \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) \{}
 \NormalTok{    t }\OtherTok{\textless{}{-}} \FunctionTok{microbenchmark}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v), }\AttributeTok{times =} \DecValTok{1}\NormalTok{)}\SpecialCharTok{$}\NormalTok{time }\SpecialCharTok{/} \FloatTok{1e6}
 \NormalTok{  \} }\ControlFlowTok{else}\NormalTok{ \{}
     \FunctionTok{stop}\NormalTok{(}\StringTok{"fonction inconnue"}\NormalTok{)}
@@ -317,48 +309,67 @@ le temps en ms
 
 \subsection{Un essai}\label{un-essai}
 
+\subsubsection{Temps d'exécution en R}\label{temps-dexuxe9cution-en-r}
+
 Sur un exemple, on obtient :
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+\CommentTok{\# Simulation sur une matrice de taille n}
 \NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{10000}
-\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive"}\NormalTok{)}
+
+\CommentTok{\# Exécuter la simulation}
+\NormalTok{res\_naive }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n,}\StringTok{"Naive1D"}\NormalTok{)}
+\NormalTok{res\_kadane }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\StringTok{"Kadane1D"}\NormalTok{)}
+
+\CommentTok{\# Afficher les résultats}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive:"}\NormalTok{, res\_naive,}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 2487.89
+## time_naive: 2167.17 ms
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive\_Rcpp"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_kadane:"}\NormalTok{, res\_kadane, }\StringTok{"ms"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 29.42
+## time_kadane: 0.89 ms
+\end{verbatim}
+
+\subsubsection{Temps d'exécution en C++}\label{temps-dexuxe9cution-en-c}
+
+sur une matrice de taille 30x50, on obtient les résultats suivants :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Simulation sur une matrice de taille n}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{10000}
+
+\NormalTok{res\_naive\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n,}\StringTok{"Naive1D\_cpp"}\NormalTok{)}
+\NormalTok{res\_Kadane\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n,}\StringTok{"Kadane1D\_cpp"}\NormalTok{)}
+
+\CommentTok{\# Afficher les résultats}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive\_cpp:"}\NormalTok{ ,res\_naive\_cpp,}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## time_naive_cpp: 24.98 ms
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_kadane\_cpp:"}\NormalTok{,res\_Kadane\_cpp, }\StringTok{"ms"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 1.11
-\end{verbatim}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\begin{verbatim}
-## [1] 0.13
+## time_kadane_cpp: 0.07 ms
 \end{verbatim}
 
 \subsection{Simulations avec
@@ -368,65 +379,65 @@ On reproduit ces comparaisons de manière plus robuste:
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 \NormalTok{nbSimus }\OtherTok{\textless{}{-}} \DecValTok{10}
 
-\NormalTok{time1 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time2 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus);}
-\NormalTok{time3 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time4 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
+\NormalTok{time\_naive }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time\_naive\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus);}
+\NormalTok{time\_kadane }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time\_kadane\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
 
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time1[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive"}\NormalTok{)\}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time2[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"naive\_Rcpp"}\NormalTok{)\}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time3[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)\}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time4[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_naive[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Naive1D"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_naive\_cpp[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Naive1D\_cpp"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_kadane[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Kadane1D"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_kadane\_cpp[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Kadane1D\_cpp"}\NormalTok{)\}}
 \end{Highlighting}
 \end{Shaded}
 
-Gain C++ versus R
+\subsubsection{Gain R versus C++}\label{gain-r-versus-c}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{naive\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time1) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time2)}
-\NormalTok{kadane\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time3) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time4)}
-\NormalTok{naive\_speedup\_cpp}
+\NormalTok{naive\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_naive\_cpp)}
+\NormalTok{kadane\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_kadane) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane\_cpp)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain R vs cpp pour naif:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(naive\_speedup\_cpp,}\DecValTok{2}\NormalTok{),}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 79.13895
+## le gain R vs cpp pour naif: 71.46 ms
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{kadane\_speedup\_cpp}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain R vs cpp pour Kadane:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(kadane\_speedup\_cpp,}\DecValTok{2}\NormalTok{),}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 4.864253
+## le gain R vs cpp pour Kadane: 9.88 ms
 \end{verbatim}
 
-Gain naive versus optimisé
+\subsubsection{Gain Naif Versus Kadane en R et
+C++}\label{gain-naif-versus-kadane-en-r-et-c}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{kadane\_vs\_naive\_R }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time1) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time3)}
-\NormalTok{kadane\_vs\_naive\_Rcpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time2) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time4)}
-\NormalTok{kadane\_vs\_naive\_R}
+\NormalTok{kadane\_vs\_naive\_R }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane)}
+\NormalTok{kadane\_vs\_naive\_Rcpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive\_cpp) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane\_cpp)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain naif vs Kadane en R est:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(kadane\_vs\_naive\_R,}\DecValTok{2}\NormalTok{), }\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 2163.18
+## le gain naif vs Kadane en R est: 2030.39 ms
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{kadane\_vs\_naive\_Rcpp}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain cpp est:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(kadane\_vs\_naive\_Rcpp,}\DecValTok{2}\NormalTok{), }\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 132.9593
+## le gain cpp est: 280.81 ms
 \end{verbatim}
 
 On recommence avec \texttt{n\ =\ 20000} seulement pour le gain avec C++
@@ -437,16 +448,16 @@ pour Kadane
 \FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
 \NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{20000}
 \NormalTok{nbSimus }\OtherTok{\textless{}{-}} \DecValTok{10}
-\NormalTok{time3 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time4 }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time3[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt"}\NormalTok{)\}}
-\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time4[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"opt\_Rcpp"}\NormalTok{)\}}
-\NormalTok{median\_kadane\_R\_vs\_Rcpp }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(time3) }\SpecialCharTok{/} \FunctionTok{median}\NormalTok{(time4)}
-\NormalTok{median\_kadane\_R\_vs\_Rcpp}
+\NormalTok{time\_kadane }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus); time\_kadane\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{rep}\NormalTok{(}\DecValTok{0}\NormalTok{, nbSimus)}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_kadane[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Kadane1D"}\NormalTok{)\}}
+\ControlFlowTok{for}\NormalTok{(i }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\NormalTok{nbSimus)\{time\_kadane\_cpp[i] }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time}\NormalTok{(n, }\AttributeTok{func =} \StringTok{"Kadane1D\_cpp"}\NormalTok{)\}}
+\NormalTok{median\_kadane\_R\_vs\_Rcpp }\OtherTok{\textless{}{-}} \FunctionTok{median}\NormalTok{(time\_kadane) }\SpecialCharTok{/} \FunctionTok{median}\NormalTok{(time\_kadane\_cpp)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain Kadane en R vs Kadane en C++ est:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(median\_kadane\_R\_vs\_Rcpp,}\DecValTok{2}\NormalTok{), }\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 7.215686
+## le gain Kadane en R vs Kadane en C++ est: 11.86 ms
 \end{verbatim}
 
 \textbf{Conclusion:}
@@ -456,9 +467,9 @@ pour Kadane
 \begin{itemize}
 \tightlist
 \item
-  Naïf : C++ 79× plus rapide\\
+  Naïf : C++ 71× plus rapide\\
 \item
-  Kadane : C++ 5× plus rapide → 7× pour n=20k
+  Kadane : C++ 10× plus rapide → 12× pour n=20k
 \end{itemize}
 
 \subsubsection{Efficacité algorithmique
@@ -466,23 +477,9 @@ pour Kadane
 
 \begin{itemize}
 \item
-  Kadane 2163× mieux que naïf en R\\
+  Kadane 2030× mieux que naïf en R\\
 \item
-  Kadane 133× mieux que naïf en C++
-\item
-  Confirme O(n²) naïf vs O(n) Kadane
-\end{itemize}
-
-\subsubsection{Recommandations :}\label{recommandations}
-
-\begin{itemize}
-\tightlist
-\item
-  n \textgreater{} 1k : Toujours préférer Kadane\\
-\item
-  n \textgreater{} 10k : Obligatoire d'utiliser Rcpp\\
-\item
-  Très grands n : Seul Kadane+Rcpp reste viable
+  Kadane 281× mieux que naïf en C++
 \end{itemize}
 
 \subsection{\texorpdfstring{Simulations avec
@@ -492,20 +489,20 @@ Vous avez besoin des packages \texttt{microbenchmark} et
 \texttt{ggplot2} pour exécuter les simulations et afficher les résultats
 (sous forme de diagrammes en violon). Nous comparons
 \texttt{naive\_Rcpp} avec \texttt{opt\_Rcpp} pour des tailles de données
-\texttt{n\ =\ 1000} et \texttt{n\ =\ 10000}.
+\texttt{n\ =\ 1000}, \texttt{n\ =\ 5000} et \texttt{n\ =\ 10000}.
 
 \includegraphics{MaxSubarray1D_files/figure-latex/benchmark-1.pdf}
 
 \begin{verbatim}
 ## # A tibble: 6 x 8
-##       n expr       min_time q1_time median_time mean_time q3_time max_time
-##   <dbl> <fct>         <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
-## 1   100 Naif_Cpp     0.0041  0.0041      0.0041   0.00459  0.0043   0.0221
-## 2   100 Kadane_Cpp   0.0011  0.0012      0.0012   0.00136  0.0013   0.0063
-## 3  5000 Naif_Cpp     6.37    6.64        6.88     7.17     7.39    11.7   
-## 4  5000 Kadane_Cpp   0.0168  0.0281      0.0310   0.0337   0.0363   0.087 
-## 5 10000 Naif_Cpp    25.7    26.4        27.2     27.3     27.8     30.5   
-## 6 10000 Kadane_Cpp   0.0441  0.0568      0.0604   0.0642   0.0673   0.118
+##       n expr         min_time  q1_time median_time mean_time  q3_time max_time
+##   <dbl> <fct>           <dbl>    <dbl>       <dbl>     <dbl>    <dbl>    <dbl>
+## 1   100 Naif1D_Cpp    0.00650  0.00653     0.00660   0.00761  0.00678  0.0449 
+## 2   100 Kadane1D_Cpp  0.00180  0.00190     0.00200   0.00214  0.00200  0.00840
+## 3  5000 Naif1D_Cpp   10.2     10.7        11.1      11.4     11.4     20.9    
+## 4  5000 Kadane1D_Cpp  0.0235   0.0432      0.0504    0.0527   0.0549   0.156  
+## 5 10000 Naif1D_Cpp   41.3     42.8        43.2      43.2     43.7     45.0    
+## 6 10000 Kadane1D_Cpp  0.0683   0.0910      0.102     0.104    0.114    0.176
 \end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -526,32 +523,52 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Affichage des résultats}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Les résultats pour la solution naïve:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Les résultats pour la solution naïve:
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \NormalTok{res\_Naive}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##        n mean_time    sd_time
-## 1   5000     7.089  0.7716713
-## 2   5644     8.969  1.0040081
-## 3   6371    11.722  1.1311626
-## 4   7192    14.360  0.7093189
-## 5   8119    18.839  1.1019019
-## 6   9165    23.243  1.4850518
-## 7  10346    30.953  1.3783569
-## 8  11679    37.709  1.5282557
-## 9  13183    48.524  1.4181381
-## 10 14882    61.565  1.4698772
-## 11 16799    81.555 11.3921506
-## 12 18963   101.494  3.8724359
-## 13 21407   125.332  3.4540244
-## 14 24165   161.602  2.9803311
-## 15 27278   202.783  2.7031589
-## 16 30792   261.185  4.0527748
-## 17 34760   332.876  3.7155595
-## 18 39238   421.695  5.4820439
-## 19 44293   537.211  5.3039827
-## 20 50000   686.189  7.9705673
+##        n mean_time     sd_time
+## 1   5000    11.270   0.5793291
+## 2   5644    14.518   0.6674129
+## 3   6371    18.123   0.3564345
+## 4   7192    23.257   1.8599286
+## 5   8119    30.168   1.8597539
+## 6   9165    38.156   4.6008651
+## 7  10346    47.265   0.7614496
+## 8  11679    60.469   2.0857530
+## 9  13183    75.990   2.2458455
+## 10 14882    97.693   3.6680060
+## 11 16799   130.050  18.9493694
+## 12 18963   163.516  16.9388588
+## 13 21407   198.468   3.3364112
+## 14 24165   252.345   3.1644949
+## 15 27278   321.789   4.4165206
+## 16 30792   410.089   5.2821954
+## 17 34760   520.307   3.1626292
+## 18 39238   661.620  10.1094609
+## 19 44293   638.637 205.7220376
+## 20 50000   635.950 129.0299659
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Les résultats pour la solution optimale:}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Les résultats pour la solution optimale:
 \end{verbatim}
 
 \begin{Shaded}
@@ -561,27 +578,27 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 \end{Shaded}
 
 \begin{verbatim}
-##         n mean_time   sd_time
-## 1  400000     2.573 0.4202658
-## 2  411957     2.526 0.3252076
-## 3  424271     2.423 0.2216629
-## 4  436953     2.502 0.3260811
-## 5  450014     2.573 0.2672514
-## 6  463465     2.788 0.2238948
-## 7  477319     2.666 0.2424046
-## 8  491587     2.676 0.1539264
-## 9  506281     2.866 0.2386629
-## 10 521415     2.974 0.3452600
-## 11 537001     3.090 0.5790605
-## 12 553052     3.283 0.5251677
-## 13 569584     3.468 0.3315888
-## 14 586610     3.363 0.2810318
-## 15 604144     3.498 0.3401895
-## 16 622203     3.528 0.4707394
-## 17 640802     3.794 0.5501555
-## 18 659956     3.543 0.1643878
-## 19 679683     3.800 0.2701851
-## 20 700000     3.828 0.2839718
+##         n mean_time    sd_time
+## 1  100000     0.930 0.10392305
+## 2  108840     0.998 0.06425643
+## 3  118461     1.118 0.09807027
+## 4  128933     1.296 0.21700998
+## 5  140330     1.344 0.12790622
+## 6  152735     1.448 0.09600926
+## 7  166237     1.653 0.26268063
+## 8  180932     1.704 0.26412118
+## 9  196926     1.771 0.17175241
+## 10 214334     2.010 0.18342422
+## 11 233281     2.025 0.09454570
+## 12 253902     2.236 0.15471838
+## 13 276347     2.344 0.05541761
+## 14 300776     2.660 0.16096929
+## 15 327364     3.010 0.37151342
+## 16 356302     3.049 0.13395273
+## 17 387799     3.395 0.22979459
+## 18 422079     3.648 0.18960778
+## 19 459391     3.938 0.25827634
+## 20 500000     4.532 0.52119094
 \end{verbatim}
 
 On vérifie la valeur du coefficient directeur pour les deux méthodes:
@@ -592,23 +609,23 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## lm(formula = log(res_Naive$mean_time) ~ log(res_Naive$n))
 ## 
 ## Residuals:
-##       Min        1Q    Median        3Q       Max 
-## -0.019263 -0.010687 -0.002297  0.005399  0.035703 
+##      Min       1Q   Median       3Q      Max 
+## -0.37749 -0.03897  0.00767  0.08380  0.11841 
 ## 
 ## Coefficients:
-##                    Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      -14.922447   0.047727  -312.7   <2e-16 ***
-## log(res_Naive$n)   1.982513   0.004924   402.7   <2e-16 ***
+##                   Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)      -13.53834    0.35982  -37.62   <2e-16 ***
+## log(res_Naive$n)   1.88275    0.03712   50.72   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.01539 on 18 degrees of freedom
-## Multiple R-squared:  0.9999, Adjusted R-squared:  0.9999 
-## F-statistic: 1.621e+05 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.116 on 18 degrees of freedom
+## Multiple R-squared:  0.9931, Adjusted R-squared:  0.9927 
+## F-statistic:  2573 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (naïf): 1.982513
+## Exposant estimé (naïf): 1.882751
 \end{verbatim}
 
 \begin{verbatim}
@@ -618,22 +635,22 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## 
 ## Residuals:
 ##       Min        1Q    Median        3Q       Max 
-## -0.066554 -0.028535 -0.000786  0.027560  0.075691 
+## -0.056489 -0.026127 -0.008281  0.020889  0.067536 
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       -10.4858     0.6841  -15.33 8.96e-12 ***
-## log(res_Kadane$n)   0.8803     0.0519   16.96 1.62e-12 ***
+## (Intercept)       -10.7594     0.2071  -51.95   <2e-16 ***
+## log(res_Kadane$n)   0.9312     0.0168   55.43   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.03942 on 18 degrees of freedom
-## Multiple R-squared:  0.9411, Adjusted R-squared:  0.9378 
-## F-statistic: 287.7 on 1 and 18 DF,  p-value: 1.622e-12
+## Residual standard error: 0.0367 on 18 degrees of freedom
+## Multiple R-squared:  0.9942, Adjusted R-squared:  0.9939 
+## F-statistic:  3073 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (Kadane): 0.8802988
+## Exposant estimé (Kadane): 0.9312324
 \end{verbatim}
 
 Les coefficients directeurs trouvés sont bien ceux que l'on attendait.
@@ -659,12 +676,12 @@ Sur un exemple cela donne :
 \end{Shaded}
 
 \begin{verbatim}
-##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
-##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  85  67  33  34  35  36
+##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  30
+##  [19]  19  20  21  22  23  24  25  26  27  28  29  34  31  32  33  94  35  36
 ##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
-##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  31  68  69  70  71  72
-##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  32  86  87  88  89  90
-##  [91]  91  92  93  94  95  96  97  98  99 100
+##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+##  [91]  91  92  93  18  95  96  97  98  99 100
 \end{verbatim}
 
 \begin{Shaded}
@@ -693,14 +710,14 @@ Sur un exemple cela donne :
 ## # A tibble: 8 x 10
 ##       n expr       min_time q1_time median_time mean_time q3_time max_time type 
 ##   <dbl> <fct>         <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl> <chr>
-## 1  1000 naive_ran~   0.325   0.327       0.329     0.376   0.374    0.704  rand~
-## 2  1000 kadane_ra~   0.0688  0.0698      0.0704    0.127   0.0713   2.88   rand~
-## 3  1000 naive_sor~   0.0173  0.0185      0.0191    0.131   0.0200   5.43   sort~
-## 4  1000 kadane_so~   0.0177  0.0185      0.0191    0.0206  0.0198   0.0658 sort~
-## 5 10000 naive_ran~  26.4    27.3        27.8      27.9    28.6     31.2    rand~
-## 6 10000 kadane_ra~   0.636   0.685       0.697     0.709   0.724    0.837  rand~
-## 7 10000 naive_sor~   0.0951  0.146       0.155     0.165   0.173    0.276  sort~
-## 8 10000 kadane_so~   0.0948  0.145       0.156     0.163   0.173    0.341  sort~
+## 1  1000 naive_ran~   0.513   0.518       0.542     0.604   0.706    1.03   rand~
+## 2  1000 kadane_ra~   0.109   0.111       0.116     0.226   0.120    5.38   rand~
+## 3  1000 naive_sor~   0.0276  0.0290      0.0300    0.0321  0.0318   0.0567 sort~
+## 4  1000 kadane_so~   0.0272  0.0295      0.0303    0.171   0.0331   6.59   sort~
+## 5 10000 naive_ran~  42.5    43.7        44.3      44.4    44.7     52.2    rand~
+## 6 10000 kadane_ra~   1.04    1.06        1.10      1.12    1.16     1.38   rand~
+## 7 10000 naive_sor~   0.174   0.203       0.213     0.238   0.260    0.455  sort~
+## 8 10000 kadane_so~   0.192   0.206       0.217     0.234   0.236    0.348  sort~
 ## # i 1 more variable: algo <chr>
 \end{verbatim}
 

@@ -17,7 +17,7 @@ urlcolor: blue
 title: | 
   | Analyse des algorithmes de Maximum Subarray 1D
   |  M2 Data Science Algorithmique 
-author:  "Khalil Ounis, Manal Derghal, Taqwa Ben Romdhane"
+author:  "Manal Derghal, Khalil Ounis, Taqwa Ben Romdhane"
 date: "Lundi 7 avril 2025"
 header-includes:
   - \usepackage[french]{babel}
@@ -94,26 +94,18 @@ La fonction `one.simu.time` retourne le temps recherché, et `one.simu` sera uti
 
 ```{r}
 library(microbenchmark)
-set.seed(123)
 
-one.simu.time <- function(n, func, data_type = "random") {
-  if (data_type == "random") {
-    v <- sample(-100:100, n, replace = TRUE)
-  } else if (data_type == "all_negative") {
-    v <- sample(-100:-1, n, replace = TRUE)
-  } else if (data_type == "all_positive") {
-    v <- sample(0:100, n, replace = TRUE)
-  } else {
-    stop("data_type inconnu")
-  }
+one.simu.time <- function(n, func) {
+  
+  v <- sample(-100:100, n, replace = TRUE)
 
-  if (func == "naive") {
+  if (func == "Naive1D") {
     t <- microbenchmark(max_subarray_sum_naive(v), times = 1)$time / 1e6
-  } else if (func == "naive_Rcpp") {
+  } else if (func == "Naive1D_cpp") {
     t <- microbenchmark(max_subarray_sum_naive_Rcpp(v), times = 1)$time / 1e6
-  } else if (func == "opt") {
+  } else if (func == "Kadane1D") {
     t <- microbenchmark(max_subarray_sum_opt(v), times = 1)$time / 1e6
-  } else if (func == "opt_Rcpp") {
+  } else if (func == "Kadane1D_cpp") {
     t <- microbenchmark(max_subarray_sum_opt_Rcpp(v), times = 1)$time / 1e6
   } else {
     stop("fonction inconnue")
@@ -127,15 +119,37 @@ one.simu.time <- function(n, func, data_type = "random") {
 
 ## Un essai
 
+### Temps d'exécution en R
+
 Sur un exemple, on obtient :
 
 ```{r}
-set.seed(123)
+# Simulation sur une matrice de taille n
 n <- 10000
-one.simu.time(n, func = "naive")
-one.simu.time(n, func = "naive_Rcpp")
-one.simu.time(n, func = "opt")
-one.simu.time(n, func = "opt_Rcpp")
+
+# Exécuter la simulation
+res_naive <- one.simu.time(n,"Naive1D")
+res_kadane <- one.simu.time(n, "Kadane1D")
+
+# Afficher les résultats
+cat("time_naive:", res_naive,"ms\n")
+cat("time_kadane:", res_kadane, "ms")
+```
+
+### Temps d'exécution en C++
+
+sur une matrice de taille 30x50, on obtient les résultats suivants :
+
+```{r}
+# Simulation sur une matrice de taille n
+n <- 10000
+
+res_naive_cpp <- one.simu.time(n,"Naive1D_cpp")
+res_Kadane_cpp <- one.simu.time(n,"Kadane1D_cpp")
+
+# Afficher les résultats
+cat("time_naive_cpp:" ,res_naive_cpp,"ms\n")
+cat("time_kadane_cpp:",res_Kadane_cpp, "ms")
 ```
 
 
@@ -144,34 +158,33 @@ one.simu.time(n, func = "opt_Rcpp")
 On reproduit ces comparaisons de manière plus robuste:
 
 ```{r first simu}
-set.seed(123)
 nbSimus <- 10
 
-time1 <- rep(0, nbSimus); time2 <- rep(0, nbSimus);
-time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
+time_naive <- rep(0, nbSimus); time_naive_cpp <- rep(0, nbSimus);
+time_kadane <- rep(0, nbSimus); time_kadane_cpp <- rep(0, nbSimus)
 
-for(i in 1:nbSimus){time1[i] <- one.simu.time(n, func = "naive")}
-for(i in 1:nbSimus){time2[i] <- one.simu.time(n, func = "naive_Rcpp")}
-for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "opt")}
-for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "opt_Rcpp")}
+for(i in 1:nbSimus){time_naive[i] <- one.simu.time(n, func = "Naive1D")}
+for(i in 1:nbSimus){time_naive_cpp[i] <- one.simu.time(n, func = "Naive1D_cpp")}
+for(i in 1:nbSimus){time_kadane[i] <- one.simu.time(n, func = "Kadane1D")}
+for(i in 1:nbSimus){time_kadane_cpp[i] <- one.simu.time(n, func = "Kadane1D_cpp")}
 ```
 
-Gain C++ versus R
+### Gain R versus C++
 
 ```{r}
-naive_speedup_cpp <- mean(time1) / mean(time2)
-kadane_speedup_cpp <- mean(time3) / mean(time4)
-naive_speedup_cpp
-kadane_speedup_cpp
+naive_speedup_cpp <- mean(time_naive) / mean(time_naive_cpp)
+kadane_speedup_cpp <- mean(time_kadane) / mean(time_kadane_cpp)
+cat("le gain R vs cpp pour naif:", round(naive_speedup_cpp,2),"ms\n")
+cat("le gain R vs cpp pour Kadane:", round(kadane_speedup_cpp,2),"ms\n")
 ```
 
-Gain naive versus optimisé
+### Gain Naif Versus Kadane en R et C++
 
 ```{r}
-kadane_vs_naive_R <- mean(time1) / mean(time3)
-kadane_vs_naive_Rcpp <- mean(time2) / mean(time4)
-kadane_vs_naive_R
-kadane_vs_naive_Rcpp
+kadane_vs_naive_R <- mean(time_naive) / mean(time_kadane)
+kadane_vs_naive_Rcpp <- mean(time_naive_cpp) / mean(time_kadane_cpp)
+cat("le gain naif vs Kadane en R est:",round(kadane_vs_naive_R,2), "ms\n")
+cat("le gain cpp est:",round(kadane_vs_naive_Rcpp,2), "ms\n")
 ```
 
 On recommence avec `n = 20000` seulement pour le gain avec C++ pour Kadane
@@ -180,11 +193,11 @@ On recommence avec `n = 20000` seulement pour le gain avec C++ pour Kadane
 set.seed(123)
 n <- 20000
 nbSimus <- 10
-time3 <- rep(0, nbSimus); time4 <- rep(0, nbSimus)
-for(i in 1:nbSimus){time3[i] <- one.simu.time(n, func = "opt")}
-for(i in 1:nbSimus){time4[i] <- one.simu.time(n, func = "opt_Rcpp")}
-median_kadane_R_vs_Rcpp <- median(time3) / median(time4)
-median_kadane_R_vs_Rcpp
+time_kadane <- rep(0, nbSimus); time_kadane_cpp <- rep(0, nbSimus)
+for(i in 1:nbSimus){time_kadane[i] <- one.simu.time(n, func = "Kadane1D")}
+for(i in 1:nbSimus){time_kadane_cpp[i] <- one.simu.time(n, func = "Kadane1D_cpp")}
+median_kadane_R_vs_Rcpp <- median(time_kadane) / median(time_kadane_cpp)
+cat("le gain Kadane en R vs Kadane en C++ est:",round(median_kadane_R_vs_Rcpp,2), "ms\n")
 ```
 
 **Conclusion:**
@@ -200,17 +213,10 @@ median_kadane_R_vs_Rcpp
 
 -   Kadane `r round(kadane_vs_naive_Rcpp)`× mieux que naïf en C++
 
--   Confirme O(n²) naïf vs O(n) Kadane
-
-### Recommandations :
-
--   n \> 1k : Toujours préférer Kadane\
--   n \> 10k : Obligatoire d'utiliser Rcpp\
--   Très grands n : Seul Kadane+Rcpp reste viable
 
 ## Simulations avec `microbenchmark`
 
-Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les simulations et afficher les résultats (sous forme de diagrammes en violon). Nous comparons `naive_Rcpp` avec `opt_Rcpp` pour des tailles de données `n = 1000` et `n = 10000`.
+Vous avez besoin des packages `microbenchmark` et `ggplot2` pour exécuter les simulations et afficher les résultats (sous forme de diagrammes en violon). Nous comparons `naive_Rcpp` avec `opt_Rcpp` pour des tailles de données `n = 1000`, `n = 5000` et `n = 10000`.
 
 
 ```{r benchmark, echo = FALSE, warning=FALSE, message=FALSE}
@@ -223,8 +229,8 @@ library(dplyr)
 benchmark_1d <- function(n) {
   v <- sample(-100:100, n, replace = TRUE)
   microbenchmark(
-    Naif_Cpp = max_subarray_sum_naive_Rcpp(v),
-    Kadane_Cpp = max_subarray_sum_opt_Rcpp(v),
+    Naif1D_Cpp = max_subarray_sum_naive_Rcpp(v),
+    Kadane1D_Cpp = max_subarray_sum_opt_Rcpp(v),
     times = 50
   )
 }
@@ -269,7 +275,7 @@ On réalise 10 répétitions pour chaque valeur de `n` et pour chaque algorithme
 ```{r simu complexite, echo = FALSE, warning=FALSE, message=FALSE}
 set.seed(123)
 
-# Function to run benchmarking with mean and standard deviation
+# Fonction pour exécuter les benchmarks sur les algorithmes 1D
 benchmark_subarray <- function(func_name, n_values, nbRep) {
   results <- sapply(n_values, function(n) {
     times <- replicate(nbRep, one.simu.time(n, func = func_name))  # Run simulations
@@ -286,11 +292,11 @@ nbRep <- 10
 
 # Benchmark pour l'algorithme naïf
 vector_n_naive <- exp(seq(log(5000), log(50000), length.out = nbSimus)) |> round()
-res_Naive <- benchmark_subarray("naive_Rcpp", vector_n_naive, nbRep)
+res_Naive <- benchmark_subarray("Naive1D_cpp", vector_n_naive, nbRep)
 
 # Benchmark pour Kadane
-vector_n_kadane <- exp(seq(log(400000), log(700000), length.out = nbSimus)) |> round()
-res_Kadane <- benchmark_subarray("opt_Rcpp", vector_n_kadane, nbRep)
+vector_n_kadane <- exp(seq(log(100000), log(500000), length.out = nbSimus)) |> round()
+res_Kadane <- benchmark_subarray("Kadane1D_cpp", vector_n_kadane, nbRep)
 
 # Graphique log-log avec barres d'erreur
 ggplot() +
@@ -321,7 +327,9 @@ ggplot() +
 
 ```{r}
 # Affichage des résultats
+cat("Les résultats pour la solution naïve:\n")
 res_Naive
+cat("Les résultats pour la solution optimale:\n")
 res_Kadane
 ```
 
