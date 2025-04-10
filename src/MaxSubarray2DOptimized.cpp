@@ -1,5 +1,4 @@
 #include <Rcpp.h>
-#include "utils.h"
 using namespace Rcpp;
 
 // Kadane's algorithm to find the maximum sum subarray in a 1D array

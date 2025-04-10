@@ -4,7 +4,7 @@ kadane_algorithm <- function(arr) {
     return(list(sum = -Inf, start = NA_integer_, end = NA_integer_))
   }
 
-  if (anyNA(arr)) {
+  if (any(is.na(arr))) {
     return(list(sum = NA_real_, start = NA_integer_, end = NA_integer_))
   }
 
@@ -13,6 +13,10 @@ kadane_algorithm <- function(arr) {
   start <- end <- temp_start <- 1
 
   for (i in 2:length(arr)) {
+    if (is.na(arr[i])) {
+      return(list(sum = NA_real_, start = NA_integer_, end = NA_integer_))
+    }
+
     if (arr[i] > max_ending_here + arr[i]) {
       max_ending_here <- arr[i]
       temp_start <- i
@@ -97,7 +101,6 @@ max_subarray_rectangle_opt <- function(mat) {
 
   rows <- nrow(mat)
   cols <- ncol(mat)
-
   max_sum <- -Inf
   final_top <- final_bottom <- final_left <- final_right <- 1
 
@@ -114,13 +117,14 @@ max_subarray_rectangle_opt <- function(mat) {
       top <- kadane_res$start
       bottom <- kadane_res$end
 
-      if (current_sum > max_sum) {
+      if (!is.na(current_sum) && current_sum > max_sum) {
         max_sum <- current_sum
         final_top <- top
         final_bottom <- bottom
         final_left <- left
         final_right <- right
       }
+
     }
   }
 
