@@ -138,7 +138,7 @@ cat("time_kadane:", res_kadane, "ms")
 
 ### Temps d'exécution en C++
 
-sur une matrice de taille 30x50, on obtient les résultats suivants :
+sur un vecteur de taille 10000 on obtient les résultats suivants :
 
 ```{r}
 # Simulation sur une matrice de taille n
@@ -247,7 +247,9 @@ ggplot(df_1d, aes(x = expr, y = time/1e6, fill = expr)) +
   labs(title = "Comparaison des algorithmes Maximum Subarray 1D",
        x = "Algorithm",
        y = "Temps (ms)") +
-  theme_minimal()
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
@@ -295,7 +297,7 @@ vector_n_naive <- exp(seq(log(5000), log(50000), length.out = nbSimus)) |> round
 res_Naive <- benchmark_subarray("Naive1D_cpp", vector_n_naive, nbRep)
 
 # Benchmark pour Kadane
-vector_n_kadane <- exp(seq(log(100000), log(500000), length.out = nbSimus)) |> round()
+vector_n_kadane <- exp(seq(log(200000), log(600000), length.out = nbSimus)) |> round()
 res_Kadane <- benchmark_subarray("Kadane1D_cpp", vector_n_kadane, nbRep)
 
 # Graphique log-log avec barres d'erreur
@@ -372,8 +374,8 @@ v
 # Fonctions de simulation
 one.simu <- function(n, func) {
   v <- sample(-100:100, n, replace = TRUE)
-  if (func == "naive_Rcpp") return(max_subarray_sum_naive_Rcpp(v))
-  if (func == "kadane_Rcpp") return(max_subarray_sum_opt_Rcpp(v))
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v))
 }
 
 one.simu2 <- function(n, func) {
@@ -381,8 +383,8 @@ one.simu2 <- function(n, func) {
   n_swap <- floor(0.05 * n)
   swap_indices <- sample(n, n_swap)
   v[swap_indices] <- sample(v[swap_indices])
-  if (func == "naive_Rcpp") return(max_subarray_sum_naive_Rcpp(v))
-  if (func == "kadane_Rcpp") return(max_subarray_sum_opt_Rcpp(v))
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v))
 }
 ```
 
@@ -393,10 +395,10 @@ library(ggplot2)
 # Benchmark
 benchmark_subarray <- function(n, times = 50) {
   microbenchmark(
-    naive_random = one.simu(n, "naive_Rcpp"),
-    kadane_random = one.simu(n, "kadane_Rcpp"),
-    naive_sorted = one.simu2(n, "naive_Rcpp"),
-    kadane_sorted = one.simu2(n, "kadane_Rcpp"),
+    naive_random = one.simu(n, "Naive1D_cpp"),
+    kadane_random = one.simu(n, "Kadane1D_cpp"),
+    naive_sorted = one.simu2(n, "Naive1D_cpp"),
+    kadane_sorted = one.simu2(n, "Kadane1D_cpp"),
     times = times
   )
 }
@@ -416,7 +418,9 @@ ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
        x = "Subarray Algorithm",
        y = "Execution Time (ms)",
        fill = "Algorithm") +
-  theme_minimal()
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
@@ -438,4 +442,177 @@ df_results %>%
 Pour n = 1000, le temps d'exécution est plus rapide que pour n = 10000. Kadane est toujours plus rapide que Naïf, avec un écart plus important à n = 10000. Lorsque les tableaux sont triés, Naïf et Kadane sont beaucoup plus rapides, avec un écart réduit entre les deux.
 
 
+# Cas particulier des données presques toutes positives
+
+On considère un vecteur contenant des valeurs positives, avec 5% de valeurs négatives insérées aléatoirement dans le vecteur.
+
+Sur un exemple cela donne : 
+
+
+```{r}
+set.seed(123)
+
+# Vecteur de base : valeurs positives de 1 à 100
+v_mostly_pos <- sample(1:100)
+
+# Introduire 5% de valeurs négatives aléatoires
+n_neg <- floor(0.05 * length(v_mostly_pos))  # 5% de négatifs
+neg_indices <- sample(length(v_mostly_pos), n_neg)
+
+# Remplacer ces valeurs par des valeurs négatives aléatoires
+v_mostly_pos[neg_indices] <- -sample(1:100, n_neg)
+
+# Affichage du vecteur
+v_mostly_pos
+```
+
+```{r}
+
+# Fonctions de simulation
+one.simu <- function(n, func) {
+  v <- sample(-100:100, n, replace = TRUE)
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v))
+}
+
+one.simu2 <- function(n, func) {
+  v_mostly_pos <- sample(1:100)
+  n_neg <- floor(0.05 * length(v_mostly_pos))
+  neg_indices <- sample(length(v_mostly_pos), n_neg)
+  v_mostly_pos[neg_indices] <- -sample(1:100, n_neg)
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v_mostly_pos))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v_mostly_pos))
+}
+```
+
+
+```{r benchmark3, echo = FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+# Benchmark
+benchmark_subarray <- function(n, times = 50) {
+  microbenchmark(
+    naive_random = one.simu(n, "Naive1D_cpp"),
+    kadane_random = one.simu(n, "Kadane1D_cpp"),
+    naive_most_pos = one.simu2(n, "Naive1D_cpp"),
+    kadane_most_pos = one.simu2(n, "Kadane1D_cpp"),
+    times = times
+  )
+}
+
+# Exécution pour différentes tailles
+n_values <- c(1000, 10000)
+results <- lapply(n_values, benchmark_subarray)
+
+# Combine results into a single dataframe with n as an identifier
+df_results <- do.call(rbind, Map(cbind, results, n = n_values))
+
+ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
+  geom_violin(alpha = 0.7) +
+  scale_y_log10() +
+  facet_wrap(~n, scales = "free") +
+  labs(title = "Subarray Algorithm in Rcpp Benchmark",
+       x = "Subarray Algorithm",
+       y = "Execution Time (ms)",
+       fill = "Algorithm") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+```
+
+# Cas particulier des données presques toutes negatives
+
+On considère un vecteur contenant des valeurs négatives, avec 5% de valeurs positives insérées aléatoirement dans le vecteur.
+
+Sur un exemple cela donne : 
+
+
+```{r}
+set.seed(123)
+
+# Vecteur de base : valeurs négatives de -1 à -100
+v_mostly_neg <- -sample(1:100)
+
+# Introduire 5% de valeurs positives aléatoires
+n_pos <- floor(0.05 * length(v_mostly_neg))  # 5% de positifs
+pos_indices <- sample(length(v_mostly_neg), n_pos)
+
+# Remplacer ces valeurs par des valeurs positives aléatoires
+v_mostly_neg[pos_indices] <- sample(1:100, n_pos)
+
+# Affichage du vecteur
+v_mostly_neg
+
+```
+
+```{r}
+
+# Fonctions de simulation
+one.simu <- function(n, func) {
+  v <- sample(-100:100, n, replace = TRUE)
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v))
+}
+
+one.simu2 <- function(n, func) {
+
+  v_mostly_neg <- -sample(1:100)
+  n_pos <- floor(0.05 * length(v_mostly_neg))
+  pos_indices <- sample(length(v_mostly_neg), n_pos)
+  v_mostly_neg[pos_indices] <- sample(1:100, n_pos)
+  if (func == "Naive1D_cpp") return(max_subarray_sum_naive_Rcpp(v_mostly_neg ))
+  if (func == "Kadane1D_cpp") return(max_subarray_sum_opt_Rcpp(v_mostly_neg ))
+}
+```
+
+
+```{r benchmark4, echo = FALSE, warning=FALSE, message=FALSE}
+library(ggplot2)
+
+# Benchmark
+benchmark_subarray <- function(n, times = 50) {
+  microbenchmark(
+    naive_random = one.simu(n, "Naive1D_cpp"),
+    kadane_random = one.simu(n, "Kadane1D_cpp"),
+    naive_most_neg = one.simu2(n, "Naive1D_cpp"),
+    kadane_most_neg = one.simu2(n, "Kadane1D_cpp"),
+    times = times
+  )
+}
+
+# Exécution pour différentes tailles
+n_values <- c(1000, 10000)
+results <- lapply(n_values, benchmark_subarray)
+
+df_results <- do.call(rbind, Map(cbind, results, n = n_values))
+
+ggplot(df_results, aes(x = expr, y = time / 1e6, fill = expr)) +
+  geom_violin(alpha = 0.7) +
+  scale_y_log10() +
+  facet_wrap(~n, scales = "free") +
+  labs(title = "Subarray Algorithm in Rcpp Benchmark",
+       x = "Subarray Algorithm",
+       y = "Execution Time (ms)",
+       fill = "Algorithm") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+library(dplyr)
+df_results %>%
+  group_by(n, expr) %>%
+  summarise(
+    min_time = min(time) / 1e6,   # Convert nanoseconds to milliseconds
+    q1_time = quantile(time, 0.25) / 1e6,
+    median_time = median(time) / 1e6,
+    mean_time = mean(time) / 1e6,
+    q3_time = quantile(time, 0.75) / 1e6,
+    max_time = max(time) / 1e6,
+    .groups = "drop"
+  ) %>%
+  mutate(type = ifelse(grepl("mostly_neg", expr), "mostly_neg", "random")) %>%
+  mutate(algo = ifelse(grepl("naive", expr), "naive", "kadane"))
+```
+Pour n = 1000, le temps d'exécution est plus rapide que pour n = 10000. Kadane est toujours plus rapide que Naïf, avec un écart plus important à n = 10000. Lorsque les tableaux sont presques toutes négatif, Naïf et Kadane sont beaucoup plus rapides, avec un écart réduit entre les deux.
 

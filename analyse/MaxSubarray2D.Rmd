@@ -195,7 +195,7 @@ res_naive <- one.simu.time_2D(n,m,"Naive2D")
 res_kadane <- one.simu.time_2D(n,m,"Kadane2D")
 
 # Afficher les résultats
-cat("time_naive:", res_naive,"ms")
+cat("time_naive:", res_naive,"ms\n")
 cat("time_kadane:", res_kadane, "ms")
 ```
 
@@ -212,7 +212,7 @@ res_naive_cpp <- one.simu.time_2D(n,m,"Naive2D_cpp")
 res_Kadane_cpp <- one.simu.time_2D(n,m,"Kadane2D_cpp")
 
 # Afficher les résultats
-cat("time_naive_cpp:" ,res_naive_cpp,"ms")
+cat("time_naive_cpp:" ,res_naive_cpp,"ms\n")
 cat("time_kadane_cpp:",res_Kadane_cpp, "ms")
 ```
 
@@ -241,7 +241,7 @@ for(i in 1:nbSimus){time_kadane_cpp[i] <- one.simu.time_2D(n,m, func = "Kadane2D
 ```{r}
 naive_speedup_cpp <- mean(time_naive) / mean(time_naive_cpp)
 kadane_speedup_cpp <- mean(time_kadane) / mean(time_kadane_cpp)
-cat("le gain R vs cpp pour naif:", round(naive_speedup_cpp,2),"ms")
+cat("le gain R vs cpp pour naif:", round(naive_speedup_cpp,2),"ms\n")
 cat("le gain R vs cpp pour Kadane:", round(kadane_speedup_cpp,2),"ms")
 ```
 
@@ -250,7 +250,7 @@ cat("le gain R vs cpp pour Kadane:", round(kadane_speedup_cpp,2),"ms")
 ```{r}
 kadane_vs_naive_R <- mean(time_naive) / mean(time_kadane)
 kadane_vs_naive_Rcpp <- mean(time_naive_cpp) / mean(time_kadane_cpp)
-cat("le gain naif vs Kadane en R est:",round(kadane_vs_naive_R,2), "ms")
+cat("le gain naif vs Kadane en R est:",round(kadane_vs_naive_R,2), "ms\n")
 cat("le gain cpp est:",round(kadane_vs_naive_Rcpp,2), "ms")
 ```
 
@@ -335,8 +335,8 @@ ggplot(df_2d, aes(x = expr, y = time / 1e6, fill = expr)) +
   labs(title = "Comparaison des algorithmes Maximum Subarray 2D",
        x = "Algorithme",
        y = "Temps d'exécution (ms)") +
-  theme_minimal()
-
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
@@ -479,8 +479,8 @@ mat
 # Fonctions de simulation
 one.simu <- function(n,m, func) {
   mat <- matrix(sample(-100:100, n * m, replace = TRUE), nrow = n, ncol = m)
-  if (func == "naive_Rcpp") return(max_subarray_rectangle_naive(mat))
-  if (func == "kadane_Rcpp") return(max_subarray_rectangle_opt_Rcpp(mat))
+  if (func == "Naive2D_cpp") return(max_subarray_rectangle_naive(mat))
+  if (func == "Kadane2D_cpp") return(max_subarray_rectangle_opt_Rcpp(mat))
 }
 
 one.simu2 <- function(n,m, func) {
@@ -489,8 +489,8 @@ one.simu2 <- function(n,m, func) {
   swap_indices <- sample(length(v), n_swap)
   v[swap_indices] <- sample(v[swap_indices])
   mat <- matrix(v, nrow = n, ncol = m)
-  if (func == "naive_Rcpp") return(max_subarray_rectangle_naive(mat))
-  if (func == "kadane_Rcpp") return(max_subarray_rectangle_opt_Rcpp(mat))
+  if (func == "Naive2D_cpp") return(max_subarray_rectangle_naive(mat))
+  if (func == "Kadane2D_cpp") return(max_subarray_rectangle_opt_Rcpp(mat))
 }
 ```
 
@@ -498,10 +498,10 @@ one.simu2 <- function(n,m, func) {
 # Définir la fonction de benchmark
 benchmark_subarray_2d <- function(n, m,times=50) {
   microbenchmark(
-    naive_random_2D = one.simu(n,m, "naive_Rcpp"),
-    kadane_random_2D = one.simu(n,m, "kadane_Rcpp"),
-    naive_sorted_2D = one.simu2(n,m, "naive_Rcpp"),
-    kadane_sorted_2D = one.simu2(n,m, "kadane_Rcpp"),
+    naive_random_2D = one.simu(n,m, "Naive2D_cpp"),
+    kadane_random_2D = one.simu(n,m, "Kadane2D_cpp"),
+    naive_sorted_2D = one.simu2(n,m, "Naive2D_cpp"),
+    kadane_sorted_2D = one.simu2(n,m, "Kadane2D_cpp"),
     times = times
   )
 }
@@ -533,7 +533,8 @@ ggplot(df_2d, aes(x = expr, y = time / 1e6, fill = expr)) +
   labs(title = "Comparaison des algorithmes Maximum Subarray 2D",
        x = "Algorithme",
        y = "Temps d'exécution (ms)") +
-  theme_minimal()
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
 ```
 
 ```{r, echo = FALSE, warning=FALSE, message=FALSE}
@@ -561,3 +562,108 @@ print(summary_results)
 ```
 
 Pour `(n,m) = (10,5)`, le temps d'exécution est plus rapide que pour `(n,m) = (30,40)`. Kadane est toujours plus rapide que Naïf, avec un écart plus important à `(n,m) = (30,40)`. Lorsque les tableaux sont triés, Naïf et Kadane sont beaucoup plus rapides, avec un écart réduit entre les deux.
+
+
+# Cas particulier avec matrice symétrique
+
+On considère une matrice symétrique
+
+Sur un exemple cela donne : 
+
+```{r}
+# Création d'une matrice triée
+n <- 10  # nombre de lignes
+m <- 10  # nombre de colonnes
+
+v_sym <- sample(1:100, n * m, replace = TRUE)
+mat <- matrix(v_sym, nrow = n, ncol = m)
+mat[lower.tri(mat)] <- t(mat)[lower.tri(mat)]
+  
+mat
+```
+
+```{r}
+# Fonctions de simulation
+one.simu <- function(n,m, func) {
+  mat <- matrix(sample(-100:100, n * m, replace = TRUE), nrow = n, ncol = m)
+  if (func == "Naive2D_cpp") return(max_subarray_rectangle_naive(mat))
+  if (func == "Kadane2D_cpp") return(max_subarray_rectangle_opt_Rcpp(mat))
+}
+
+one.simu2 <- function(n,m, func) {
+  v_sym <- sample(1:100, n * m, replace = TRUE)
+  mat <- matrix(v_sym, nrow = n, ncol = m)
+  mat[lower.tri(mat)] <- t(mat)[lower.tri(mat)]
+  if (func == "Naive2D_cpp") return(max_subarray_rectangle_naive(mat))
+  if (func == "Kadane2D_cpp") return(max_subarray_rectangle_opt_Rcpp(mat))
+}
+```
+
+```{r benchmark3, echo = FALSE, warning=FALSE, message=FALSE}
+# Définir la fonction de benchmark
+benchmark_subarray_2d <- function(n, m,times=50) {
+  microbenchmark(
+    naive_random_2D = one.simu(n,m, "Naive2D_cpp"),
+    kadane_random_2D = one.simu(n,m, "Kadane2D_cpp"),
+    naive_sym_2D = one.simu2(n,m, "Naive2D_cpp"),
+    kadane_sym_2D = one.simu2(n,m, "Kadane2D_cpp"),
+    times = times
+  )
+}
+
+# Définir les tailles de matrices à tester
+sizes <- list(c(10, 10), c(40, 40))
+
+# Stocker les résultats
+results_2d <- list()
+
+# Exécution des benchmarks
+for (size in sizes) {
+  n <- size[1]
+  m <- size[2]
+  res <- benchmark_subarray_2d(n, m, times = 50)
+  res_df <- as.data.frame(res)
+  res_df$MatrixSize <- paste(n, "x", m)
+  results_2d <- append(results_2d, list(res_df))
+}
+
+# Fusion des résultats
+df_2d <- do.call(rbind, results_2d)
+
+# Visualisation
+ggplot(df_2d, aes(x = expr, y = time / 1e6, fill = expr)) +
+  scale_y_log10() +
+  geom_violin(alpha = 0.7) +
+  facet_wrap(~ MatrixSize, scales = "free") +
+  labs(title = "Comparaison des algorithmes Maximum Subarray 2D",
+       x = "Algorithme",
+       y = "Temps d'exécution (ms)") +
+  theme_minimal()+
+  theme(axis.text.x = element_text(angle = 60, vjust = 1, hjust = 1))
+```
+
+```{r, echo = FALSE, warning=FALSE, message=FALSE}
+# Extraire les dimensions de la matrice et les ajouter en tant que colonnes séparées
+resultsCpp <- df_2d %>%
+  mutate(n = as.numeric(sub("x.*", "", MatrixSize)),
+         m = as.numeric(sub(".*x", "", MatrixSize)),
+         size = n * m)
+
+# Créer un résumé avec les statistiques souhaitées
+summary_results <- resultsCpp %>%
+  group_by(size, expr) %>%
+  summarise(
+    min_time = min(time) / 1e6,   # Convertir les nanosecondes en millisecondes
+    q1_time = quantile(time, 0.25) / 1e6,
+    median_time = median(time) / 1e6,
+    mean_time = mean(time) / 1e6,
+    q3_time = quantile(time, 0.75) / 1e6,
+    max_time = max(time) / 1e6,
+    .groups = "drop"
+  )
+
+# Afficher le résumé
+print(summary_results)
+```
+
+Pour `(n,m) = (10,10)`, le temps d'exécution est plus rapide que pour `(n,m) = (40,40)`. Kadane est toujours plus rapide que Naïf, avec un écart plus important à `(n,m) = (40,40)`. Lorsque les tableaux sont symétriques, Naïf et Kadane sont beaucoup plus rapides, avec un écart réduit entre les deux.

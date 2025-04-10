@@ -11,17 +11,6 @@ using namespace Rcpp;
    if (n == 0 || m == 0)
      return List::create(Named("sum") = R_NegInf, Named("submatrix") = NumericMatrix(0, 0));
 
-   // Cas trivial : tous positifs
-   if (all_non_negative(mat))
-     return List::create(Named("sum") = total_sum(mat), Named("submatrix") = mat);
-
-   // Cas trivial : tous négatifs
-   if (all_non_positive(mat)) {
-     double max_val = max_element_2d(mat);
-     NumericMatrix mat_out(1, 1);
-     mat_out(0, 0) = max_val;
-     return List::create(Named("sum") = max_val, Named("submatrix") = mat_out);
-   }
 
    double maxSum = mat(0, 0);
    int top = 0, bottom = 0, left = 0, right = 0;

@@ -57,17 +57,6 @@ max_subarray_rectangle_naive <- function(mat) {
     return(list(sum = -Inf, submatrix = matrix(nrow = 0, ncol = 0)))
   }
 
-  # Cas trivial : tous les éléments sont positifs
-  if (all(mat >= 0)) {
-    return(list(sum = sum(mat), submatrix = mat))
-  }
-
-  # Cas trivial : tous les éléments sont négatifs
-  if (all(mat <= 0)) {
-    max_val <- max(mat)
-    return(list(sum = max_val, submatrix = matrix(max_val, nrow = 1)))
-  }
-
   max_sum <- -Inf
   top <- bottom <- left <- right <- 1
 

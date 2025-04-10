@@ -328,7 +328,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## time_naive: 2167.17 ms
+## time_naive: 2717.72 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -338,12 +338,12 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## time_kadane: 0.89 ms
+## time_kadane: 0.95 ms
 \end{verbatim}
 
 \subsubsection{Temps d'exécution en C++}\label{temps-dexuxe9cution-en-c}
 
-sur une matrice de taille 30x50, on obtient les résultats suivants :
+sur un vecteur de taille 10000 on obtient les résultats suivants :
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -359,7 +359,7 @@ sur une matrice de taille 30x50, on obtient les résultats suivants :
 \end{Shaded}
 
 \begin{verbatim}
-## time_naive_cpp: 24.98 ms
+## time_naive_cpp: 26.93 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -369,7 +369,7 @@ sur une matrice de taille 30x50, on obtient les résultats suivants :
 \end{Shaded}
 
 \begin{verbatim}
-## time_kadane_cpp: 0.07 ms
+## time_kadane_cpp: 0.1 ms
 \end{verbatim}
 
 \subsection{Simulations avec
@@ -402,7 +402,7 @@ On reproduit ces comparaisons de manière plus robuste:
 \end{Shaded}
 
 \begin{verbatim}
-## le gain R vs cpp pour naif: 71.46 ms
+## le gain R vs cpp pour naif: 81.66 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -412,7 +412,7 @@ On reproduit ces comparaisons de manière plus robuste:
 \end{Shaded}
 
 \begin{verbatim}
-## le gain R vs cpp pour Kadane: 9.88 ms
+## le gain R vs cpp pour Kadane: 9.4 ms
 \end{verbatim}
 
 \subsubsection{Gain Naif Versus Kadane en R et
@@ -427,7 +427,7 @@ C++}\label{gain-naif-versus-kadane-en-r-et-c}
 \end{Shaded}
 
 \begin{verbatim}
-## le gain naif vs Kadane en R est: 2030.39 ms
+## le gain naif vs Kadane en R est: 2490.92 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -437,7 +437,7 @@ C++}\label{gain-naif-versus-kadane-en-r-et-c}
 \end{Shaded}
 
 \begin{verbatim}
-## le gain cpp est: 280.81 ms
+## le gain cpp est: 286.8 ms
 \end{verbatim}
 
 On recommence avec \texttt{n\ =\ 20000} seulement pour le gain avec C++
@@ -457,7 +457,7 @@ pour Kadane
 \end{Shaded}
 
 \begin{verbatim}
-## le gain Kadane en R vs Kadane en C++ est: 11.86 ms
+## le gain Kadane en R vs Kadane en C++ est: 11.69 ms
 \end{verbatim}
 
 \textbf{Conclusion:}
@@ -467,9 +467,9 @@ pour Kadane
 \begin{itemize}
 \tightlist
 \item
-  Naïf : C++ 71× plus rapide\\
+  Naïf : C++ 82× plus rapide\\
 \item
-  Kadane : C++ 10× plus rapide → 12× pour n=20k
+  Kadane : C++ 9× plus rapide → 12× pour n=20k
 \end{itemize}
 
 \subsubsection{Efficacité algorithmique
@@ -477,9 +477,9 @@ pour Kadane
 
 \begin{itemize}
 \item
-  Kadane 2030× mieux que naïf en R\\
+  Kadane 2491× mieux que naïf en R\\
 \item
-  Kadane 281× mieux que naïf en C++
+  Kadane 287× mieux que naïf en C++
 \end{itemize}
 
 \subsection{\texorpdfstring{Simulations avec
@@ -495,14 +495,14 @@ Vous avez besoin des packages \texttt{microbenchmark} et
 
 \begin{verbatim}
 ## # A tibble: 6 x 8
-##       n expr         min_time  q1_time median_time mean_time  q3_time max_time
-##   <dbl> <fct>           <dbl>    <dbl>       <dbl>     <dbl>    <dbl>    <dbl>
-## 1   100 Naif1D_Cpp    0.00650  0.00653     0.00660   0.00761  0.00678  0.0449 
-## 2   100 Kadane1D_Cpp  0.00180  0.00190     0.00200   0.00214  0.00200  0.00840
-## 3  5000 Naif1D_Cpp   10.2     10.7        11.1      11.4     11.4     20.9    
-## 4  5000 Kadane1D_Cpp  0.0235   0.0432      0.0504    0.0527   0.0549   0.156  
-## 5 10000 Naif1D_Cpp   41.3     42.8        43.2      43.2     43.7     45.0    
-## 6 10000 Kadane1D_Cpp  0.0683   0.0910      0.102     0.104    0.114    0.176
+##       n expr         min_time q1_time median_time mean_time q3_time max_time
+##   <dbl> <fct>           <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
+## 1   100 Naif1D_Cpp     0.0041  0.0041      0.0042   0.00480  0.0043   0.0279
+## 2   100 Kadane1D_Cpp   0.0011  0.0012      0.0012   0.00137  0.0013   0.007 
+## 3  5000 Naif1D_Cpp     6.37    6.61        6.88     7.05     7.22     9.80  
+## 4  5000 Kadane1D_Cpp   0.0174  0.0282      0.0314   0.0330   0.0350   0.0868
+## 5 10000 Naif1D_Cpp    26.0    27.3        28.0     28.9     29.7     39.2   
+## 6 10000 Kadane1D_Cpp   0.0446  0.0563      0.0656   0.0691   0.0729   0.198
 \end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -538,27 +538,27 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 \end{Shaded}
 
 \begin{verbatim}
-##        n mean_time     sd_time
-## 1   5000    11.270   0.5793291
-## 2   5644    14.518   0.6674129
-## 3   6371    18.123   0.3564345
-## 4   7192    23.257   1.8599286
-## 5   8119    30.168   1.8597539
-## 6   9165    38.156   4.6008651
-## 7  10346    47.265   0.7614496
-## 8  11679    60.469   2.0857530
-## 9  13183    75.990   2.2458455
-## 10 14882    97.693   3.6680060
-## 11 16799   130.050  18.9493694
-## 12 18963   163.516  16.9388588
-## 13 21407   198.468   3.3364112
-## 14 24165   252.345   3.1644949
-## 15 27278   321.789   4.4165206
-## 16 30792   410.089   5.2821954
-## 17 34760   520.307   3.1626292
-## 18 39238   661.620  10.1094609
-## 19 44293   638.637 205.7220376
-## 20 50000   635.950 129.0299659
+##        n mean_time    sd_time
+## 1   5000     7.200  0.2991841
+## 2   5644     9.123  0.6236817
+## 3   6371    11.145  0.5563622
+## 4   7192    14.405  1.0457028
+## 5   8119    18.808  1.7312603
+## 6   9165    23.307  0.7777610
+## 7  10346    31.505  3.4447424
+## 8  11679    38.573  3.1766336
+## 9  13183    47.995  1.7669072
+## 10 14882    67.621 12.1391876
+## 11 16799    79.465  3.1507398
+## 12 18963   106.873  9.0534046
+## 13 21407   129.639  5.6214538
+## 14 24165   169.168 18.5884318
+## 15 27278   304.334 26.6861459
+## 16 30792   406.982 21.8300582
+## 17 34760   514.950 13.7058917
+## 18 39238   653.446  7.1864088
+## 19 44293   832.811 21.2956383
+## 20 50000  1070.974 60.7800569
 \end{verbatim}
 
 \begin{Shaded}
@@ -578,27 +578,27 @@ chaque algorithme. Les barres d'erreur sont placées en ``mean +/- sd''.
 \end{Shaded}
 
 \begin{verbatim}
-##         n mean_time    sd_time
-## 1  100000     0.930 0.10392305
-## 2  108840     0.998 0.06425643
-## 3  118461     1.118 0.09807027
-## 4  128933     1.296 0.21700998
-## 5  140330     1.344 0.12790622
-## 6  152735     1.448 0.09600926
-## 7  166237     1.653 0.26268063
-## 8  180932     1.704 0.26412118
-## 9  196926     1.771 0.17175241
-## 10 214334     2.010 0.18342422
-## 11 233281     2.025 0.09454570
-## 12 253902     2.236 0.15471838
-## 13 276347     2.344 0.05541761
-## 14 300776     2.660 0.16096929
-## 15 327364     3.010 0.37151342
-## 16 356302     3.049 0.13395273
-## 17 387799     3.395 0.22979459
-## 18 422079     3.648 0.18960778
-## 19 459391     3.938 0.25827634
-## 20 500000     4.532 0.52119094
+##         n mean_time   sd_time
+## 1  200000     1.751 0.1177993
+## 2  211905     1.734 0.4513240
+## 3  224519     1.962 0.2241428
+## 4  237884     2.128 0.4366489
+## 5  252044     2.210 0.5221749
+## 6  267047     2.091 0.1706491
+## 7  282944     2.259 0.3977841
+## 8  299786     2.651 0.6001009
+## 9  317631     2.538 0.4588827
+## 10 336539     2.956 0.5970520
+## 11 356571     2.960 0.4703190
+## 12 377797     3.111 0.4523875
+## 13 400285     3.091 0.4317780
+## 14 424113     3.724 0.6257476
+## 15 449359     3.663 0.2389351
+## 16 476107     4.037 0.6447403
+## 17 504448     4.229 0.4569087
+## 18 534476     4.429 0.3795158
+## 19 566291     4.577 0.4072687
+## 20 600000     5.682 0.9350793
 \end{verbatim}
 
 On vérifie la valeur du coefficient directeur pour les deux méthodes:
@@ -610,22 +610,22 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.37749 -0.03897  0.00767  0.08380  0.11841 
+## -0.19432 -0.07602  0.02344  0.08923  0.14727 
 ## 
 ## Coefficients:
 ##                   Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)      -13.53834    0.35982  -37.62   <2e-16 ***
-## log(res_Naive$n)   1.88275    0.03712   50.72   <2e-16 ***
+## (Intercept)      -17.00864    0.34524  -49.27   <2e-16 ***
+## log(res_Naive$n)   2.21288    0.03562   62.13   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.116 on 18 degrees of freedom
-## Multiple R-squared:  0.9931, Adjusted R-squared:  0.9927 
-## F-statistic:  2573 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.1113 on 18 degrees of freedom
+## Multiple R-squared:  0.9954, Adjusted R-squared:  0.9951 
+## F-statistic:  3860 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (naïf): 1.882751
+## Exposant estimé (naïf): 2.21288
 \end{verbatim}
 
 \begin{verbatim}
@@ -635,22 +635,22 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## 
 ## Residuals:
 ##       Min        1Q    Median        3Q       Max 
-## -0.056489 -0.026127 -0.008281  0.020889  0.067536 
+## -0.086471 -0.033685 -0.008933  0.039289  0.119393 
 ## 
 ## Coefficients:
-##                   Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)       -10.7594     0.2071  -51.95   <2e-16 ***
-## log(res_Kadane$n)   0.9312     0.0168   55.43   <2e-16 ***
+##                    Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)       -11.62733    0.45467  -25.57 1.33e-15 ***
+## log(res_Kadane$n)   0.99553    0.03563   27.94 2.81e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.0367 on 18 degrees of freedom
-## Multiple R-squared:  0.9942, Adjusted R-squared:  0.9939 
-## F-statistic:  3073 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.05313 on 18 degrees of freedom
+## Multiple R-squared:  0.9775, Adjusted R-squared:  0.9762 
+## F-statistic: 780.6 on 1 and 18 DF,  p-value: 2.815e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (Kadane): 0.9312324
+## Exposant estimé (Kadane): 0.9955319
 \end{verbatim}
 
 Les coefficients directeurs trouvés sont bien ceux que l'on attendait.
@@ -676,12 +676,12 @@ Sur un exemple cela donne :
 \end{Shaded}
 
 \begin{verbatim}
-##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  30
-##  [19]  19  20  21  22  23  24  25  26  27  28  29  34  31  32  33  94  35  36
+##   [1]   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  59  18
+##  [19]  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
 ##  [37]  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
-##  [55]  55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
-##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
-##  [91]  91  92  93  18  95  96  97  98  99 100
+##  [55]  55  56  57  58  17  60  61  62  63  64  65  66  67  68  69  70  71  72
+##  [73]  73  74  75  76  77  78  79  80  81  82  83  84  87  86  85  88  89  90
+##  [91]  91  92  93  94  95  96  97  98  99 100
 \end{verbatim}
 
 \begin{Shaded}
@@ -689,8 +689,8 @@ Sur un exemple cela donne :
 \CommentTok{\# Fonctions de simulation}
 \NormalTok{one.simu }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
 \NormalTok{  v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"kadane\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
 \NormalTok{\}}
 
 \NormalTok{one.simu2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
@@ -698,8 +698,8 @@ Sur un exemple cela donne :
 \NormalTok{  n\_swap }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(}\FloatTok{0.05} \SpecialCharTok{*}\NormalTok{ n)}
 \NormalTok{  swap\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(n, n\_swap)}
 \NormalTok{  v[swap\_indices] }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(v[swap\_indices])}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"kadane\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -710,14 +710,14 @@ Sur un exemple cela donne :
 ## # A tibble: 8 x 10
 ##       n expr       min_time q1_time median_time mean_time q3_time max_time type 
 ##   <dbl> <fct>         <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl> <chr>
-## 1  1000 naive_ran~   0.513   0.518       0.542     0.604   0.706    1.03   rand~
-## 2  1000 kadane_ra~   0.109   0.111       0.116     0.226   0.120    5.38   rand~
-## 3  1000 naive_sor~   0.0276  0.0290      0.0300    0.0321  0.0318   0.0567 sort~
-## 4  1000 kadane_so~   0.0272  0.0295      0.0303    0.171   0.0331   6.59   sort~
-## 5 10000 naive_ran~  42.5    43.7        44.3      44.4    44.7     52.2    rand~
-## 6 10000 kadane_ra~   1.04    1.06        1.10      1.12    1.16     1.38   rand~
-## 7 10000 naive_sor~   0.174   0.203       0.213     0.238   0.260    0.455  sort~
-## 8 10000 kadane_so~   0.192   0.206       0.217     0.234   0.236    0.348  sort~
+## 1  1000 naive_ran~   0.328   0.524       0.551     0.673   0.589    5.73   rand~
+## 2  1000 kadane_ra~   0.0699  0.111       0.113     0.117   0.123    0.232  rand~
+## 3  1000 naive_sor~   0.0182  0.0291      0.0312    0.0346  0.0346   0.0701 sort~
+## 4  1000 kadane_so~   0.0194  0.0286      0.0306    0.168   0.0346   6.71   sort~
+## 5 10000 naive_ran~  38.6    42.3        44.0      49.4    52.2     82.3    rand~
+## 6 10000 kadane_ra~   0.677   1.01        1.12      1.13    1.28     1.67   rand~
+## 7 10000 naive_sor~   0.122   0.215       0.246     0.292   0.301    1.77   sort~
+## 8 10000 kadane_so~   0.139   0.212       0.241     0.249   0.286    0.398  sort~
 ## # i 1 more variable: algo <chr>
 \end{verbatim}
 
@@ -725,5 +725,143 @@ Pour n = 1000, le temps d'exécution est plus rapide que pour n = 10000.
 Kadane est toujours plus rapide que Naïf, avec un écart plus important à
 n = 10000. Lorsque les tableaux sont triés, Naïf et Kadane sont beaucoup
 plus rapides, avec un écart réduit entre les deux.
+
+\section{Cas particulier des données presques toutes
+positives}\label{cas-particulier-des-donnuxe9es-presques-toutes-positives}
+
+On considère un vecteur contenant des valeurs positives, avec 5\% de
+valeurs négatives insérées aléatoirement dans le vecteur.
+
+Sur un exemple cela donne :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# Vecteur de base : valeurs positives de 1 à 100}
+\NormalTok{v\_mostly\_pos }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{\# Introduire 5\% de valeurs négatives aléatoires}
+\NormalTok{n\_neg }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(}\FloatTok{0.05} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(v\_mostly\_pos))  }\CommentTok{\# 5\% de négatifs}
+\NormalTok{neg\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\FunctionTok{length}\NormalTok{(v\_mostly\_pos), n\_neg)}
+
+\CommentTok{\# Remplacer ces valeurs par des valeurs négatives aléatoires}
+\NormalTok{v\_mostly\_pos[neg\_indices] }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n\_neg)}
+
+\CommentTok{\# Affichage du vecteur}
+\NormalTok{v\_mostly\_pos}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  31  79  51  14  67  42  50  43  97  25  90  69  57   9  72  26 -94  95
+##  [19]  87  36  78  93  76  15  32  84  82  41  23  27  60  53  75  89  71  38
+##  [37]  91  34  29   5   8  12  13  18  33 -35  64  65  21  77  73  47  85 100
+##  [55]  16  30   6  99  70  22  94 -79  49  17  63   4  58  61  40  96  19  54
+##  [73]  20  80  62 -46  86   3  83  46  59  48  24 -54  81  68  88  98  44  10
+##  [91]  56  11  55  37   2  28  74  35  52   1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fonctions de simulation}
+\NormalTok{one.simu }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
+\NormalTok{  v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
+\NormalTok{\}}
+
+\NormalTok{one.simu2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
+\NormalTok{  v\_mostly\_pos }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{)}
+\NormalTok{  n\_neg }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(}\FloatTok{0.05} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(v\_mostly\_pos))}
+\NormalTok{  neg\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\FunctionTok{length}\NormalTok{(v\_mostly\_pos), n\_neg)}
+\NormalTok{  v\_mostly\_pos[neg\_indices] }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n\_neg)}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v\_mostly\_pos))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v\_mostly\_pos))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MaxSubarray1D_files/figure-latex/benchmark3-1.pdf}
+
+\section{Cas particulier des données presques toutes
+negatives}\label{cas-particulier-des-donnuxe9es-presques-toutes-negatives}
+
+On considère un vecteur contenant des valeurs négatives, avec 5\% de
+valeurs positives insérées aléatoirement dans le vecteur.
+
+Sur un exemple cela donne :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123}\NormalTok{)}
+
+\CommentTok{\# Vecteur de base : valeurs négatives de {-}1 à {-}100}
+\NormalTok{v\_mostly\_neg }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{)}
+
+\CommentTok{\# Introduire 5\% de valeurs positives aléatoires}
+\NormalTok{n\_pos }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(}\FloatTok{0.05} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(v\_mostly\_neg))  }\CommentTok{\# 5\% de positifs}
+\NormalTok{pos\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\FunctionTok{length}\NormalTok{(v\_mostly\_neg), n\_pos)}
+
+\CommentTok{\# Remplacer ces valeurs par des valeurs positives aléatoires}
+\NormalTok{v\_mostly\_neg[pos\_indices] }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n\_pos)}
+
+\CommentTok{\# Affichage du vecteur}
+\NormalTok{v\_mostly\_neg}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   [1]  -31  -79  -51  -14  -67  -42  -50  -43  -97  -25  -90  -69  -57   -9  -72
+##  [16]  -26   94  -95  -87  -36  -78  -93  -76  -15  -32  -84  -82  -41  -23  -27
+##  [31]  -60  -53  -75  -89  -71  -38  -91  -34  -29   -5   -8  -12  -13  -18  -33
+##  [46]   35  -64  -65  -21  -77  -73  -47  -85 -100  -16  -30   -6  -99  -70  -22
+##  [61]  -94   79  -49  -17  -63   -4  -58  -61  -40  -96  -19  -54  -20  -80  -62
+##  [76]   46  -86   -3  -83  -46  -59  -48  -24   54  -81  -68  -88  -98  -44  -10
+##  [91]  -56  -11  -55  -37   -2  -28  -74  -35  -52   -1
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fonctions de simulation}
+\NormalTok{one.simu }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
+\NormalTok{  v }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v))}
+\NormalTok{\}}
+
+\NormalTok{one.simu2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n, func) \{}
+
+\NormalTok{  v\_mostly\_neg }\OtherTok{\textless{}{-}} \SpecialCharTok{{-}}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{)}
+\NormalTok{  n\_pos }\OtherTok{\textless{}{-}} \FunctionTok{floor}\NormalTok{(}\FloatTok{0.05} \SpecialCharTok{*} \FunctionTok{length}\NormalTok{(v\_mostly\_neg))}
+\NormalTok{  pos\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\FunctionTok{length}\NormalTok{(v\_mostly\_neg), n\_pos)}
+\NormalTok{  v\_mostly\_neg[pos\_indices] }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n\_pos)}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_naive\_Rcpp}\NormalTok{(v\_mostly\_neg ))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane1D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_sum\_opt\_Rcpp}\NormalTok{(v\_mostly\_neg ))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MaxSubarray1D_files/figure-latex/benchmark4-1.pdf}
+
+\begin{verbatim}
+## # A tibble: 8 x 10
+##       n expr       min_time q1_time median_time mean_time q3_time max_time type 
+##   <dbl> <fct>         <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl> <chr>
+## 1  1000 naive_ran~   0.327   0.476       0.530     0.541   0.553     1.00  rand~
+## 2  1000 kadane_ra~   0.0708  0.0990      0.116     0.112   0.120     0.159 rand~
+## 3  1000 naive_mos~   0.0355  0.0464      0.0498    0.282   0.0588   11.5   rand~
+## 4  1000 kadane_mo~   0.0273  0.0419      0.0464    0.0532  0.0544    0.198 rand~
+## 5 10000 naive_ran~  40.3    42.3        43.4      43.7    44.6      51.3   rand~
+## 6 10000 kadane_ra~   0.724   1.06        1.09      1.09    1.19      1.61  rand~
+## 7 10000 naive_mos~   0.0299  0.0476      0.0586    0.0983  0.169     0.292 rand~
+## 8 10000 kadane_mo~   0.0253  0.0426      0.0523    0.0821  0.0822    0.311 rand~
+## # i 1 more variable: algo <chr>
+\end{verbatim}
+
+Pour n = 1000, le temps d'exécution est plus rapide que pour n = 10000.
+Kadane est toujours plus rapide que Naïf, avec un écart plus important à
+n = 10000. Lorsque les tableaux sont presques toutes négatif, Naïf et
+Kadane sont beaucoup plus rapides, avec un écart réduit entre les deux.
 
 \end{document}

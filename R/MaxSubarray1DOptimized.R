@@ -47,17 +47,6 @@
 max_subarray_sum_opt <- function(arr) {
   n <- length(arr)
 
-  # Cas trivial : tous les éléments sont positifs
-  if (all(arr >= 0)) {
-    return(list(sum = sum(arr), subarray = arr))
-  }
-
-  # Cas trivial : tous les éléments sont négatifs
-  if (all(arr <= 0)) {
-    max_val <- max(arr)
-    return(list(sum = max_val, subarray = max_val))
-  }
-
   # Cas général : Kadane
   max_so_far <- arr[1]
   max_ending_here <- arr[1]

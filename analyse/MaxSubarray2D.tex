@@ -452,12 +452,12 @@ Sur un exemple, on obtient :
 \NormalTok{res\_kadane }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time\_2D}\NormalTok{(n,m,}\StringTok{"Kadane2D"}\NormalTok{)}
 
 \CommentTok{\# Afficher les résultats}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive:"}\NormalTok{, res\_naive,}\StringTok{"ms"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive:"}\NormalTok{, res\_naive,}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## time_naive: 943.79 ms
+## time_naive: 995.95 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -467,7 +467,7 @@ Sur un exemple, on obtient :
 \end{Shaded}
 
 \begin{verbatim}
-## time_kadane: 9.29 ms
+## time_kadane: 8.31 ms
 \end{verbatim}
 
 \subsubsection{Temps d'exécution en C++}\label{temps-dexuxe9cution-en-c}
@@ -484,12 +484,12 @@ sur une matrice de taille 30x50, on obtient les résultats suivants :
 \NormalTok{res\_Kadane\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{one.simu.time\_2D}\NormalTok{(n,m,}\StringTok{"Kadane2D\_cpp"}\NormalTok{)}
 
 \CommentTok{\# Afficher les résultats}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive\_cpp:"}\NormalTok{ ,res\_naive\_cpp,}\StringTok{"ms"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"time\_naive\_cpp:"}\NormalTok{ ,res\_naive\_cpp,}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## time_naive_cpp: 90.31 ms
+## time_naive_cpp: 87.15 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -499,7 +499,7 @@ sur une matrice de taille 30x50, on obtient les résultats suivants :
 \end{Shaded}
 
 \begin{verbatim}
-## time_kadane_cpp: 0.75 ms
+## time_kadane_cpp: 0.98 ms
 \end{verbatim}
 
 \subsection{Simulations avec
@@ -532,12 +532,12 @@ gain de temps à partir de 10 répétitions de simulation
 \begin{Highlighting}[]
 \NormalTok{naive\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_naive\_cpp)}
 \NormalTok{kadane\_speedup\_cpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_kadane) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane\_cpp)}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain R vs cpp pour naif:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(naive\_speedup\_cpp,}\DecValTok{2}\NormalTok{),}\StringTok{"ms"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain R vs cpp pour naif:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(naive\_speedup\_cpp,}\DecValTok{2}\NormalTok{),}\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## le gain R vs cpp pour naif: 6.07 ms
+## le gain R vs cpp pour naif: 10.2 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -547,7 +547,7 @@ gain de temps à partir de 10 répétitions de simulation
 \end{Shaded}
 
 \begin{verbatim}
-## le gain R vs cpp pour Kadane: 11.26 ms
+## le gain R vs cpp pour Kadane: 10.8 ms
 \end{verbatim}
 
 \subsubsection{Gain Naif Versus Kadane en R et
@@ -557,12 +557,12 @@ C++}\label{gain-naif-versus-kadane-en-r-et-c}
 \begin{Highlighting}[]
 \NormalTok{kadane\_vs\_naive\_R }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane)}
 \NormalTok{kadane\_vs\_naive\_Rcpp }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(time\_naive\_cpp) }\SpecialCharTok{/} \FunctionTok{mean}\NormalTok{(time\_kadane\_cpp)}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain naif vs Kadane en R est:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(kadane\_vs\_naive\_R,}\DecValTok{2}\NormalTok{), }\StringTok{"ms"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"le gain naif vs Kadane en R est:"}\NormalTok{,}\FunctionTok{round}\NormalTok{(kadane\_vs\_naive\_R,}\DecValTok{2}\NormalTok{), }\StringTok{"ms}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## le gain naif vs Kadane en R est: 60.68 ms
+## le gain naif vs Kadane en R est: 100.55 ms
 \end{verbatim}
 
 \begin{Shaded}
@@ -572,7 +572,7 @@ C++}\label{gain-naif-versus-kadane-en-r-et-c}
 \end{Shaded}
 
 \begin{verbatim}
-## le gain cpp est: 112.58 ms
+## le gain cpp est: 106.53 ms
 \end{verbatim}
 
 On recommence avec \texttt{n\ =\ 80} et \texttt{m\ =\ 60} seulement pour
@@ -594,7 +594,7 @@ le gain avec C++ pour Kadane
 \end{Shaded}
 
 \begin{verbatim}
-## le gain Kadane en R vs Kadane en C++ est: 19.25 ms
+## le gain Kadane en R vs Kadane en C++ est: 19.36 ms
 \end{verbatim}
 
 \textbf{Conclusion:}
@@ -604,7 +604,7 @@ le gain avec C++ pour Kadane
 \begin{itemize}
 \tightlist
 \item
-  Naïf : C++ 6× plus rapide\\
+  Naïf : C++ 10× plus rapide\\
 \item
   Kadane : C++ 11× plus rapide → 19× pour \texttt{(n,m)=(80,60)}
 \end{itemize}
@@ -614,9 +614,9 @@ le gain avec C++ pour Kadane
 
 \begin{itemize}
 \item
-  Kadane 61× mieux que naïf en R\\
+  Kadane 101× mieux que naïf en R\\
 \item
-  Kadane 113× mieux que naïf en C++
+  Kadane 107× mieux que naïf en C++
 \end{itemize}
 
 \subsection{\texorpdfstring{Simulations avec
@@ -633,14 +633,14 @@ Vous avez besoin des packages \texttt{microbenchmark} et
 
 \begin{verbatim}
 ## # A tibble: 6 x 8
-##    size expr         min_time q1_time median_time mean_time q3_time max_time
-##   <dbl> <fct>           <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
-## 1    50 naif2D_Cpp     0.0154  0.0159      0.0217    0.0264  0.0342   0.0770
-## 2    50 kadane2D_Cpp   0.0135  0.0150      0.0199    0.0220  0.0283   0.0426
-## 3   200 naif2D_Cpp     0.483   0.490       0.521     0.544   0.533    0.972 
-## 4   200 kadane2D_Cpp   0.0447  0.0473      0.0507    0.0549  0.0578   0.0991
-## 5  1200 naif2D_Cpp    73.9    75.3        76.0      76.5    76.7     89.1   
-## 6  1200 kadane2D_Cpp   0.679   0.782       0.823     0.825   0.874    1.12
+##    size expr         min_time  q1_time median_time mean_time q3_time max_time
+##   <dbl> <fct>           <dbl>    <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
+## 1    50 naif2D_Cpp     0.01    0.0105       0.0108    0.0118  0.0113   0.0331
+## 2    50 kadane2D_Cpp   0.0085  0.00962      0.0104    0.0112  0.0114   0.0299
+## 3   200 naif2D_Cpp     0.307   0.308        0.309     0.330   0.317    0.686 
+## 4   200 kadane2D_Cpp   0.0288  0.0296       0.0320    0.0397  0.0372   0.153 
+## 5  1200 naif2D_Cpp    45.0    46.4         47.5      47.5    48.6     51.1   
+## 6  1200 kadane2D_Cpp   0.457   0.523        0.558     0.579   0.609    0.874
 \end{verbatim}
 
 \begin{center}\rule{0.5\linewidth}{0.5pt}\end{center}
@@ -676,26 +676,26 @@ d'exp
 
 \begin{verbatim}
 ##     n  m mean_time     sd_time total_size
-## 1  10 10     0.165  0.05060742        100
-## 2  11 11     0.196  0.03565265        121
-## 3  12 12     0.266  0.02270585        144
-## 4  14 14     0.559  0.07978443        196
-## 5  15 15     0.757  0.14892578        225
-## 6  17 17     1.562  0.39233772        289
-## 7  18 18     2.178  0.28141705        324
-## 8  20 20     3.498  0.66676333        400
-## 9  23 23     7.349  0.44016285        529
-## 10 25 25    11.721  0.24843734        625
-## 11 28 28    22.210  0.43230648        784
-## 12 31 31    40.204  0.66367998        961
-## 13 34 34    74.642 10.24031770       1156
-## 14 38 38   142.807 20.48118977       1444
-## 15 42 42   234.027  2.08537793       1764
-## 16 46 46   403.600  6.09241970       2116
-## 17 51 51   737.696 11.08930135       2601
-## 18 57 57  1418.405 13.15217536       3249
-## 19 63 63  2521.861 32.03512532       3969
-## 20 70 70  4685.667 85.53927533       4900
+## 1  10 10     0.096  0.01955050        100
+## 2  11 11     0.142  0.04417138        121
+## 3  12 12     0.186  0.05168279        144
+## 4  14 14     0.346  0.06801961        196
+## 5  15 15     0.534  0.19265398        225
+## 6  17 17     0.916  0.25872336        289
+## 7  18 18     1.250  0.26115130        324
+## 8  20 20     2.179  0.48098164        400
+## 9  23 23     4.438  0.28549372        529
+## 10 25 25     7.096  0.55349797        625
+## 11 28 28    13.734  0.60415598        784
+## 12 31 31    24.775  1.77162355        961
+## 13 34 34    41.820  1.38223651       1156
+## 14 38 38    79.585  2.10719535       1444
+## 15 42 42   144.203  2.88942151       1764
+## 16 46 46   247.426  5.94501509       2116
+## 17 51 51   464.146 23.71130823       2601
+## 18 57 57   866.553  9.57412723       3249
+## 19 63 63  1564.906  7.49193967       3969
+## 20 70 70  2907.218 25.18713199       4900
 \end{verbatim}
 
 \begin{Shaded}
@@ -716,26 +716,26 @@ d'exp
 
 \begin{verbatim}
 ##      n   m mean_time    sd_time total_size
-## 1  100 100     7.369  0.4771780      10000
-## 2  111 111     9.124  0.4816915      12321
-## 3  123 123    11.745  1.6973722      15129
-## 4  136 136    15.820  3.1222072      18496
-## 5  151 151    21.304  4.2273086      22801
-## 6  167 167    25.440  3.8355414      27889
-## 7  185 185    33.038  5.1589788      34225
-## 8  205 205    39.837  0.7333947      42025
-## 9  227 227    51.539  2.2519939      51529
-## 10 251 251    66.198  1.9636802      63001
-## 11 278 278    97.317 12.5969732      77284
-## 12 309 309   135.725 12.4503942      95481
-## 13 342 342   163.313 22.4270512     116964
-## 14 379 379   201.343 16.7595638     143641
-## 15 419 419   248.050  6.7056991     175561
-## 16 465 465   354.498 37.6416438     216225
-## 17 515 515   433.078 13.4269206     265225
-## 18 570 570   575.083 14.5564503     324900
-## 19 632 632   749.245 12.2654956     399424
-## 20 700 700  1015.559 35.7560498     490000
+## 1  100 100     4.699  0.3868520      10000
+## 2  111 111     5.664  0.2813539      12321
+## 3  123 123     7.092  0.2056318      15129
+## 4  136 136     9.333  0.5034558      18496
+## 5  151 151    11.866  0.8136229      22801
+## 6  167 167    15.115  1.3503024      27889
+## 7  185 185    19.008  0.9176516      34225
+## 8  205 205    25.596  2.4731545      42025
+## 9  227 227    34.937  7.0523236      51529
+## 10 251 251    42.941  3.2107128      63001
+## 11 278 278    53.335  1.7266297      77284
+## 12 309 309    71.488  2.2730635      95481
+## 13 342 342    94.241  2.9288392     116964
+## 14 379 379   123.336  3.8497509     143641
+## 15 419 419   160.155  3.7121011     175561
+## 16 465 465   212.544  4.2603265     216225
+## 17 515 515   276.896 11.4978067     265225
+## 18 570 570   361.101  9.3000208     324900
+## 19 632 632   480.394  9.7461060     399424
+## 20 700 700   630.326 14.0494256     490000
 \end{verbatim}
 
 On vérifie la valeur du coefficient directeur pour les deux méthodes:
@@ -747,22 +747,22 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## 
 ## Residuals:
 ##      Min       1Q   Median       3Q      Max 
-## -0.20284 -0.13428 -0.01958  0.07768  0.54047 
+## -0.23073 -0.16716 -0.04825  0.12184  0.44446 
 ## 
 ## Coefficients:
 ##                     Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)         -14.8923     0.2312  -64.42   <2e-16 ***
-## log(res_Naive_2D$n)   5.4504     0.0695   78.42   <2e-16 ***
+## (Intercept)         -15.2525     0.2465  -61.88   <2e-16 ***
+## log(res_Naive_2D$n)   5.4133     0.0741   73.05   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.1836 on 18 degrees of freedom
-## Multiple R-squared:  0.9971, Adjusted R-squared:  0.9969 
-## F-statistic:  6150 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.1957 on 18 degrees of freedom
+## Multiple R-squared:  0.9966, Adjusted R-squared:  0.9965 
+## F-statistic:  5336 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (naïf): 5.4504
+## Exposant estimé (naïf): 5.413324
 \end{verbatim}
 
 \begin{verbatim}
@@ -772,22 +772,22 @@ On vérifie la valeur du coefficient directeur pour les deux méthodes:
 ## 
 ## Residuals:
 ##       Min        1Q    Median        3Q       Max 
-## -0.087289 -0.019932 -0.002617  0.034696  0.104749 
+## -0.065266 -0.023608 -0.008487  0.021311  0.108724 
 ## 
 ## Coefficients:
-##                      Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)          -9.69907    0.11322  -85.67   <2e-16 ***
-## log(res_Kadane_2D$n)  2.52993    0.02018  125.35   <2e-16 ***
+##                       Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)          -10.28647    0.08876  -115.9   <2e-16 ***
+## log(res_Kadane_2D$n)   2.54607    0.01582   160.9   <2e-16 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 0.05326 on 18 degrees of freedom
-## Multiple R-squared:  0.9989, Adjusted R-squared:  0.9988 
-## F-statistic: 1.571e+04 on 1 and 18 DF,  p-value: < 2.2e-16
+## Residual standard error: 0.04175 on 18 degrees of freedom
+## Multiple R-squared:  0.9993, Adjusted R-squared:  0.9993 
+## F-statistic: 2.59e+04 on 1 and 18 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
 \begin{verbatim}
-## Exposant estimé (Kadane): 2.52993
+## Exposant estimé (Kadane): 2.546071
 \end{verbatim}
 
 Les coefficients directeurs trouvés sont bien ceux que l'on attendait.
@@ -837,8 +837,8 @@ Sur un exemple cela donne :
 \CommentTok{\# Fonctions de simulation}
 \NormalTok{one.simu }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n,m, func) \{}
 \NormalTok{  mat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n }\SpecialCharTok{*}\NormalTok{ m, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ m)}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"kadane\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
 \NormalTok{\}}
 
 \NormalTok{one.simu2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n,m, func) \{}
@@ -847,8 +847,8 @@ Sur un exemple cela donne :
 \NormalTok{  swap\_indices }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\FunctionTok{length}\NormalTok{(v), n\_swap)}
 \NormalTok{  v[swap\_indices] }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(v[swap\_indices])}
 \NormalTok{  mat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(v, }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ m)}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"naive\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
-  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"kadane\_Rcpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
 \NormalTok{\}}
 \end{Highlighting}
 \end{Shaded}
@@ -859,14 +859,14 @@ Sur un exemple cela donne :
 ## # A tibble: 8 x 8
 ##    size expr             min_time q1_time median_time mean_time q3_time max_time
 ##   <dbl> <fct>               <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
-## 1    50 naive_random_2D    0.848  8.75e-1      0.899     0.958  9.37e-1  1.64e+0
-## 2    50 kadane_random_2D   0.0288 3.10e-2      0.0341    0.160  3.85e-2  6.09e+0
-## 3    50 naive_sorted_2D    0.0203 2.23e-2      0.0254    0.0302 3.03e-2  8.28e-2
-## 4    50 kadane_sorted_2D   0.0220 2.33e-2      0.0269    0.230  3.19e-2  9.86e+0
-## 5  1200 naive_random_2D  722.     7.45e+2    815.      831.     8.88e+2  1.14e+3
-## 6  1200 kadane_random_2D   0.844  8.91e-1      0.956     1.02   1.04e+0  1.63e+0
-## 7  1200 naive_sorted_2D    0.0412 5.51e-2      0.0752    0.0907 1.23e-1  2.79e-1
-## 8  1200 kadane_sorted_2D   0.0871 1.08e-1      0.135     0.161  2.28e-1  3.12e-1
+## 1    50 naive_random_2D    0.787  8.25e-1      0.868     1.07   1.34e+0   2.07  
+## 2    50 kadane_random_2D   0.0263 2.75e-2      0.0308    0.177  4.91e-2   6.95  
+## 3    50 naive_sorted_2D    0.0176 1.92e-2      0.0219    0.0289 3.02e-2   0.0723
+## 4    50 kadane_sorted_2D   0.0185 2.02e-2      0.0233    0.256  3.10e-2  11.4   
+## 5  1200 naive_random_2D  479.     5.12e+2    524.      558.     5.99e+2 711.    
+## 6  1200 kadane_random_2D   0.539  5.66e-1      0.591     0.617  6.71e-1   0.908 
+## 7  1200 naive_sorted_2D    0.0271 3.27e-2      0.0432    0.0566 6.15e-2   0.140 
+## 8  1200 kadane_sorted_2D   0.0574 6.60e-2      0.0812    0.110  1.77e-1   0.196
 \end{verbatim}
 
 Pour \texttt{(n,m)\ =\ (10,5)}, le temps d'exécution est plus rapide que
@@ -874,5 +874,81 @@ pour \texttt{(n,m)\ =\ (30,40)}. Kadane est toujours plus rapide que
 Naïf, avec un écart plus important à \texttt{(n,m)\ =\ (30,40)}. Lorsque
 les tableaux sont triés, Naïf et Kadane sont beaucoup plus rapides, avec
 un écart réduit entre les deux.
+
+\section{Cas particulier avec matrice
+symétrique}\label{cas-particulier-avec-matrice-symuxe9trique}
+
+On considère une matrice symétrique
+
+Sur un exemple cela donne :
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Création d\textquotesingle{}une matrice triée}
+\NormalTok{n }\OtherTok{\textless{}{-}} \DecValTok{10}  \CommentTok{\# nombre de lignes}
+\NormalTok{m }\OtherTok{\textless{}{-}} \DecValTok{10}  \CommentTok{\# nombre de colonnes}
+
+\NormalTok{v\_sym }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n }\SpecialCharTok{*}\NormalTok{ m, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{mat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(v\_sym, }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ m)}
+\NormalTok{mat[}\FunctionTok{lower.tri}\NormalTok{(mat)] }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(mat)[}\FunctionTok{lower.tri}\NormalTok{(mat)]}
+  
+\NormalTok{mat}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]   50   59   16   85   17   37   38   98   37    92
+##  [2,]   59   52   11   76   85   92    8   24   89    14
+##  [3,]   16   11   70   12   28   69   82   49   80    96
+##  [4,]   85   76   12   86   32   16   81   41    6    56
+##  [5,]   17   85   28   32   39   58   76   40   28    24
+##  [6,]   37   92   69   16   58   93   44   16   24    90
+##  [7,]   38    8   82   81   76   44   12   91   65    18
+##  [8,]   98   24   49   41   40   16   91   15   65    38
+##  [9,]   37   89   80    6   28   24   65   65   80    48
+## [10,]   92   14   96   56   24   90   18   38   48    23
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Fonctions de simulation}
+\NormalTok{one.simu }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n,m, func) \{}
+\NormalTok{  mat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(}\FunctionTok{sample}\NormalTok{(}\SpecialCharTok{{-}}\DecValTok{100}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n }\SpecialCharTok{*}\NormalTok{ m, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{), }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ m)}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
+\NormalTok{\}}
+
+\NormalTok{one.simu2 }\OtherTok{\textless{}{-}} \ControlFlowTok{function}\NormalTok{(n,m, func) \{}
+\NormalTok{  v\_sym }\OtherTok{\textless{}{-}} \FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\DecValTok{100}\NormalTok{, n }\SpecialCharTok{*}\NormalTok{ m, }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)}
+\NormalTok{  mat }\OtherTok{\textless{}{-}} \FunctionTok{matrix}\NormalTok{(v\_sym, }\AttributeTok{nrow =}\NormalTok{ n, }\AttributeTok{ncol =}\NormalTok{ m)}
+\NormalTok{  mat[}\FunctionTok{lower.tri}\NormalTok{(mat)] }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(mat)[}\FunctionTok{lower.tri}\NormalTok{(mat)]}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Naive2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_naive}\NormalTok{(mat))}
+  \ControlFlowTok{if}\NormalTok{ (func }\SpecialCharTok{==} \StringTok{"Kadane2D\_cpp"}\NormalTok{) }\FunctionTok{return}\NormalTok{(}\FunctionTok{max\_subarray\_rectangle\_opt\_Rcpp}\NormalTok{(mat))}
+\NormalTok{\}}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{MaxSubarray2D_files/figure-latex/benchmark3-1.pdf}
+
+\begin{verbatim}
+## # A tibble: 8 x 8
+##    size expr             min_time q1_time median_time mean_time q3_time max_time
+##   <dbl> <fct>               <dbl>   <dbl>       <dbl>     <dbl>   <dbl>    <dbl>
+## 1   100 naive_random_2D    1.99   2.04e+0      2.10      2.31   2.23e+0  6.52e+0
+## 2   100 kadane_random_2D   0.0414 4.34e-2      0.045     0.0476 4.98e-2  6.92e-2
+## 3   100 naive_sym_2D       0.0236 2.55e-2      0.0281    0.0353 3.70e-2  1.18e-1
+## 4   100 kadane_sym_2D      0.0254 2.72e-2      0.0287    0.140  3.59e-2  5.41e+0
+## 5  1600 naive_random_2D  962.     1.02e+3   1094.     1101.     1.17e+3  1.27e+3
+## 6  1600 kadane_random_2D   0.612  6.32e-1      0.658     0.691  7.35e-1  8.88e-1
+## 7  1600 naive_sym_2D       0.132  1.68e-1      0.205     0.220  2.81e-1  3.81e-1
+## 8  1600 kadane_sym_2D      0.182  2.04e-1      0.226     0.258  3.14e-1  4.53e-1
+\end{verbatim}
+
+Pour \texttt{(n,m)\ =\ (10,10)}, le temps d'exécution est plus rapide
+que pour \texttt{(n,m)\ =\ (40,40)}. Kadane est toujours plus rapide que
+Naïf, avec un écart plus important à \texttt{(n,m)\ =\ (40,40)}. Lorsque
+les tableaux sont symétriques, Naïf et Kadane sont beaucoup plus
+rapides, avec un écart réduit entre les deux.
 
 \end{document}

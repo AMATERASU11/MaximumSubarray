@@ -40,17 +40,6 @@ List max_subarray_rectangle_opt_Rcpp(NumericMatrix mat) {
     return List::create(Named("sum") = R_NegInf, Named("submatrix") = NumericMatrix(0, 0));
   }
 
-  if (all_non_negative(mat)) {
-    return List::create(Named("sum") = total_sum(mat), Named("submatrix") = mat);
-  }
-
-  if (all_non_positive(mat)) {
-    double max_val = max_element_2d(mat);
-    NumericMatrix mat_out(1, 1);
-    mat_out(0, 0) = max_val;
-    return List::create(Named("sum") = max_val, Named("submatrix") = mat_out);
-  }
-
   double maxSum = mat(0, 0);
   int final_top = 0, final_bottom = 0, final_left = 0, final_right = 0;
   NumericVector temp(rows);
