@@ -99,6 +99,17 @@ max_subarray_rectangle_opt <- function(mat) {
     return(list(sum = NA_real_, submatrix = matrix(NA, nrow = 1)))
   }
 
+  if (nrow(mat) == 1 && ncol(mat) == 1) {
+    return(list(
+      sum = mat[1,1],
+      submatrix = mat,
+      top = 1,
+      bottom = 1,
+      left = 1,
+      right = 1
+    ))
+  }
+
   rows <- nrow(mat)
   cols <- ncol(mat)
   max_sum <- -Inf
